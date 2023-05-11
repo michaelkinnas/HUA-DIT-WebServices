@@ -24,9 +24,9 @@
         "env": []
     },
     {
-        "id": "fccd04d924c1f084",
+        "id": "c40ec10e0a604635",
         "type": "tab",
-        "label": "Predictive Models",
+        "label": "Dashboard",
         "disabled": false,
         "info": "",
         "env": []
@@ -36,6 +36,123 @@
         "type": "sqlitedb",
         "db": "/home/mike/HUA/WebServices/HUA-DIT-WebServices/attica_traffic.sqlite",
         "mode": "RWC"
+    },
+    {
+        "id": "88a1b30644239eaa",
+        "type": "ui_tab",
+        "name": "Main",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "9714bae56d65258b",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "1c10e563b65ed805",
+        "type": "ui_group",
+        "name": "Select Road",
+        "tab": "88a1b30644239eaa",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
     },
     {
         "id": "dbf05a9182a29505",
@@ -60,7 +177,7 @@
                 "valueValue": "Token 18b95bf584abece33b62fba77e946f5d19760873"
             }
         ],
-        "x": 590,
+        "x": 630,
         "y": 60,
         "wires": [
             [
@@ -73,7 +190,7 @@
         "type": "function",
         "z": "aa2139114aac899f",
         "name": "set query date parameters",
-        "func": "msg.payload = {}\nmsg[\"date_from\"] = \"2023-04-05\"\nmsg[\"date_to\"] = \"2023-04-06\"\n\nreturn msg;",
+        "func": "msg.payload = {}\nmsg[\"date_from\"] = \"2023-02-02\"\nmsg[\"date_to\"] = \"2023-02-02\"\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -147,7 +264,9 @@
         "y": 140,
         "wires": [
             [
-                "3e4e9c6a6b2c8b2c"
+                "3e4e9c6a6b2c8b2c",
+                "905397bc70e9fa3f",
+                "785e3a89d887acdc"
             ]
         ]
     },
@@ -155,6 +274,7 @@
         "id": "3e4e9c6a6b2c8b2c",
         "type": "function",
         "z": "aa2139114aac899f",
+        "d": true,
         "name": "build traffic data list",
         "func": "let data_set = []\n\nfor (let item of msg.payload) {\n    const record = {\n        \"deviceid\": item.deviceid,\n        \"appprocesstime\": item.appprocesstime,\n        \"countedcars\": item.countedcars,\n        \"average_speed\": item.average_speed\n    }    \n    data_set.push({\"payload\": record})\n}\n\nreturn [data_set];",
         "outputs": 1,
@@ -184,11 +304,51 @@
         "wires": []
     },
     {
+        "id": "905397bc70e9fa3f",
+        "type": "function",
+        "z": "aa2139114aac899f",
+        "d": true,
+        "name": "Batch insert traffic data into DB",
+        "func": "// const query_template\nlet query = \"\"\n\nfor (let item of msg.payload) {\n    query += `INSERT INTO traffic(app_process_time, counted_cars, average_speed, device_id) VALUES (\"${item.appprocesstime}\", \"${item.countedcars}\", \"${item.average_speed}\", \"${item.deviceid}\");`   \n}\nmsg.topic = query\nmsg.payload = query\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 220,
+        "wires": [
+            [
+                "3a43bae8791684d6"
+            ]
+        ]
+    },
+    {
+        "id": "785e3a89d887acdc",
+        "type": "function",
+        "z": "aa2139114aac899f",
+        "d": true,
+        "name": "Batch insert sensor info into DB",
+        "func": "// const query_template\nlet query = \"\"\n\nfor (let item of msg.payload) {\n    query += `INSERT INTO sensors(sensor_id, road_name, road_info) VALUES (\"${item.deviceid}\", \"${item.road_name}\", \"${item.road_info}\");`\n}\nmsg.topic = query\nmsg.payload = query\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 300,
+        "wires": [
+            [
+                "3a43bae8791684d6"
+            ]
+        ]
+    },
+    {
         "id": "19dfc0d054f8700b",
         "type": "sqlite",
         "z": "5a19a3d618f6d937",
         "mydb": "39a5a9876bc94f25",
-        "sqlquery": "msg.topic",
+        "sqlquery": "batch",
         "sql": "",
         "name": "DB",
         "x": 390,
@@ -204,7 +364,7 @@
         "type": "debug",
         "z": "5a19a3d618f6d937",
         "name": "debug 14",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -351,10 +511,109 @@
         ]
     },
     {
-        "id": "1456057e1d258a6c",
-        "type": "inject",
+        "id": "683a138dafe9ac4f",
+        "type": "sqlite",
         "z": "5a19a3d618f6d937",
-        "name": "SELECT Λ.ΚΗΦΙΣΟΥ DATA",
+        "mydb": "39a5a9876bc94f25",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "DB",
+        "x": 390,
+        "y": 380,
+        "wires": [
+            [
+                "645a3d969b770990"
+            ]
+        ]
+    },
+    {
+        "id": "26d9ee0fc5629619",
+        "type": "link in",
+        "z": "5a19a3d618f6d937",
+        "name": "DB Interface",
+        "links": [
+            "60a4b7b6ef8acb62"
+        ],
+        "x": 265,
+        "y": 380,
+        "wires": [
+            [
+                "683a138dafe9ac4f"
+            ]
+        ]
+    },
+    {
+        "id": "645a3d969b770990",
+        "type": "link out",
+        "z": "5a19a3d618f6d937",
+        "name": "link out 5",
+        "mode": "return",
+        "links": [],
+        "x": 515,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "029b027a3db8e12d",
+        "type": "function",
+        "z": "bdd9c2353f1a493e",
+        "name": "K-Clustering",
+        "func": "var clusterMaker = global.get('clusters')\n//number of clusters, defaults to undefined\nclusterMaker.k(3);\n\n//default to 1000\nclusterMaker.iterations(750);\n\nclusterMaker.data(msg.dataset)\n// msg.payload['clusters'] = clusterMaker.clusters()\nmsg.clusters = clusterMaker.clusters()\n\ndelete msg.dataset\ndelete msg.topic\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 80,
+        "wires": [
+            [
+                "8c8544a7cdbf6e79",
+                "218f7b80a4c6805d"
+            ]
+        ]
+    },
+    {
+        "id": "8c8544a7cdbf6e79",
+        "type": "debug",
+        "z": "bdd9c2353f1a493e",
+        "name": "debug 22",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "8d6e6389dfd6386f",
+        "type": "function",
+        "z": "bdd9c2353f1a493e",
+        "name": "Build data set",
+        "func": "let speeds = []\nfor (let item of msg.payload) {\n    speeds.push([item.average_speed])\n}\n\nmsg.dataset = speeds\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 80,
+        "wires": [
+            [
+                "029b027a3db8e12d"
+            ]
+        ]
+    },
+    {
+        "id": "586280cf42d63f38",
+        "type": "inject",
+        "z": "bdd9c2353f1a493e",
+        "name": "ΔΕΔΟΜΕΝΑ Λ.ΚΗΦΙΣΟΥ",
         "props": [
             {
                 "p": "payload"
@@ -371,130 +630,242 @@
         "topic": "SELECT * FROM traffic JOIN sensors ON traffic.device_id = sensors.sensor_id WHERE sensors.road_name = 'Λ. ΚΗΦΙΣΟΥ'",
         "payload": "",
         "payloadType": "date",
+        "x": 190,
+        "y": 80,
+        "wires": [
+            [
+                "a14d4dc787d56e5a"
+            ]
+        ]
+    },
+    {
+        "id": "a14d4dc787d56e5a",
+        "type": "link call",
+        "z": "bdd9c2353f1a493e",
+        "name": "",
+        "links": [
+            "26d9ee0fc5629619"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 430,
+        "y": 80,
+        "wires": [
+            [
+                "8d6e6389dfd6386f"
+            ]
+        ]
+    },
+    {
+        "id": "218f7b80a4c6805d",
+        "type": "function",
+        "z": "bdd9c2353f1a493e",
+        "name": "Find centroid brackets",
+        "func": "for (let item of msg.clusters) {\n    let array = []\n    for (let number of item.points) {\n        array.push(number[0])\n    }\n\n    let bracket = {\n        'high': 0,\n        'low': 0\n    }\n\n    bracket.high = Math.max.apply(null, array)\n    bracket.low = Math.min.apply(null, array)\n    item.bracket = bracket\n}\n\n//cleanup cluster points if not needed, comment out if needed\n// for (let cluster of msg.clusters) {\n//     delete cluster.points\n// }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 180,
-        "y": 440,
+        "y": 160,
         "wires": [
             [
-                "776a307d869a845b"
+                "f0e6402424d03900",
+                "13cc94855913b725"
             ]
         ]
     },
     {
-        "id": "8968aa742d9061a8",
+        "id": "f0e6402424d03900",
+        "type": "debug",
+        "z": "bdd9c2353f1a493e",
+        "name": "debug 23",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "13cc94855913b725",
         "type": "function",
-        "z": "5a19a3d618f6d937",
-        "name": "Build speeds array",
-        "func": "let speeds = []\n\nfor (let item of msg.payload) {\n    speeds.push([item.average_speed])\n}\nmsg.payload = speeds\nreturn msg;",
+        "z": "bdd9c2353f1a493e",
+        "name": "Classify traffic into brackets",
+        "func": "let counted_cars = []\n\n//count cars for each centroid bracket\nlet total = 0\nfor (let cluster of msg.clusters) {   \n    let count = 0        \n    for (let record of msg.payload) {\n        if (record.average_speed >= cluster.bracket.low && record.average_speed <= cluster.bracket.high){            \n            count += record.counted_cars            \n        }\n    }   \n    counted_cars.push({\n        centroid: cluster.centroid[0],\n        counted_cars: count,\n        ratio: 0\n    })\n    total += count\n}\n\nmsg.counted_cars = counted_cars\n\n//calculate rations for each centroid bracket\nfor (let item of msg.counted_cars) {\n    item.ratio = item.counted_cars / total\n}\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
-        "y": 440,
-        "wires": [
-            [
-                "412cc0d52fd20b98",
-                "b82c153f3ad76008"
-            ]
-        ]
-    },
-    {
-        "id": "412cc0d52fd20b98",
-        "type": "debug",
-        "z": "5a19a3d618f6d937",
-        "name": "debug 21",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 800,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "b82c153f3ad76008",
-        "type": "link out",
-        "z": "5a19a3d618f6d937",
-        "d": true,
-        "name": "link out 4",
-        "mode": "link",
-        "links": [
-            "01617a9de4dcf600"
-        ],
-        "x": 775,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "776a307d869a845b",
-        "type": "sqlite",
-        "z": "5a19a3d618f6d937",
-        "mydb": "39a5a9876bc94f25",
-        "sqlquery": "msg.topic",
-        "sql": "",
-        "name": "DB",
-        "x": 410,
-        "y": 440,
-        "wires": [
-            [
-                "8968aa742d9061a8"
-            ]
-        ]
-    },
-    {
-        "id": "0bfd4c86d322b345",
-        "type": "function",
-        "z": "bdd9c2353f1a493e",
-        "name": "K-Clustering",
-        "func": "var clusterMaker = global.get('clusters')\n//number of clusters, defaults to undefined\nclusterMaker.k(3);\n\n// //number of iterations (higher number gives more time to converge), defaults to 1000\nclusterMaker.iterations(750);\n\n// //data from which to identify clusters, defaults to []\n// clusterMaker.data([[1, 0], [0, 1], [0, 0], [-10, 10], [-9, 11], [10, 10], [11, 12]]);\n// clusterMaker.data([[13],[14],[56],[54],[32],[35]])\nclusterMaker.data(msg.payload)\nmsg.payload = clusterMaker.clusters()\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 290,
-        "y": 60,
-        "wires": [
-            [
-                "cdaf23531d25e68c"
-            ]
-        ]
-    },
-    {
-        "id": "cdaf23531d25e68c",
-        "type": "debug",
-        "z": "bdd9c2353f1a493e",
-        "name": "debug 20",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
         "x": 480,
-        "y": 60,
+        "y": 160,
+        "wires": [
+            [
+                "efa902300430adb1"
+            ]
+        ]
+    },
+    {
+        "id": "efa902300430adb1",
+        "type": "debug",
+        "z": "bdd9c2353f1a493e",
+        "name": "debug 24",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 260,
         "wires": []
     },
     {
-        "id": "01617a9de4dcf600",
-        "type": "link in",
-        "z": "bdd9c2353f1a493e",
-        "name": "K-Clusters",
-        "links": [
-            "b82c153f3ad76008"
+        "id": "dc0265d0157dcc7f",
+        "type": "inject",
+        "z": "c40ec10e0a604635",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
         ],
-        "x": 145,
-        "y": 60,
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 380,
+        "y": 80,
         "wires": [
             [
-                "0bfd4c86d322b345"
+                "af52e27b504239d9"
             ]
         ]
+    },
+    {
+        "id": "fd94a139eb80cee5",
+        "type": "ui_dropdown",
+        "z": "c40ec10e0a604635",
+        "name": "",
+        "label": "",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "1c10e563b65ed805",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 980,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "af52e27b504239d9",
+        "type": "link call",
+        "z": "c40ec10e0a604635",
+        "d": true,
+        "name": "",
+        "links": [
+            "26d9ee0fc5629619"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 570,
+        "y": 80,
+        "wires": [
+            [
+                "86270794a2d1be31"
+            ]
+        ]
+    },
+    {
+        "id": "86270794a2d1be31",
+        "type": "function",
+        "z": "c40ec10e0a604635",
+        "name": "Build roads list",
+        "func": "\n\n\n\nmsg.options = ['epilogi1','epilogi2']\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 80,
+        "wires": [
+            [
+                "fd94a139eb80cee5",
+                "9bd12703532f246e"
+            ]
+        ]
+    },
+    {
+        "id": "c5a4954564f60b3b",
+        "type": "inject",
+        "z": "c40ec10e0a604635",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 580,
+        "y": 220,
+        "wires": [
+            [
+                "86270794a2d1be31"
+            ]
+        ]
+    },
+    {
+        "id": "9bd12703532f246e",
+        "type": "debug",
+        "z": "c40ec10e0a604635",
+        "name": "debug 25",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 200,
+        "wires": []
     }
 ]

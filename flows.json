@@ -155,6 +155,16 @@
         "className": ""
     },
     {
+        "id": "ee9e192385ead66b",
+        "type": "MySQLdatabase",
+        "name": "Docker MySQL Database",
+        "host": "localhost",
+        "port": "3306",
+        "db": "attica_traffic",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
         "id": "dbf05a9182a29505",
         "type": "http request",
         "z": "aa2139114aac899f",
@@ -190,7 +200,7 @@
         "type": "function",
         "z": "aa2139114aac899f",
         "name": "set query date parameters",
-        "func": "msg.payload = {}\nmsg[\"date_from\"] = \"2023-02-02\"\nmsg[\"date_to\"] = \"2023-02-02\"\n\nreturn msg;",
+        "func": "msg.payload = {}\nmsg[\"date_from\"] = \"2023-01-01\"\nmsg[\"date_to\"] = \"2023-03-31\"\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -234,25 +244,6 @@
         ]
     },
     {
-        "id": "77ba76428fbfc664",
-        "type": "function",
-        "z": "aa2139114aac899f",
-        "name": "insert traffic data",
-        "func": "let query = {}\nquery[\"topic\"] = `INSERT INTO traffic(app_process_time, counted_cars, average_speed, device_id) VALUES (\"${msg.payload.appprocesstime}\", \"${msg.payload.countedcars}\", \"${msg.payload.average_speed}\", \"${msg.payload.deviceid}\")`\nreturn query",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 540,
-        "y": 140,
-        "wires": [
-            [
-                "3a43bae8791684d6"
-            ]
-        ]
-    },
-    {
         "id": "aa14258ae9fa65bb",
         "type": "json",
         "z": "aa2139114aac899f",
@@ -264,29 +255,7 @@
         "y": 140,
         "wires": [
             [
-                "3e4e9c6a6b2c8b2c",
-                "905397bc70e9fa3f",
-                "785e3a89d887acdc"
-            ]
-        ]
-    },
-    {
-        "id": "3e4e9c6a6b2c8b2c",
-        "type": "function",
-        "z": "aa2139114aac899f",
-        "d": true,
-        "name": "build traffic data list",
-        "func": "let data_set = []\n\nfor (let item of msg.payload) {\n    const record = {\n        \"deviceid\": item.deviceid,\n        \"appprocesstime\": item.appprocesstime,\n        \"countedcars\": item.countedcars,\n        \"average_speed\": item.average_speed\n    }    \n    data_set.push({\"payload\": record})\n}\n\nreturn [data_set];",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 310,
-        "y": 140,
-        "wires": [
-            [
-                "77ba76428fbfc664"
+                "49fc7b630895ac40"
             ]
         ]
     },
@@ -297,26 +266,25 @@
         "name": "link out 2",
         "mode": "link",
         "links": [
-            "f69b41b69e23d8a5"
+            "26d9ee0fc5629619"
         ],
         "x": 695,
         "y": 140,
         "wires": []
     },
     {
-        "id": "905397bc70e9fa3f",
+        "id": "49fc7b630895ac40",
         "type": "function",
         "z": "aa2139114aac899f",
-        "d": true,
-        "name": "Batch insert traffic data into DB",
-        "func": "// const query_template\nlet query = \"\"\n\nfor (let item of msg.payload) {\n    query += `INSERT INTO traffic(app_process_time, counted_cars, average_speed, device_id) VALUES (\"${item.appprocesstime}\", \"${item.countedcars}\", \"${item.average_speed}\", \"${item.deviceid}\");`   \n}\nmsg.topic = query\nmsg.payload = query\nreturn msg;\n",
+        "name": "Batch insert traffic data into DB (SqLite)",
+        "func": "// const query_template\nlet insert_query = \"INSERT INTO traffic(device_id, app_process_time, counted_cars, average_speed) VALUES \"\n\nfor (let item of msg.payload) {\n    insert_query += `(\"${item.deviceid}\", \"${item.appprocesstime}\", \"${item.countedcars}\", \"${item.average_speed}\"),`   \n}\n\n// insert_query += ')'\nmsg.topic = insert_query.slice(0, -1)\n// msg.topic += ' on duplicate key update device_id=device_id'\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
-        "y": 220,
+        "x": 400,
+        "y": 140,
         "wires": [
             [
                 "3a43bae8791684d6"
@@ -324,24 +292,14 @@
         ]
     },
     {
-        "id": "785e3a89d887acdc",
-        "type": "function",
+        "id": "8efda35242b2a4bb",
+        "type": "comment",
         "z": "aa2139114aac899f",
-        "d": true,
-        "name": "Batch insert sensor info into DB",
-        "func": "// const query_template\nlet query = \"\"\n\nfor (let item of msg.payload) {\n    query += `INSERT INTO sensors(sensor_id, road_name, road_info) VALUES (\"${item.deviceid}\", \"${item.road_name}\", \"${item.road_info}\");`\n}\nmsg.topic = query\nmsg.payload = query\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 350,
-        "y": 300,
-        "wires": [
-            [
-                "3a43bae8791684d6"
-            ]
-        ]
+        "name": "",
+        "info": "INSERT INTO traffic(deviceid, name, time) VALUES ({deviceid}....)\nINSERT INTO traffic(deviceid, name, time) VALUES ({deviceid}....)\nINSERT INTO traffic(deviceid, name, time) VALUES ({deviceid}....)\nINSERT INTO traffic(deviceid, name, time) VALUES ({deviceid}....)\nINSERT INTO traffic(deviceid, name, time) VALUES ({deviceid}....)\n\nhow to batch insert into db\n\n\n\n\nINSERT INTO traffic(deviceid, name, time) VALUES ({deviceid},{name},{time}),({deviceid},{name},{time}),({deviceid},{name},{time})",
+        "x": 560,
+        "y": 340,
+        "wires": []
     },
     {
         "id": "19dfc0d054f8700b",
@@ -393,7 +351,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "CREATE TABLE traffic(device_id TEXT, app_process_time TEXT, counted_cars INTEGER, average_speed REAL, PRIMARY KEY(device_id, app_process_time) FOREIGN KEY(device_id) REFERENCES sensors(device_id) ON DELETE CASCADE)",
+        "topic": "CREATE TABLE traffic(device_id TEXT, app_process_time TEXT, counted_cars INTEGER, average_speed REAL, PRIMARY KEY(device_id, app_process_time) ON CONFLICT IGNORE, FOREIGN KEY(device_id) REFERENCES sensors(device_id) ON DELETE CASCADE)",
         "payload": "",
         "payloadType": "date",
         "x": 150,
@@ -469,7 +427,6 @@
         "name": "link in to DB",
         "links": [
             "cbc7e4cf0be56963",
-            "3a43bae8791684d6",
             "2c61b8bd7bcb5476"
         ],
         "x": 225,
@@ -522,7 +479,8 @@
         "y": 380,
         "wires": [
             [
-                "645a3d969b770990"
+                "645a3d969b770990",
+                "27de633002b614c0"
             ]
         ]
     },
@@ -532,13 +490,15 @@
         "z": "5a19a3d618f6d937",
         "name": "DB Interface",
         "links": [
-            "60a4b7b6ef8acb62"
+            "60a4b7b6ef8acb62",
+            "3a43bae8791684d6"
         ],
         "x": 265,
         "y": 380,
         "wires": [
             [
-                "683a138dafe9ac4f"
+                "683a138dafe9ac4f",
+                "a58f252745c6c729"
             ]
         ]
     },
@@ -552,6 +512,182 @@
         "x": 515,
         "y": 380,
         "wires": []
+    },
+    {
+        "id": "a58f252745c6c729",
+        "type": "mysql",
+        "z": "5a19a3d618f6d937",
+        "d": true,
+        "mydb": "ee9e192385ead66b",
+        "name": "MySQL DB",
+        "x": 390,
+        "y": 560,
+        "wires": [
+            [
+                "27de633002b614c0",
+                "645a3d969b770990"
+            ]
+        ]
+    },
+    {
+        "id": "27de633002b614c0",
+        "type": "debug",
+        "z": "5a19a3d618f6d937",
+        "name": "debug 27",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "879ef2c16d4871f7",
+        "type": "inject",
+        "z": "5a19a3d618f6d937",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 60,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5116b1642f62d548",
+        "type": "inject",
+        "z": "5a19a3d618f6d937",
+        "name": "Create sensors table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "CREATE TABLE sensors(sensor_id VARCHAR(10) PRIMARY KEY, road_name VARCHAR(100), road_info VARCHAR(255))",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 560,
+        "wires": [
+            [
+                "a58f252745c6c729"
+            ]
+        ]
+    },
+    {
+        "id": "4890fc32b923dca6",
+        "type": "inject",
+        "z": "5a19a3d618f6d937",
+        "name": "Create traffic table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "CREATE TABLE traffic(device_id VARCHAR(10), app_process_time VARCHAR(20), counted_cars INT, average_speed REAL, PRIMARY KEY(device_id, app_process_time), FOREIGN KEY(device_id) REFERENCES sensors(sensor_id) ON DELETE CASCADE)",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 600,
+        "wires": [
+            [
+                "a58f252745c6c729"
+            ]
+        ]
+    },
+    {
+        "id": "4c631bf0bffdd117",
+        "type": "inject",
+        "z": "5a19a3d618f6d937",
+        "name": "Drop table traffic",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "DROP TABLE traffic",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 680,
+        "wires": [
+            [
+                "a58f252745c6c729"
+            ]
+        ]
+    },
+    {
+        "id": "3505f67b29bc3a13",
+        "type": "inject",
+        "z": "5a19a3d618f6d937",
+        "name": "Drop table sensors",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "DROP TABLE sensors",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 720,
+        "wires": [
+            [
+                "a58f252745c6c729"
+            ]
+        ]
     },
     {
         "id": "029b027a3db8e12d",

@@ -303,8 +303,7 @@
         "y": 140,
         "wires": [
             [
-                "567611ad4eedcd43",
-                "7e5755ea301b997a"
+                "567611ad4eedcd43"
             ]
         ]
     },
@@ -450,11 +449,11 @@
             "60a4b7b6ef8acb62",
             "eebc06999e92089c"
         ],
-        "x": 215,
-        "y": 100,
+        "x": 265,
+        "y": 400,
         "wires": [
             [
-                "b15e039dbb381e4c"
+                "47d5bd7d62a90f7e"
             ]
         ]
     },
@@ -465,9 +464,25 @@
         "name": "link out 5",
         "mode": "return",
         "links": [],
-        "x": 525,
-        "y": 100,
+        "x": 555,
+        "y": 400,
         "wires": []
+    },
+    {
+        "id": "47d5bd7d62a90f7e",
+        "type": "sqlite",
+        "z": "f04f43533f741c82",
+        "mydb": "39a5a9876bc94f25",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "DB",
+        "x": 390,
+        "y": 400,
+        "wires": [
+            [
+                "7e5755ea301b997a"
+            ]
+        ]
     },
     {
         "id": "55548fc40a903403",
@@ -568,7 +583,8 @@
         "y": 80,
         "wires": [
             [
-                "1b85d160a557c69e"
+                "1b85d160a557c69e",
+                "be0370c3ce7895bf"
             ]
         ]
     },
@@ -624,7 +640,8 @@
         "y": 160,
         "wires": [
             [
-                "089c6d952e6a566e"
+                "089c6d952e6a566e",
+                "7ee76e7af2f44726"
             ]
         ]
     },
@@ -643,6 +660,47 @@
         "statusType": "auto",
         "x": 700,
         "y": 260,
+        "wires": []
+    },
+    {
+        "id": "be0370c3ce7895bf",
+        "type": "debug",
+        "z": "d9af16830f8ace2c",
+        "name": "debug 26",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "1ee747450ecdcf88",
+        "type": "link in",
+        "z": "d9af16830f8ace2c",
+        "name": "link in 1",
+        "links": [],
+        "x": 545,
+        "y": 20,
+        "wires": [
+            [
+                "1b85d160a557c69e"
+            ]
+        ]
+    },
+    {
+        "id": "7ee76e7af2f44726",
+        "type": "link out",
+        "z": "d9af16830f8ace2c",
+        "name": "link out 6",
+        "mode": "link",
+        "links": [],
+        "x": 715,
+        "y": 160,
         "wires": []
     },
     {
@@ -723,7 +781,7 @@
         "type": "function",
         "z": "3a610e6787b75aeb",
         "name": "Build roads list",
-        "func": "\n\n\n\nmsg.options = ['epilogi1','epilogi2']\nreturn msg;",
+        "func": "let data = msg.counted_cars\n\n\n\n\nmsg.options = ['epilogi1','epilogi2']\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",

@@ -1,0 +1,1576 @@
+[
+    {
+        "id": "3d9c4b8676673364",
+        "type": "tab",
+        "label": "Get data from API",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "019efafd3890369d",
+        "type": "tab",
+        "label": "Monthly K-Clusters",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "469d36c343ae88fa",
+        "type": "tab",
+        "label": "Hourly K-Clusters",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f04f43533f741c82",
+        "type": "tab",
+        "label": "DB",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "d9af16830f8ace2c",
+        "type": "tab",
+        "label": "K-Clusters",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3a610e6787b75aeb",
+        "type": "tab",
+        "label": "Dashboard",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "39a5a9876bc94f25",
+        "type": "sqlitedb",
+        "db": "/home/mike/HUA/WebServices/HUA-DIT-WebServices/attica_traffic.sqlite",
+        "mode": "RWC"
+    },
+    {
+        "id": "75713334e8d9d783",
+        "type": "ui_tab",
+        "name": "Main",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "d74ed80f31a2ffe3",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "578d025e00dafb5b",
+        "type": "ui_group",
+        "name": "Select Road",
+        "tab": "75713334e8d9d783",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "5588be0b796aa416",
+        "type": "sqlitedb",
+        "db": "/home/mike/HUA/WebServices/HUA-DIT-WebServices/db2.sqlite",
+        "mode": "RWC"
+    },
+    {
+        "id": "98d6e69f573d7d61",
+        "type": "http request",
+        "z": "3d9c4b8676673364",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://data.gov.gr/api/v1/query/road_traffic_attica?date_from={{{date_from}}}&date_to={{{date_to}}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "Authorization",
+                "valueType": "other",
+                "valueValue": "Token 18b95bf584abece33b62fba77e946f5d19760873"
+            }
+        ],
+        "x": 630,
+        "y": 60,
+        "wires": [
+            [
+                "02b98a40aa4d3f7b"
+            ]
+        ]
+    },
+    {
+        "id": "ae99c0a11089472a",
+        "type": "function",
+        "z": "3d9c4b8676673364",
+        "name": "set query date parameters",
+        "func": "msg.payload = {}\nmsg[\"date_from\"] = \"2023-01-01\"\nmsg[\"date_to\"] = \"2023-01-10\"\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 60,
+        "wires": [
+            [
+                "98d6e69f573d7d61"
+            ]
+        ]
+    },
+    {
+        "id": "b533a47bb7919317",
+        "type": "inject",
+        "z": "3d9c4b8676673364",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 60,
+        "wires": [
+            [
+                "ae99c0a11089472a"
+            ]
+        ]
+    },
+    {
+        "id": "02b98a40aa4d3f7b",
+        "type": "json",
+        "z": "3d9c4b8676673364",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 810,
+        "y": 60,
+        "wires": [
+            [
+                "52067ff2382e812f",
+                "cbfcd413682c56e2"
+            ]
+        ]
+    },
+    {
+        "id": "eebc06999e92089c",
+        "type": "link out",
+        "z": "3d9c4b8676673364",
+        "name": "link out 2",
+        "mode": "link",
+        "links": [
+            "0cb85856e7bf9f24"
+        ],
+        "x": 645,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "4fed006d0cb12aed",
+        "type": "function",
+        "z": "3d9c4b8676673364",
+        "name": "Batch insert traffic data into DB (SqLite)",
+        "func": "// const query_template\nlet insert_query = \"INSERT INTO traffic(device_id, app_process_time, counted_cars, average_speed) VALUES \"\n\nfor (let item of msg.payload) {\n    insert_query += `(\"${item.deviceid}\", \"${item.appprocesstime}\", \"${item.countedcars}\", \"${item.average_speed}\"),`   \n}\n\n// insert_query += ')'\nmsg.topic = insert_query.slice(0, -1)\n// msg.topic += ' on duplicate key update device_id=device_id'\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 620,
+        "wires": [
+            [
+                "eebc06999e92089c"
+            ]
+        ]
+    },
+    {
+        "id": "fc0ac11ee099dff3",
+        "type": "link in",
+        "z": "3d9c4b8676673364",
+        "name": "API Call",
+        "links": [],
+        "x": 405,
+        "y": 280,
+        "wires": [
+            [
+                "98d6e69f573d7d61"
+            ]
+        ]
+    },
+    {
+        "id": "52067ff2382e812f",
+        "type": "link out",
+        "z": "3d9c4b8676673364",
+        "name": "API Return",
+        "mode": "return",
+        "links": [],
+        "x": 895,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "cbfcd413682c56e2",
+        "type": "debug",
+        "z": "3d9c4b8676673364",
+        "name": "debug 30",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "52520011d05866bd",
+        "type": "link call",
+        "z": "019efafd3890369d",
+        "name": "",
+        "links": [
+            "fc0ac11ee099dff3"
+        ],
+        "linkType": "static",
+        "timeout": "300",
+        "x": 360,
+        "y": 380,
+        "wires": [
+            [
+                "491e4d62c496e8ca"
+            ]
+        ]
+    },
+    {
+        "id": "83aebcd0862abf23",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "January",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-01-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-01-31",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 60,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "9a67748875739596",
+        "type": "function",
+        "z": "019efafd3890369d",
+        "d": true,
+        "name": "Build datasets for many months",
+        "func": "const roads_arr = msg.payload.map(record => record.road_name);\nconst roads_list = [...new Set(roads_arr)];\nconst dates_arr = msg.payload.map(record => record.appprocesstime.substring(0, 7))\nconst dates_list = [...new Set(dates_arr)];\n\nlet speeds_obj = []\n\nfor (let road of roads_list) {\n    \n    let each_date = []\n    for (let date of dates_list) {\n        \n        let avg_speed_arr = []\n        for (let item of msg.payload) {\n            if (item.road_name === road && item.appprocesstime.includes(date)) {\n                avg_speed_arr.push([item.average_speed])\n            }\n        }\n\n        each_date.push({\n            'month': date,\n            'speeds': avg_speed_arr        \n        })\n\n    }\n\n    speeds_obj.push({\n        'road': road,\n        'dates': each_date\n    })\n}\n\nmsg = {}\nmsg.speeds = speeds_obj\n\nlet test = [{\n    road: 'roadname',\n    dates: [{\n        month: 'month',\n        speeds: [[1],[2],[3]]\n    }]\n}]\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cee2f7b1bbc03e41",
+        "type": "function",
+        "z": "019efafd3890369d",
+        "name": "K-Clustering",
+        "func": "var clusterMaker = global.get('clusters')\n//number of clusters, defaults to undefined\nclusterMaker.k(2);\n\n//default to 1000\nclusterMaker.iterations(750);\n\nlet clusters = []\n\nfor (let road of msg.roads) {     \n    clusterMaker.data(road.speeds)\n    let cluster = clusterMaker.clusters()    \n    clusters.push({\n        'road': road.road,\n        'month': road.month,\n        'cluster': cluster\n    })\n}\n\nmsg = {}\nmsg.clusters = clusters\nmsg.payload = 'Operation Complete'\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 500,
+        "wires": [
+            [
+                "c61a13d82f2bad85",
+                "f22b46e7d111a546"
+            ]
+        ]
+    },
+    {
+        "id": "491e4d62c496e8ca",
+        "type": "function",
+        "z": "019efafd3890369d",
+        "name": "Build dataset (single month)",
+        "func": "const roads_arr = msg.payload.map(record => record.road_name);\nconst roads_list = [...new Set(roads_arr)];\n\nconst dates_arr = msg.payload.map(record => record.appprocesstime.substring(0, 7))\nconst dates_list = [...new Set(dates_arr)];\n\nconsole.log(dates_list)\n\nlet month = dates_list[0]\nlet roads = []\nfor (let road of roads_list) {\n    let speeds = []\n    for (let item of msg.payload) {\n        if (item.road_name === road) {\n            speeds.push([item.average_speed])\n        }\n    }\n    roads.push({\n        'road': road,\n        'month': month,\n        'speeds':speeds\n    })\n}\n\n\n\nmsg = {}\nmsg.roads = roads\n\n// let test = [{\n//     road: 'roadname',\n//     dates: [{\n//         month: 'month',\n//         speeds: [[1],[2],[3]]\n//     }]\n// }]\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 440,
+        "wires": [
+            [
+                "cee2f7b1bbc03e41"
+            ]
+        ]
+    },
+    {
+        "id": "f22b46e7d111a546",
+        "type": "debug",
+        "z": "019efafd3890369d",
+        "name": "debug 29",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "c61a13d82f2bad85",
+        "type": "function",
+        "z": "019efafd3890369d",
+        "name": "Built SQL insert",
+        "func": "let insert_query = \"INSERT INTO clusters(date, road, centroid1, centroid2) VALUES \"\nfor (let item of msg.clusters) {\n    let max = 0\n    let min = 0\n    if (item.cluster[0].centroid[0] > item.cluster[1].centroid[0]) {\n        max = item.cluster[0].centroid[0]\n        min = item.cluster[1].centroid[0]\n    }else {\n        max = item.cluster[1].centroid[0]\n        min = item.cluster[0].centroid[0]\n    }\n    insert_query += `(\"${item.month}\", \"${item.road}\", \"${max}\", \"${min}\"),`\n}\nmsg.topic = insert_query.slice(0, -1)\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 560,
+        "wires": [
+            [
+                "527efbcb58ecf430"
+            ]
+        ]
+    },
+    {
+        "id": "527efbcb58ecf430",
+        "type": "link out",
+        "z": "019efafd3890369d",
+        "name": "link out 7",
+        "mode": "link",
+        "links": [
+            "f8482dd0d3eb5861"
+        ],
+        "x": 555,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "2b905a4f5a984cd8",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "February",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-02-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-02-29",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 120,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "a30b23810ebe40fb",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "March",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-03-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-03-31",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 180,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "566215ecf7d0432e",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "April",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-04-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-04-30",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 240,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "83b8100e9055a721",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "May",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-05-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-05-31",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 300,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "5e6a68a570e6e80d",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "June",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-06-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-06-30",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 360,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "e646a9d60b47993c",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "July",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-07-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-07-31",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 420,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "5a7b8670c3819dbd",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "August",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-08-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-08-31",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 480,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "a6c215fc02737288",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "September",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-09-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-09-30",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 540,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "09b7ed7bfac53ade",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "October",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-10-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-10-31",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 600,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "edc8a194e92163eb",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "November",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-11-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-11-30",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 660,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "15ea21a7a38a4c7b",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "December",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-12-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-12-31",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 720,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "1e6ab091d72cf623",
+        "type": "inject",
+        "z": "469d36c343ae88fa",
+        "name": "Last 4 months",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "'2023-01-01'",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "'2023-01-10'",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 160,
+        "wires": [
+            [
+                "a4eae0be3193e5d7"
+            ]
+        ]
+    },
+    {
+        "id": "a4eae0be3193e5d7",
+        "type": "link call",
+        "z": "469d36c343ae88fa",
+        "name": "",
+        "links": [
+            "fc0ac11ee099dff3"
+        ],
+        "linkType": "static",
+        "timeout": "300",
+        "x": 380,
+        "y": 160,
+        "wires": [
+            [
+                "f60ae7ab6aee55c0"
+            ]
+        ]
+    },
+    {
+        "id": "f60ae7ab6aee55c0",
+        "type": "function",
+        "z": "469d36c343ae88fa",
+        "name": "Build Dataset",
+        "func": "const roads_arr = msg.payload.map(record => record.road_name);\nconst roads_list = [...new Set(roads_arr)];\n\nconst hours_arr = msg.payload.map(record => record.appprocesstime.substring(11, 19))\nconst hours_list = [...new Set(hours_arr)];\n\nlet roads = []\nfor (let road of roads_list) {\n    for (let hour of hours_arr) {\n        let speeds = []\n        for (let item of msg.payload) {\n            if (item.appprocesstime.includes(hour) && item.road_name === road) {\n                speeds.push([item.average_speed])\n            }\n        }\n        roads.push({\n            'road': road,\n            'speeds': speeds,\n        })\n    }\n}\n\nmsg.dataset = roads\n\n\nreturn msg;\n\n// [{\n//     road: 'roadname',\n//     speeds: []\n// }]",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 160,
+        "wires": [
+            [
+                "4c4269ef5c51be9f"
+            ]
+        ]
+    },
+    {
+        "id": "4c4269ef5c51be9f",
+        "type": "debug",
+        "z": "469d36c343ae88fa",
+        "name": "debug 31",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "b15e039dbb381e4c",
+        "type": "sqlite",
+        "z": "f04f43533f741c82",
+        "mydb": "39a5a9876bc94f25",
+        "sqlquery": "batch",
+        "sql": "",
+        "name": "DB",
+        "x": 390,
+        "y": 140,
+        "wires": [
+            [
+                "567611ad4eedcd43"
+            ]
+        ]
+    },
+    {
+        "id": "567611ad4eedcd43",
+        "type": "debug",
+        "z": "f04f43533f741c82",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "354fbc127d1d58ca",
+        "type": "inject",
+        "z": "f04f43533f741c82",
+        "name": "Create traffic table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "CREATE TABLE traffic(device_id TEXT, app_process_time TEXT, counted_cars INTEGER, average_speed REAL, PRIMARY KEY(device_id, app_process_time) ON CONFLICT IGNORE, FOREIGN KEY(device_id) REFERENCES sensors(device_id) ON DELETE CASCADE)",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 180,
+        "wires": [
+            [
+                "b15e039dbb381e4c"
+            ]
+        ]
+    },
+    {
+        "id": "9744469082665cdf",
+        "type": "inject",
+        "z": "f04f43533f741c82",
+        "name": "Create sensors table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "CREATE TABLE sensors(sensor_id TEXT PRIMARY KEY, road_name TEXT, road_info TEXT)",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 140,
+        "wires": [
+            [
+                "b15e039dbb381e4c"
+            ]
+        ]
+    },
+    {
+        "id": "f5b57f80c8eef1ca",
+        "type": "inject",
+        "z": "f04f43533f741c82",
+        "name": "Drop table traffic",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "DROP TABLE traffic",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 260,
+        "wires": [
+            [
+                "b15e039dbb381e4c"
+            ]
+        ]
+    },
+    {
+        "id": "8f330a581dc2fa70",
+        "type": "inject",
+        "z": "f04f43533f741c82",
+        "d": true,
+        "name": "Select sensor ids from Λ.ΚΗΦΙΣΟΥ",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "SELECT sensor_id FROM sensors WHERE road_name = \"Λ. ΚΗΦΙΣΟΥ\"",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 40,
+        "wires": [
+            [
+                "b15e039dbb381e4c"
+            ]
+        ]
+    },
+    {
+        "id": "0cb85856e7bf9f24",
+        "type": "link in",
+        "z": "f04f43533f741c82",
+        "name": "DB Interface",
+        "links": [
+            "60a4b7b6ef8acb62",
+            "eebc06999e92089c"
+        ],
+        "x": 265,
+        "y": 400,
+        "wires": [
+            [
+                "47d5bd7d62a90f7e"
+            ]
+        ]
+    },
+    {
+        "id": "7e5755ea301b997a",
+        "type": "link out",
+        "z": "f04f43533f741c82",
+        "name": "link out 5",
+        "mode": "return",
+        "links": [],
+        "x": 555,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "47d5bd7d62a90f7e",
+        "type": "sqlite",
+        "z": "f04f43533f741c82",
+        "mydb": "39a5a9876bc94f25",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "DB",
+        "x": 390,
+        "y": 400,
+        "wires": [
+            [
+                "7e5755ea301b997a"
+            ]
+        ]
+    },
+    {
+        "id": "6543c3f2ca12350d",
+        "type": "sqlite",
+        "z": "f04f43533f741c82",
+        "mydb": "5588be0b796aa416",
+        "sqlquery": "batch",
+        "sql": "",
+        "name": "DB Batch insert",
+        "x": 420,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f8482dd0d3eb5861",
+        "type": "link in",
+        "z": "f04f43533f741c82",
+        "name": "db2 batch",
+        "links": [
+            "527efbcb58ecf430"
+        ],
+        "x": 265,
+        "y": 520,
+        "wires": [
+            [
+                "6543c3f2ca12350d"
+            ]
+        ]
+    },
+    {
+        "id": "2bbf3a20ae89c520",
+        "type": "inject",
+        "z": "f04f43533f741c82",
+        "name": "Create monthly clusters table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "CREATE TABLE clusters(date TEXT, road TEXT, centroid1 NUMBER, centroid2 NUMBER, PRIMARY KEY(date, road) ON CONFLICT IGNORE)",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 560,
+        "wires": [
+            [
+                "6543c3f2ca12350d"
+            ]
+        ]
+    },
+    {
+        "id": "3efe1fcdf5a096a6",
+        "type": "comment",
+        "z": "f04f43533f741c82",
+        "name": "",
+        "info": "CREATE TABLE traffic(device_id TEXT, app_process_time TEXT, counted_cars INTEGER, average_speed REAL, PRIMARY KEY(device_id, app_process_time) ON CONFLICT IGNORE, FOREIGN KEY(device_id) REFERENCES sensors(device_id) ON DELETE CASCADE)",
+        "x": 1220,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "7e2726054319fa12",
+        "type": "inject",
+        "z": "f04f43533f741c82",
+        "name": "Create hourly clusters table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "CREATE TABLE hours(date TEXT, road TEXT, centroid1 NUMBER, centroid2 NUMBER, PRIMARY KEY(date, road) ON CONFLICT IGNORE)",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 600,
+        "wires": [
+            [
+                "6543c3f2ca12350d"
+            ]
+        ]
+    },
+    {
+        "id": "55548fc40a903403",
+        "type": "function",
+        "z": "d9af16830f8ace2c",
+        "name": "K-Clustering",
+        "func": "var clusterMaker = global.get('clusters')\n//number of clusters, defaults to undefined\nclusterMaker.k(3);\n\n//default to 1000\nclusterMaker.iterations(750);\n\nclusterMaker.data(msg.dataset)\n// msg.payload['clusters'] = clusterMaker.clusters()\nmsg.clusters = clusterMaker.clusters()\n\ndelete msg.dataset\ndelete msg.topic\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 80,
+        "wires": [
+            [
+                "84f5c8a9aab7a96e"
+            ]
+        ]
+    },
+    {
+        "id": "542ba9a40b5504e8",
+        "type": "debug",
+        "z": "d9af16830f8ace2c",
+        "name": "debug 22",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "1b85d160a557c69e",
+        "type": "function",
+        "z": "d9af16830f8ace2c",
+        "name": "Build data set",
+        "func": "let speeds = []\nfor (let item of msg.payload) {\n    speeds.push([item.average_speed])\n}\n\nmsg.dataset = speeds\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 80,
+        "wires": [
+            [
+                "55548fc40a903403",
+                "542ba9a40b5504e8"
+            ]
+        ]
+    },
+    {
+        "id": "6ee78aa888ad31f4",
+        "type": "inject",
+        "z": "d9af16830f8ace2c",
+        "name": "ΔΕΔΟΜΕΝΑ Λ.ΚΗΦΙΣΟΥ",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "SELECT * FROM traffic JOIN sensors ON traffic.device_id = sensors.sensor_id WHERE sensors.road_name = 'Λ. ΚΗΦΙΣΟΥ' AND app_process_time LIKE '2023-05-03%'",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 80,
+        "wires": [
+            [
+                "e445e64fdb7335be"
+            ]
+        ]
+    },
+    {
+        "id": "e445e64fdb7335be",
+        "type": "link call",
+        "z": "d9af16830f8ace2c",
+        "name": "",
+        "links": [
+            "0cb85856e7bf9f24"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 430,
+        "y": 80,
+        "wires": [
+            [
+                "1b85d160a557c69e"
+            ]
+        ]
+    },
+    {
+        "id": "84f5c8a9aab7a96e",
+        "type": "function",
+        "z": "d9af16830f8ace2c",
+        "name": "Find centroid brackets",
+        "func": "for (let item of msg.clusters) {\n    let array = []\n    for (let number of item.points) {\n        array.push(number[0])\n    }\n\n    let bracket = {\n        'high': 0,\n        'low': 0\n    }\n\n    bracket.high = Math.max.apply(null, array)\n    bracket.low = Math.min.apply(null, array)\n    item.bracket = bracket\n}\n\n//cleanup cluster points if not needed, comment out if needed\n// for (let cluster of msg.clusters) {\n//     delete cluster.points\n// }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 180,
+        "y": 160,
+        "wires": [
+            [
+                "0f41f297bc3cd867"
+            ]
+        ]
+    },
+    {
+        "id": "0f41f297bc3cd867",
+        "type": "function",
+        "z": "d9af16830f8ace2c",
+        "name": "Classify traffic into brackets",
+        "func": "let counted_cars = []\n\n//count cars for each centroid bracket\nlet total = 0\nfor (let cluster of msg.clusters) {   \n    let count = 0        \n    for (let record of msg.payload) {\n        if (record.average_speed >= cluster.bracket.low && record.average_speed <= cluster.bracket.high){            \n            count += record.counted_cars            \n        }\n    }   \n    counted_cars.push({\n        centroid: cluster.centroid[0],\n        counted_cars: count,\n        ratio: 0\n    })\n    total += count\n}\n\nmsg.counted_cars = counted_cars\n\n//calculate rations for each centroid bracket\nfor (let item of msg.counted_cars) {\n    item.ratio = item.counted_cars / total\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 160,
+        "wires": [
+            [
+                "7ee76e7af2f44726"
+            ]
+        ]
+    },
+    {
+        "id": "1ee747450ecdcf88",
+        "type": "link in",
+        "z": "d9af16830f8ace2c",
+        "name": "link in 1",
+        "links": [],
+        "x": 545,
+        "y": 20,
+        "wires": [
+            [
+                "1b85d160a557c69e"
+            ]
+        ]
+    },
+    {
+        "id": "7ee76e7af2f44726",
+        "type": "link out",
+        "z": "d9af16830f8ace2c",
+        "name": "link out 6",
+        "mode": "link",
+        "links": [],
+        "x": 715,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "faebc7c0593e53c6",
+        "type": "inject",
+        "z": "3a610e6787b75aeb",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 380,
+        "y": 80,
+        "wires": [
+            [
+                "fb9c62c4221ae1f8"
+            ]
+        ]
+    },
+    {
+        "id": "ab987c8d46297707",
+        "type": "ui_dropdown",
+        "z": "3a610e6787b75aeb",
+        "name": "",
+        "label": "",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "578d025e00dafb5b",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 980,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fb9c62c4221ae1f8",
+        "type": "link call",
+        "z": "3a610e6787b75aeb",
+        "d": true,
+        "name": "",
+        "links": [
+            "0cb85856e7bf9f24"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 570,
+        "y": 80,
+        "wires": [
+            [
+                "a38c62b72745c652"
+            ]
+        ]
+    },
+    {
+        "id": "a38c62b72745c652",
+        "type": "function",
+        "z": "3a610e6787b75aeb",
+        "name": "Build roads list",
+        "func": "let data = msg.counted_cars\n\n\n\n\nmsg.options = ['epilogi1','epilogi2']\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 80,
+        "wires": [
+            [
+                "ab987c8d46297707",
+                "a1dddbf4fbbb4d49"
+            ]
+        ]
+    },
+    {
+        "id": "4479012e810e49fa",
+        "type": "inject",
+        "z": "3a610e6787b75aeb",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 580,
+        "y": 220,
+        "wires": [
+            [
+                "a38c62b72745c652"
+            ]
+        ]
+    },
+    {
+        "id": "a1dddbf4fbbb4d49",
+        "type": "debug",
+        "z": "3a610e6787b75aeb",
+        "name": "debug 25",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 200,
+        "wires": []
+    }
+]

@@ -1,8 +1,16 @@
 [
     {
+        "id": "372f8629abbd83d1",
+        "type": "tab",
+        "label": "Save to DB",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "3d9c4b8676673364",
         "type": "tab",
-        "label": "Get data from API",
+        "label": "gov.gr API",
         "disabled": false,
         "info": "",
         "env": []
@@ -32,14 +40,6 @@
         "env": []
     },
     {
-        "id": "d9af16830f8ace2c",
-        "type": "tab",
-        "label": "K-Clusters",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
         "id": "3a610e6787b75aeb",
         "type": "tab",
         "label": "Dashboard",
@@ -48,18 +48,16 @@
         "env": []
     },
     {
+        "id": "19ae6230b6d2cba0",
+        "type": "sqlitedb",
+        "db": "/home/mike/HUA/WebServices/Lab/madrid.db",
+        "mode": "RWC"
+    },
+    {
         "id": "39a5a9876bc94f25",
         "type": "sqlitedb",
         "db": "/home/mike/HUA/WebServices/HUA-DIT-WebServices/attica_traffic.sqlite",
         "mode": "RWC"
-    },
-    {
-        "id": "75713334e8d9d783",
-        "type": "ui_tab",
-        "name": "Main",
-        "icon": "dashboard",
-        "disabled": false,
-        "hidden": false
     },
     {
         "id": "d74ed80f31a2ffe3",
@@ -177,6 +175,160 @@
         "mode": "RWC"
     },
     {
+        "id": "e6b3f9669cad2f4e",
+        "type": "sqlite",
+        "z": "372f8629abbd83d1",
+        "mydb": "19ae6230b6d2cba0",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "DB",
+        "x": 570,
+        "y": 140,
+        "wires": [
+            [
+                "095f7f0145328d3e"
+            ]
+        ]
+    },
+    {
+        "id": "57845a320eefea48",
+        "type": "function",
+        "z": "372f8629abbd83d1",
+        "name": "Create Table",
+        "func": "msg.topic = 'create table madrid (it text, id text, idelem text, velocidad text, timestamp text)';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 80,
+        "wires": [
+            [
+                "e6b3f9669cad2f4e"
+            ]
+        ]
+    },
+    {
+        "id": "1d74369e826c3ed7",
+        "type": "function",
+        "z": "372f8629abbd83d1",
+        "name": "Read * from DB",
+        "func": "msg.topic = 'select * from madrid'\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 140,
+        "wires": [
+            [
+                "e6b3f9669cad2f4e"
+            ]
+        ]
+    },
+    {
+        "id": "095f7f0145328d3e",
+        "type": "debug",
+        "z": "372f8629abbd83d1",
+        "name": "debug 3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "66d7ada6ed47e15c",
+        "type": "inject",
+        "z": "372f8629abbd83d1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "57845a320eefea48"
+            ]
+        ]
+    },
+    {
+        "id": "7e2fc9825a1544db",
+        "type": "inject",
+        "z": "372f8629abbd83d1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 140,
+        "wires": [
+            [
+                "1d74369e826c3ed7"
+            ]
+        ]
+    },
+    {
+        "id": "c215e2b78564b378",
+        "type": "link in",
+        "z": "372f8629abbd83d1",
+        "name": "link in 1",
+        "links": [
+            "af5befa082010c26"
+        ],
+        "x": 405,
+        "y": 200,
+        "wires": [
+            [
+                "e6b3f9669cad2f4e"
+            ]
+        ]
+    },
+    {
+        "id": "d241db0b121a5d6e",
+        "type": "comment",
+        "z": "372f8629abbd83d1",
+        "name": "Insert",
+        "info": "Insert",
+        "x": 410,
+        "y": 240,
+        "wires": []
+    },
+    {
         "id": "98d6e69f573d7d61",
         "type": "http request",
         "z": "3d9c4b8676673364",
@@ -199,7 +351,7 @@
                 "valueValue": "Token 18b95bf584abece33b62fba77e946f5d19760873"
             }
         ],
-        "x": 630,
+        "x": 190,
         "y": 60,
         "wires": [
             [
@@ -219,7 +371,7 @@
         "finalize": "",
         "libs": [],
         "x": 350,
-        "y": 60,
+        "y": 260,
         "wires": [
             [
                 "98d6e69f573d7d61"
@@ -248,7 +400,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 120,
-        "y": 60,
+        "y": 260,
         "wires": [
             [
                 "ae99c0a11089472a"
@@ -263,7 +415,7 @@
         "property": "payload",
         "action": "",
         "pretty": false,
-        "x": 810,
+        "x": 370,
         "y": 60,
         "wires": [
             [
@@ -310,8 +462,8 @@
         "z": "3d9c4b8676673364",
         "name": "API Call",
         "links": [],
-        "x": 405,
-        "y": 280,
+        "x": 55,
+        "y": 60,
         "wires": [
             [
                 "98d6e69f573d7d61"
@@ -325,8 +477,8 @@
         "name": "API Return",
         "mode": "return",
         "links": [],
-        "x": 895,
-        "y": 280,
+        "x": 495,
+        "y": 60,
         "wires": []
     },
     {
@@ -334,15 +486,25 @@
         "type": "debug",
         "z": "3d9c4b8676673364",
         "name": "debug 30",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1020,
-        "y": 100,
+        "x": 600,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "60c6085a7e36fd58",
+        "type": "comment",
+        "z": "3d9c4b8676673364",
+        "name": "Testing",
+        "info": "",
+        "x": 110,
+        "y": 220,
         "wires": []
     },
     {
@@ -396,24 +558,6 @@
             [
                 "52520011d05866bd"
             ]
-        ]
-    },
-    {
-        "id": "9a67748875739596",
-        "type": "function",
-        "z": "019efafd3890369d",
-        "d": true,
-        "name": "Build datasets for many months",
-        "func": "const roads_arr = msg.payload.map(record => record.road_name);\nconst roads_list = [...new Set(roads_arr)];\nconst dates_arr = msg.payload.map(record => record.appprocesstime.substring(0, 7))\nconst dates_list = [...new Set(dates_arr)];\n\nlet speeds_obj = []\n\nfor (let road of roads_list) {\n    \n    let each_date = []\n    for (let date of dates_list) {\n        \n        let avg_speed_arr = []\n        for (let item of msg.payload) {\n            if (item.road_name === road && item.appprocesstime.includes(date)) {\n                avg_speed_arr.push([item.average_speed])\n            }\n        }\n\n        each_date.push({\n            'month': date,\n            'speeds': avg_speed_arr        \n        })\n\n    }\n\n    speeds_obj.push({\n        'road': road,\n        'dates': each_date\n    })\n}\n\nmsg = {}\nmsg.speeds = speeds_obj\n\nlet test = [{\n    road: 'roadname',\n    dates: [{\n        month: 'month',\n        speeds: [[1],[2],[3]]\n    }]\n}]\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 730,
-        "y": 60,
-        "wires": [
-            []
         ]
     },
     {
@@ -477,7 +621,7 @@
         "type": "function",
         "z": "019efafd3890369d",
         "name": "Built SQL insert",
-        "func": "let insert_query = \"INSERT INTO clusters(date, road, centroid1, centroid2) VALUES \"\nfor (let item of msg.clusters) {\n    let max = 0\n    let min = 0\n    if (item.cluster[0].centroid[0] > item.cluster[1].centroid[0]) {\n        max = item.cluster[0].centroid[0]\n        min = item.cluster[1].centroid[0]\n    }else {\n        max = item.cluster[1].centroid[0]\n        min = item.cluster[0].centroid[0]\n    }\n    insert_query += `(\"${item.month}\", \"${item.road}\", \"${max}\", \"${min}\"),`\n}\nmsg.topic = insert_query.slice(0, -1)\n\nreturn msg;",
+        "func": "let insert_query = \"INSERT INTO clusters(date, road, centroid1, centroid2) VALUES \"\nfor (let item of msg.clusters) {\n    let max = item.cluster[0].centroid[0]\n    let min = item.cluster[1].centroid[0]\n    if (min > max) {\n        [max, min] = [min, max]\n    }\n    insert_query += `(\"${item.month}\", \"${item.road}\", \"${max}\", \"${min}\"),`\n}\nmsg.topic = insert_query.slice(0, -1)\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -531,8 +675,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 100,
-        "y": 120,
+        "x": 300,
+        "y": 60,
         "wires": [
             [
                 "52520011d05866bd"
@@ -566,8 +710,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 110,
-        "y": 180,
+        "x": 490,
+        "y": 60,
         "wires": [
             [
                 "52520011d05866bd"
@@ -602,7 +746,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 110,
-        "y": 240,
+        "y": 120,
         "wires": [
             [
                 "52520011d05866bd"
@@ -636,8 +780,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 110,
-        "y": 300,
+        "x": 290,
+        "y": 120,
         "wires": [
             [
                 "52520011d05866bd"
@@ -671,8 +815,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 110,
-        "y": 360,
+        "x": 490,
+        "y": 120,
         "wires": [
             [
                 "52520011d05866bd"
@@ -707,7 +851,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 110,
-        "y": 420,
+        "y": 180,
         "wires": [
             [
                 "52520011d05866bd"
@@ -741,8 +885,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 110,
-        "y": 480,
+        "x": 290,
+        "y": 180,
         "wires": [
             [
                 "52520011d05866bd"
@@ -776,8 +920,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 100,
-        "y": 540,
+        "x": 500,
+        "y": 180,
         "wires": [
             [
                 "52520011d05866bd"
@@ -812,7 +956,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 110,
-        "y": 600,
+        "y": 240,
         "wires": [
             [
                 "52520011d05866bd"
@@ -846,8 +990,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 100,
-        "y": 660,
+        "x": 300,
+        "y": 240,
         "wires": [
             [
                 "52520011d05866bd"
@@ -881,8 +1025,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 100,
-        "y": 720,
+        "x": 500,
+        "y": 240,
         "wires": [
             [
                 "52520011d05866bd"
@@ -905,7 +1049,7 @@
             },
             {
                 "p": "date_to",
-                "v": "'2023-01-10'",
+                "v": "'2023-01-15'",
                 "vt": "str"
             }
         ],
@@ -916,8 +1060,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 190,
-        "y": 160,
+        "x": 130,
+        "y": 60,
         "wires": [
             [
                 "a4eae0be3193e5d7"
@@ -934,8 +1078,8 @@
         ],
         "linkType": "static",
         "timeout": "300",
-        "x": 380,
-        "y": 160,
+        "x": 320,
+        "y": 100,
         "wires": [
             [
                 "f60ae7ab6aee55c0"
@@ -947,17 +1091,17 @@
         "type": "function",
         "z": "469d36c343ae88fa",
         "name": "Build Dataset",
-        "func": "const roads_arr = msg.payload.map(record => record.road_name);\nconst roads_list = [...new Set(roads_arr)];\n\nconst hours_arr = msg.payload.map(record => record.appprocesstime.substring(11, 19))\nconst hours_list = [...new Set(hours_arr)];\n\nlet roads = []\nfor (let road of roads_list) {\n    for (let hour of hours_arr) {\n        let speeds = []\n        for (let item of msg.payload) {\n            if (item.appprocesstime.includes(hour) && item.road_name === road) {\n                speeds.push([item.average_speed])\n            }\n        }\n        roads.push({\n            'road': road,\n            'speeds': speeds,\n        })\n    }\n}\n\nmsg.dataset = roads\n\n\nreturn msg;\n\n// [{\n//     road: 'roadname',\n//     speeds: []\n// }]",
+        "func": "const roads_arr = msg.payload.map(record => record.road_name);\nconst roads_list = [...new Set(roads_arr)];\n\nconst hours_arr = msg.payload.map(record => record.appprocesstime.substring(11, 19))\nconst hours_list = [...new Set(hours_arr)];\n\nlet hours = []\n\nfor (let hour of hours_list) {\n    let roads = []\n    for (let road of roads_list) {       \n        let speeds = []             \n        for (let item of msg.payload) {\n            if (item.appprocesstime.includes(hour) && road === item.road_name) {\n                speeds.push([item.average_speed])\n            }\n        }\n        roads.push({\n            'road_name':road,\n            'speeds': speeds\n        })      \n\n    }\n    hours.push({\n        'hour':hour,\n        'roads':roads\n    })\n}\n\nmsg.dataset = hours\n\n\n\nreturn msg;\n\n// [{\n//     hour: '22:00:00',\n//     roads: [{\n//         road_name: 'κηφησία',\n//         speeds: [[2],[3]...]\n//     }]\n// }]",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 570,
+        "x": 330,
         "y": 160,
         "wires": [
             [
-                "4c4269ef5c51be9f"
+                "0b49140f92b06cb5"
             ]
         ]
     },
@@ -970,11 +1114,74 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 800,
-        "y": 100,
+        "x": 560,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "0b49140f92b06cb5",
+        "type": "function",
+        "z": "469d36c343ae88fa",
+        "name": "K-Clustering",
+        "func": "var clusterMaker = global.get('clusters')\n//number of clusters, defaults to undefined\nclusterMaker.k(2);\n\n//default to 1000\nclusterMaker.iterations(750);\n\nlet clusters = []\n\nfor (let item of msg.dataset) {\n    for (let road of item.roads) {\n        clusterMaker.data(road.speeds)\n        let cluster = clusterMaker.clusters()\n        clusters.push({\n            'hour': item.hour,\n            'road': road.road_name,\n            'cluster': cluster\n        })\n    }\n    \n}\n\nmsg = {}\nmsg.clusters = clusters\nmsg.payload = 'Operation Complete'\nreturn msg;\n\n// [{\n//     hour: '22:00:00',\n//     roads: [{\n//         road_name: 'κηφησία',\n//         speeds: [[2],[3]...]\n//     }]\n// }]",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 220,
+        "wires": [
+            [
+                "4c4269ef5c51be9f",
+                "7bb72f0154eba586"
+            ]
+        ]
+    },
+    {
+        "id": "db5217e556bb47c1",
+        "type": "comment",
+        "z": "469d36c343ae88fa",
+        "name": "clusters array size  = 24 hours x number of roads",
+        "info": "",
+        "x": 680,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "7bb72f0154eba586",
+        "type": "function",
+        "z": "469d36c343ae88fa",
+        "name": "Build SQL Insert",
+        "func": "let insert_query = \"INSERT INTO hours(hour, road, centroid1, centroid2) VALUES \"\nfor (let item of msg.clusters) {\n    let max = item.cluster[0].centroid[0]\n    let min = item.cluster[1].centroid[0]    \n    if (min > max) {      \n        [max, min] = [min, max]\n    }\n    insert_query += `(\"${item.hour}\", \"${item.road}\", \"${max}\", \"${min}\"),`\n}\nmsg.topic = insert_query.slice(0, -1)\n\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 280,
+        "wires": [
+            [
+                "4afb4726da95e57b"
+            ]
+        ]
+    },
+    {
+        "id": "4afb4726da95e57b",
+        "type": "link out",
+        "z": "469d36c343ae88fa",
+        "name": "link out 8",
+        "mode": "link",
+        "links": [
+            "f8482dd0d3eb5861"
+        ],
+        "x": 515,
+        "y": 280,
         "wires": []
     },
     {
@@ -1135,8 +1342,8 @@
             "60a4b7b6ef8acb62",
             "eebc06999e92089c"
         ],
-        "x": 265,
-        "y": 400,
+        "x": 425,
+        "y": 220,
         "wires": [
             [
                 "47d5bd7d62a90f7e"
@@ -1150,8 +1357,8 @@
         "name": "link out 5",
         "mode": "return",
         "links": [],
-        "x": 555,
-        "y": 400,
+        "x": 715,
+        "y": 220,
         "wires": []
     },
     {
@@ -1162,8 +1369,8 @@
         "sqlquery": "msg.topic",
         "sql": "",
         "name": "DB",
-        "x": 390,
-        "y": 400,
+        "x": 550,
+        "y": 220,
         "wires": [
             [
                 "7e5755ea301b997a"
@@ -1178,8 +1385,8 @@
         "sqlquery": "batch",
         "sql": "",
         "name": "DB Batch insert",
-        "x": 420,
-        "y": 520,
+        "x": 580,
+        "y": 340,
         "wires": [
             []
         ]
@@ -1190,10 +1397,11 @@
         "z": "f04f43533f741c82",
         "name": "db2 batch",
         "links": [
-            "527efbcb58ecf430"
+            "527efbcb58ecf430",
+            "4afb4726da95e57b"
         ],
-        "x": 265,
-        "y": 520,
+        "x": 425,
+        "y": 340,
         "wires": [
             [
                 "6543c3f2ca12350d"
@@ -1218,11 +1426,11 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "CREATE TABLE clusters(date TEXT, road TEXT, centroid1 NUMBER, centroid2 NUMBER, PRIMARY KEY(date, road) ON CONFLICT IGNORE)",
+        "topic": "CREATE TABLE months(date TEXT, road TEXT, centroid1 NUMBER, centroid2 NUMBER, PRIMARY KEY(date, road) ON CONFLICT IGNORE)",
         "payload": "",
         "payloadType": "date",
-        "x": 160,
-        "y": 560,
+        "x": 320,
+        "y": 380,
         "wires": [
             [
                 "6543c3f2ca12350d"
@@ -1257,182 +1465,16 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "CREATE TABLE hours(date TEXT, road TEXT, centroid1 NUMBER, centroid2 NUMBER, PRIMARY KEY(date, road) ON CONFLICT IGNORE)",
+        "topic": "CREATE TABLE hours(hour TEXT, road TEXT, centroid1 NUMBER, centroid2 NUMBER, PRIMARY KEY(date, road) ON CONFLICT IGNORE)",
         "payload": "",
         "payloadType": "date",
-        "x": 170,
-        "y": 600,
+        "x": 330,
+        "y": 420,
         "wires": [
             [
                 "6543c3f2ca12350d"
             ]
         ]
-    },
-    {
-        "id": "55548fc40a903403",
-        "type": "function",
-        "z": "d9af16830f8ace2c",
-        "name": "K-Clustering",
-        "func": "var clusterMaker = global.get('clusters')\n//number of clusters, defaults to undefined\nclusterMaker.k(3);\n\n//default to 1000\nclusterMaker.iterations(750);\n\nclusterMaker.data(msg.dataset)\n// msg.payload['clusters'] = clusterMaker.clusters()\nmsg.clusters = clusterMaker.clusters()\n\ndelete msg.dataset\ndelete msg.topic\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 850,
-        "y": 80,
-        "wires": [
-            [
-                "84f5c8a9aab7a96e"
-            ]
-        ]
-    },
-    {
-        "id": "542ba9a40b5504e8",
-        "type": "debug",
-        "z": "d9af16830f8ace2c",
-        "name": "debug 22",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1060,
-        "y": 20,
-        "wires": []
-    },
-    {
-        "id": "1b85d160a557c69e",
-        "type": "function",
-        "z": "d9af16830f8ace2c",
-        "name": "Build data set",
-        "func": "let speeds = []\nfor (let item of msg.payload) {\n    speeds.push([item.average_speed])\n}\n\nmsg.dataset = speeds\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 640,
-        "y": 80,
-        "wires": [
-            [
-                "55548fc40a903403",
-                "542ba9a40b5504e8"
-            ]
-        ]
-    },
-    {
-        "id": "6ee78aa888ad31f4",
-        "type": "inject",
-        "z": "d9af16830f8ace2c",
-        "name": "ΔΕΔΟΜΕΝΑ Λ.ΚΗΦΙΣΟΥ",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "SELECT * FROM traffic JOIN sensors ON traffic.device_id = sensors.sensor_id WHERE sensors.road_name = 'Λ. ΚΗΦΙΣΟΥ' AND app_process_time LIKE '2023-05-03%'",
-        "payload": "",
-        "payloadType": "date",
-        "x": 190,
-        "y": 80,
-        "wires": [
-            [
-                "e445e64fdb7335be"
-            ]
-        ]
-    },
-    {
-        "id": "e445e64fdb7335be",
-        "type": "link call",
-        "z": "d9af16830f8ace2c",
-        "name": "",
-        "links": [
-            "0cb85856e7bf9f24"
-        ],
-        "linkType": "static",
-        "timeout": "30",
-        "x": 430,
-        "y": 80,
-        "wires": [
-            [
-                "1b85d160a557c69e"
-            ]
-        ]
-    },
-    {
-        "id": "84f5c8a9aab7a96e",
-        "type": "function",
-        "z": "d9af16830f8ace2c",
-        "name": "Find centroid brackets",
-        "func": "for (let item of msg.clusters) {\n    let array = []\n    for (let number of item.points) {\n        array.push(number[0])\n    }\n\n    let bracket = {\n        'high': 0,\n        'low': 0\n    }\n\n    bracket.high = Math.max.apply(null, array)\n    bracket.low = Math.min.apply(null, array)\n    item.bracket = bracket\n}\n\n//cleanup cluster points if not needed, comment out if needed\n// for (let cluster of msg.clusters) {\n//     delete cluster.points\n// }\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 180,
-        "y": 160,
-        "wires": [
-            [
-                "0f41f297bc3cd867"
-            ]
-        ]
-    },
-    {
-        "id": "0f41f297bc3cd867",
-        "type": "function",
-        "z": "d9af16830f8ace2c",
-        "name": "Classify traffic into brackets",
-        "func": "let counted_cars = []\n\n//count cars for each centroid bracket\nlet total = 0\nfor (let cluster of msg.clusters) {   \n    let count = 0        \n    for (let record of msg.payload) {\n        if (record.average_speed >= cluster.bracket.low && record.average_speed <= cluster.bracket.high){            \n            count += record.counted_cars            \n        }\n    }   \n    counted_cars.push({\n        centroid: cluster.centroid[0],\n        counted_cars: count,\n        ratio: 0\n    })\n    total += count\n}\n\nmsg.counted_cars = counted_cars\n\n//calculate rations for each centroid bracket\nfor (let item of msg.counted_cars) {\n    item.ratio = item.counted_cars / total\n}\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 480,
-        "y": 160,
-        "wires": [
-            [
-                "7ee76e7af2f44726"
-            ]
-        ]
-    },
-    {
-        "id": "1ee747450ecdcf88",
-        "type": "link in",
-        "z": "d9af16830f8ace2c",
-        "name": "link in 1",
-        "links": [],
-        "x": 545,
-        "y": 20,
-        "wires": [
-            [
-                "1b85d160a557c69e"
-            ]
-        ]
-    },
-    {
-        "id": "7ee76e7af2f44726",
-        "type": "link out",
-        "z": "d9af16830f8ace2c",
-        "name": "link out 6",
-        "mode": "link",
-        "links": [],
-        "x": 715,
-        "y": 160,
-        "wires": []
     },
     {
         "id": "faebc7c0593e53c6",
@@ -1455,8 +1497,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 380,
-        "y": 80,
+        "x": 100,
+        "y": 60,
         "wires": [
             [
                 "fb9c62c4221ae1f8"
@@ -1482,8 +1524,8 @@
         "topic": "topic",
         "topicType": "msg",
         "className": "",
-        "x": 980,
-        "y": 80,
+        "x": 700,
+        "y": 60,
         "wires": [
             []
         ]
@@ -1499,8 +1541,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 570,
-        "y": 80,
+        "x": 290,
+        "y": 60,
         "wires": [
             [
                 "a38c62b72745c652"
@@ -1518,8 +1560,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 780,
-        "y": 80,
+        "x": 500,
+        "y": 60,
         "wires": [
             [
                 "ab987c8d46297707",
@@ -1548,8 +1590,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 580,
-        "y": 220,
+        "x": 300,
+        "y": 200,
         "wires": [
             [
                 "a38c62b72745c652"
@@ -1569,7 +1611,7 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1020,
+        "x": 720,
         "y": 200,
         "wires": []
     }

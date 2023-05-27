@@ -1,13 +1,5 @@
 [
     {
-        "id": "372f8629abbd83d1",
-        "type": "tab",
-        "label": "Save to DB",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
         "id": "3d9c4b8676673364",
         "type": "tab",
         "label": "gov.gr API",
@@ -40,7 +32,7 @@
         "env": []
     },
     {
-        "id": "3a610e6787b75aeb",
+        "id": "e0bd9e50950cbdbf",
         "type": "tab",
         "label": "Dashboard",
         "disabled": false,
@@ -48,9 +40,28 @@
         "env": []
     },
     {
-        "id": "19ae6230b6d2cba0",
+        "id": "75713334e8d9d783",
+        "type": "ui_tab",
+        "name": "Main",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "578d025e00dafb5b",
+        "type": "ui_group",
+        "name": "Select Road",
+        "tab": "75713334e8d9d783",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "5588be0b796aa416",
         "type": "sqlitedb",
-        "db": "/home/mike/HUA/WebServices/Lab/madrid.db",
+        "db": "/home/mike/HUA/WebServices/HUA-DIT-WebServices/db2.sqlite",
         "mode": "RWC"
     },
     {
@@ -158,177 +169,6 @@
         }
     },
     {
-        "id": "578d025e00dafb5b",
-        "type": "ui_group",
-        "name": "Select Road",
-        "tab": "75713334e8d9d783",
-        "order": 1,
-        "disp": true,
-        "width": "6",
-        "collapse": false,
-        "className": ""
-    },
-    {
-        "id": "5588be0b796aa416",
-        "type": "sqlitedb",
-        "db": "/home/mike/HUA/WebServices/HUA-DIT-WebServices/db2.sqlite",
-        "mode": "RWC"
-    },
-    {
-        "id": "e6b3f9669cad2f4e",
-        "type": "sqlite",
-        "z": "372f8629abbd83d1",
-        "mydb": "19ae6230b6d2cba0",
-        "sqlquery": "msg.topic",
-        "sql": "",
-        "name": "DB",
-        "x": 570,
-        "y": 140,
-        "wires": [
-            [
-                "095f7f0145328d3e"
-            ]
-        ]
-    },
-    {
-        "id": "57845a320eefea48",
-        "type": "function",
-        "z": "372f8629abbd83d1",
-        "name": "Create Table",
-        "func": "msg.topic = 'create table madrid (it text, id text, idelem text, velocidad text, timestamp text)';\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 350,
-        "y": 80,
-        "wires": [
-            [
-                "e6b3f9669cad2f4e"
-            ]
-        ]
-    },
-    {
-        "id": "1d74369e826c3ed7",
-        "type": "function",
-        "z": "372f8629abbd83d1",
-        "name": "Read * from DB",
-        "func": "msg.topic = 'select * from madrid'\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 140,
-        "wires": [
-            [
-                "e6b3f9669cad2f4e"
-            ]
-        ]
-    },
-    {
-        "id": "095f7f0145328d3e",
-        "type": "debug",
-        "z": "372f8629abbd83d1",
-        "name": "debug 3",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 720,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "66d7ada6ed47e15c",
-        "type": "inject",
-        "z": "372f8629abbd83d1",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 80,
-        "wires": [
-            [
-                "57845a320eefea48"
-            ]
-        ]
-    },
-    {
-        "id": "7e2fc9825a1544db",
-        "type": "inject",
-        "z": "372f8629abbd83d1",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 140,
-        "wires": [
-            [
-                "1d74369e826c3ed7"
-            ]
-        ]
-    },
-    {
-        "id": "c215e2b78564b378",
-        "type": "link in",
-        "z": "372f8629abbd83d1",
-        "name": "link in 1",
-        "links": [
-            "af5befa082010c26"
-        ],
-        "x": 405,
-        "y": 200,
-        "wires": [
-            [
-                "e6b3f9669cad2f4e"
-            ]
-        ]
-    },
-    {
-        "id": "d241db0b121a5d6e",
-        "type": "comment",
-        "z": "372f8629abbd83d1",
-        "name": "Insert",
-        "info": "Insert",
-        "x": 410,
-        "y": 240,
-        "wires": []
-    },
-    {
         "id": "98d6e69f573d7d61",
         "type": "http request",
         "z": "3d9c4b8676673364",
@@ -360,35 +200,22 @@
         ]
     },
     {
-        "id": "ae99c0a11089472a",
-        "type": "function",
-        "z": "3d9c4b8676673364",
-        "name": "set query date parameters",
-        "func": "msg.payload = {}\nmsg[\"date_from\"] = \"2023-01-01\"\nmsg[\"date_to\"] = \"2023-01-10\"\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 350,
-        "y": 260,
-        "wires": [
-            [
-                "98d6e69f573d7d61"
-            ]
-        ]
-    },
-    {
         "id": "b533a47bb7919317",
         "type": "inject",
         "z": "3d9c4b8676673364",
-        "name": "",
+        "name": "Test API",
         "props": [
             {
                 "p": "payload"
             },
             {
-                "p": "topic",
+                "p": "date_from",
+                "v": "2023-01-01",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2023-02-28",
                 "vt": "str"
             }
         ],
@@ -403,7 +230,7 @@
         "y": 260,
         "wires": [
             [
-                "ae99c0a11089472a"
+                "98d6e69f573d7d61"
             ]
         ]
     },
@@ -421,38 +248,6 @@
             [
                 "52067ff2382e812f",
                 "cbfcd413682c56e2"
-            ]
-        ]
-    },
-    {
-        "id": "eebc06999e92089c",
-        "type": "link out",
-        "z": "3d9c4b8676673364",
-        "name": "link out 2",
-        "mode": "link",
-        "links": [
-            "0cb85856e7bf9f24"
-        ],
-        "x": 645,
-        "y": 620,
-        "wires": []
-    },
-    {
-        "id": "4fed006d0cb12aed",
-        "type": "function",
-        "z": "3d9c4b8676673364",
-        "name": "Batch insert traffic data into DB (SqLite)",
-        "func": "// const query_template\nlet insert_query = \"INSERT INTO traffic(device_id, app_process_time, counted_cars, average_speed) VALUES \"\n\nfor (let item of msg.payload) {\n    insert_query += `(\"${item.deviceid}\", \"${item.appprocesstime}\", \"${item.countedcars}\", \"${item.average_speed}\"),`   \n}\n\n// insert_query += ')'\nmsg.topic = insert_query.slice(0, -1)\n// msg.topic += ' on duplicate key update device_id=device_id'\nreturn msg;\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 300,
-        "y": 620,
-        "wires": [
-            [
-                "eebc06999e92089c"
             ]
         ]
     },
@@ -486,14 +281,14 @@
         "type": "debug",
         "z": "3d9c4b8676673364",
         "name": "debug 30",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 600,
+        "x": 380,
         "y": 260,
         "wires": []
     },
@@ -517,11 +312,11 @@
         ],
         "linkType": "static",
         "timeout": "300",
-        "x": 360,
+        "x": 460,
         "y": 380,
         "wires": [
             [
-                "491e4d62c496e8ca"
+                "b3e0b9db3a177a7e"
             ]
         ]
     },
@@ -552,7 +347,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 110,
+        "x": 190,
         "y": 60,
         "wires": [
             [
@@ -565,18 +360,18 @@
         "type": "function",
         "z": "019efafd3890369d",
         "name": "K-Clustering",
-        "func": "var clusterMaker = global.get('clusters')\n//number of clusters, defaults to undefined\nclusterMaker.k(2);\n\n//default to 1000\nclusterMaker.iterations(750);\n\nlet clusters = []\n\nfor (let road of msg.roads) {     \n    clusterMaker.data(road.speeds)\n    let cluster = clusterMaker.clusters()    \n    clusters.push({\n        'road': road.road,\n        'month': road.month,\n        'cluster': cluster\n    })\n}\n\nmsg = {}\nmsg.clusters = clusters\nmsg.payload = 'Operation Complete'\nreturn msg;",
+        "func": "var clusterMaker = global.get('clusters')\n//number of clusters, defaults to undefined\nclusterMaker.k(2);\n\n//default to 1000\nclusterMaker.iterations(100);\n\nlet clusters = []\n\nfor (let road of msg.roads) {\n    for (let month of road.months) {\n        for (let day of month.days) {\n            clusterMaker.data(day.speeds)\n            day.clusters = clusterMaker.clusters()\n        }\n    }    \n}\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 470,
         "y": 500,
         "wires": [
             [
-                "c61a13d82f2bad85",
-                "f22b46e7d111a546"
+                "f22b46e7d111a546",
+                "c61a13d82f2bad85"
             ]
         ]
     },
@@ -584,19 +379,18 @@
         "id": "491e4d62c496e8ca",
         "type": "function",
         "z": "019efafd3890369d",
-        "name": "Build dataset (single month)",
-        "func": "const roads_arr = msg.payload.map(record => record.road_name);\nconst roads_list = [...new Set(roads_arr)];\n\nconst dates_arr = msg.payload.map(record => record.appprocesstime.substring(0, 7))\nconst dates_list = [...new Set(dates_arr)];\n\nconsole.log(dates_list)\n\nlet month = dates_list[0]\nlet roads = []\nfor (let road of roads_list) {\n    let speeds = []\n    for (let item of msg.payload) {\n        if (item.road_name === road) {\n            speeds.push([item.average_speed])\n        }\n    }\n    roads.push({\n        'road': road,\n        'month': month,\n        'speeds':speeds\n    })\n}\n\n\n\nmsg = {}\nmsg.roads = roads\n\n// let test = [{\n//     road: 'roadname',\n//     dates: [{\n//         month: 'month',\n//         speeds: [[1],[2],[3]]\n//     }]\n// }]\n\nreturn msg;",
+        "d": true,
+        "name": "Build dataset",
+        "func": "const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']\n\nconst roads_arr = msg.payload.map(record => record.road_name);\nconst roads_list = [...new Set(roads_arr)]\n\nconst dates_arr = msg.payload.map(record => record.appprocesstime.substring(0, 10))\nconst dates_list = [...new Set(dates_arr)]\n\nlet monthly_clusters = []\nfor (let road of roads_list) {\n    let data = []\n    for (let date of dates_list) {\n        let speeds = []       \n        for (let item of msg.payload) {\n            if (item.road_name === road && item.appprocesstime.includes(date.substring(0, 7))) {\n                speeds.push([item.average_speed])\n            }\n        }\n        const birthday = new Date(date)\n        \n        data.push({\n            'month': date.substring(0, 7),\n            'day': days[birthday.getDay()],\n            'speeds': speeds\n        })\n    }\n    monthly_clusters.push({\n        'road_name': road,\n        'data': data\n    })\n}\n\nmsg = {}\nmsg.data = monthly_clusters\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
-        "y": 440,
+        "x": 1010,
+        "y": 160,
         "wires": [
-            [
-                "cee2f7b1bbc03e41"
-            ]
+            []
         ]
     },
     {
@@ -608,11 +402,11 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 600,
+        "x": 700,
         "y": 500,
         "wires": []
     },
@@ -621,13 +415,13 @@
         "type": "function",
         "z": "019efafd3890369d",
         "name": "Built SQL insert",
-        "func": "let insert_query = \"INSERT INTO clusters(date, road, centroid1, centroid2) VALUES \"\nfor (let item of msg.clusters) {\n    let max = item.cluster[0].centroid[0]\n    let min = item.cluster[1].centroid[0]\n    if (min > max) {\n        [max, min] = [min, max]\n    }\n    insert_query += `(\"${item.month}\", \"${item.road}\", \"${max}\", \"${min}\"),`\n}\nmsg.topic = insert_query.slice(0, -1)\n\nreturn msg;",
+        "func": "let insert_query = \"INSERT INTO monthly_clusters(month, day, road, centroid1, centroid2) VALUES \"\nfor (let road of msg.roads) {\n    for (let month of road.months) {\n        for (let day of month.days) {\n            let max = day.clusters[0].centroid[0]\n            let min = day.clusters[1].centroid[0]\n            if (min > max) {\n                [max, min] = [min, max]\n            }\n            insert_query += `(\"${month.month}\", \"${day.day}\", \"${road.road_name}\", \"${max}\", \"${min}\"),`\n        }\n    }\n}\nmsg.topic = insert_query.slice(0, -1)\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 380,
+        "x": 480,
         "y": 560,
         "wires": [
             [
@@ -644,7 +438,7 @@
         "links": [
             "f8482dd0d3eb5861"
         ],
-        "x": 555,
+        "x": 655,
         "y": 560,
         "wires": []
     },
@@ -675,7 +469,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 300,
+        "x": 380,
         "y": 60,
         "wires": [
             [
@@ -710,7 +504,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 490,
+        "x": 570,
         "y": 60,
         "wires": [
             [
@@ -745,8 +539,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 110,
-        "y": 120,
+        "x": 190,
+        "y": 100,
         "wires": [
             [
                 "52520011d05866bd"
@@ -780,8 +574,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 290,
-        "y": 120,
+        "x": 370,
+        "y": 100,
         "wires": [
             [
                 "52520011d05866bd"
@@ -815,8 +609,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 490,
-        "y": 120,
+        "x": 570,
+        "y": 100,
         "wires": [
             [
                 "52520011d05866bd"
@@ -850,8 +644,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 110,
-        "y": 180,
+        "x": 190,
+        "y": 140,
         "wires": [
             [
                 "52520011d05866bd"
@@ -885,8 +679,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 290,
-        "y": 180,
+        "x": 370,
+        "y": 140,
         "wires": [
             [
                 "52520011d05866bd"
@@ -920,8 +714,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 500,
-        "y": 180,
+        "x": 580,
+        "y": 140,
         "wires": [
             [
                 "52520011d05866bd"
@@ -955,8 +749,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 110,
-        "y": 240,
+        "x": 190,
+        "y": 180,
         "wires": [
             [
                 "52520011d05866bd"
@@ -990,8 +784,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 300,
-        "y": 240,
+        "x": 380,
+        "y": 180,
         "wires": [
             [
                 "52520011d05866bd"
@@ -1025,11 +819,65 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 500,
-        "y": 240,
+        "x": 580,
+        "y": 180,
         "wires": [
             [
                 "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "f4617667ce12acfc",
+        "type": "inject",
+        "z": "019efafd3890369d",
+        "name": "Test",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2022-01-28",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2022-02-07",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 630,
+        "y": 320,
+        "wires": [
+            [
+                "52520011d05866bd"
+            ]
+        ]
+    },
+    {
+        "id": "b3e0b9db3a177a7e",
+        "type": "function",
+        "z": "019efafd3890369d",
+        "name": "Build dataset",
+        "func": "const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']\n\nlet roads = []\n\nfor (let item of msg.payload) { \n    const birthday = new Date(item.appprocesstime.substring(0, 10))\n    const day_name = days[birthday.getDay()]\n\n    let index_road = roads.findIndex(x => x.road_name === item.road_name);   \n    \n    if (index_road === -1) {\n        //create new road\n        roads.push({\n            'road_name' : item.road_name,\n            'months': [{\n                'month': item.appprocesstime.substring(0, 7),\n                'days': [{\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                }]                \n            }]\n        })\n    } else {\n        //update existing road\n        let index_month = roads[index_road].months.findIndex(x => x.month === item.appprocesstime.substring(0, 7)); //find month in months\n        //if month does not exist\n        if (index_month === -1) {\n            roads[index_road].months.push({                \n                'month': item.appprocesstime.substring(0, 7),\n                'days': [{\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                }]\n            })            \n        } else {         \n            let index_day = roads[index_road].months[index_month].days.findIndex(x => x.day === day_name)\n            if (index_day === -1) {\n                roads[index_road].months[index_month].days.push({\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                })\n            } else {\n                roads[index_road].months[index_month].days[index_day].speeds.push([item.average_speed])\n            }\n        }\n    }        \n}\n\n\n\nmsg = {}\nmsg.roads = roads\n// msg.data = monthly_clusters\n// [{\n//     'road_name': 'whatever',\n//     'months': [{\n//         'month': '2023-05',\n//         'days': [{\n//             'day': 'Monday',\n//             'speeds': [[2], [3]]\n//         }]\n//     }] \n// }]\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 440,
+        "wires": [
+            [
+                "cee2f7b1bbc03e41"
             ]
         ]
     },
@@ -1091,7 +939,7 @@
         "type": "function",
         "z": "469d36c343ae88fa",
         "name": "Build Dataset",
-        "func": "const roads_arr = msg.payload.map(record => record.road_name);\nconst roads_list = [...new Set(roads_arr)];\n\nconst hours_arr = msg.payload.map(record => record.appprocesstime.substring(11, 19))\nconst hours_list = [...new Set(hours_arr)];\n\nlet hours = []\n\nfor (let hour of hours_list) {\n    let roads = []\n    for (let road of roads_list) {       \n        let speeds = []             \n        for (let item of msg.payload) {\n            if (item.appprocesstime.includes(hour) && road === item.road_name) {\n                speeds.push([item.average_speed])\n            }\n        }\n        roads.push({\n            'road_name':road,\n            'speeds': speeds\n        })      \n\n    }\n    hours.push({\n        'hour':hour,\n        'roads':roads\n    })\n}\n\nmsg.dataset = hours\n\n\n\nreturn msg;\n\n// [{\n//     hour: '22:00:00',\n//     roads: [{\n//         road_name: 'κηφησία',\n//         speeds: [[2],[3]...]\n//     }]\n// }]",
+        "func": "const roads_arr = msg.payload.map(record => record.road_name);\nconst roads_list = [...new Set(roads_arr)];\n\nconst hours_arr = msg.payload.map(record => record.appprocesstime.substring(11, 19))\nconst hours_list = [...new Set(hours_arr)];\n\nlet hours = []\n\nfor (let hour of hours_list) {\n    let roads = []\n    for (let road of roads_list) {       \n        let speeds = []             \n        for (let item of msg.payload) {\n            if (item.appprocesstime.includes(hour) && road === item.road_name) {\n                speeds.push([item.average_speed])\n            }\n        }\n        roads.push({\n            'road_name':road,\n            'speeds': speeds\n        })\n    }\n    hours.push({\n        'hour':hour,\n        'roads':roads\n    })\n}\n\nmsg.dataset = hours\n\nreturn msg;\n\n// [{\n//     hour: '22:00:00',\n//     roads: [{\n//         road_name: 'κηφησία',\n//         speeds: [[2],[3]...]\n//     }]\n// }]",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1426,7 +1274,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "CREATE TABLE months(date TEXT, road TEXT, centroid1 NUMBER, centroid2 NUMBER, PRIMARY KEY(date, road) ON CONFLICT IGNORE)",
+        "topic": "CREATE TABLE \"monthly_clusters\" ( \"id\" INTEGER, \"month\" TEXT, \"day\" TEXT, \"road\" TEXT, \"centroid1\" REAL,  \"centroid2\" REAL, PRIMARY KEY(\"id\"));",
         "payload": "",
         "payloadType": "date",
         "x": 320,
@@ -1443,8 +1291,8 @@
         "z": "f04f43533f741c82",
         "name": "",
         "info": "CREATE TABLE traffic(device_id TEXT, app_process_time TEXT, counted_cars INTEGER, average_speed REAL, PRIMARY KEY(device_id, app_process_time) ON CONFLICT IGNORE, FOREIGN KEY(device_id) REFERENCES sensors(device_id) ON DELETE CASCADE)",
-        "x": 1220,
-        "y": 320,
+        "x": 760,
+        "y": 340,
         "wires": []
     },
     {
@@ -1465,7 +1313,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "CREATE TABLE hours(hour TEXT, road TEXT, centroid1 NUMBER, centroid2 NUMBER, PRIMARY KEY(date, road) ON CONFLICT IGNORE)",
+        "topic": "CREATE TABLE \"hourly_clusters\" (\"hour\" TEXT, \"road\" TEXT,  \"centroid1\" REAL, \"centroid2\" REAL, PRIMARY KEY(\"hour\"));",
         "payload": "",
         "payloadType": "date",
         "x": 330,
@@ -1477,9 +1325,9 @@
         ]
     },
     {
-        "id": "faebc7c0593e53c6",
+        "id": "ae6f4d79818992d1",
         "type": "inject",
-        "z": "3a610e6787b75aeb",
+        "z": "e0bd9e50950cbdbf",
         "name": "",
         "props": [
             {
@@ -1501,14 +1349,14 @@
         "y": 60,
         "wires": [
             [
-                "fb9c62c4221ae1f8"
+                "90992ce88253f6ef"
             ]
         ]
     },
     {
-        "id": "ab987c8d46297707",
+        "id": "6f02af30701a186c",
         "type": "ui_dropdown",
-        "z": "3a610e6787b75aeb",
+        "z": "e0bd9e50950cbdbf",
         "name": "",
         "label": "",
         "tooltip": "",
@@ -1531,9 +1379,9 @@
         ]
     },
     {
-        "id": "fb9c62c4221ae1f8",
+        "id": "90992ce88253f6ef",
         "type": "link call",
-        "z": "3a610e6787b75aeb",
+        "z": "e0bd9e50950cbdbf",
         "d": true,
         "name": "",
         "links": [
@@ -1545,14 +1393,14 @@
         "y": 60,
         "wires": [
             [
-                "a38c62b72745c652"
+                "e8bd4058f302fd97"
             ]
         ]
     },
     {
-        "id": "a38c62b72745c652",
+        "id": "e8bd4058f302fd97",
         "type": "function",
-        "z": "3a610e6787b75aeb",
+        "z": "e0bd9e50950cbdbf",
         "name": "Build roads list",
         "func": "let data = msg.counted_cars\n\n\n\n\nmsg.options = ['epilogi1','epilogi2']\nreturn msg;",
         "outputs": 1,
@@ -1564,15 +1412,15 @@
         "y": 60,
         "wires": [
             [
-                "ab987c8d46297707",
-                "a1dddbf4fbbb4d49"
+                "6f02af30701a186c",
+                "c9e4daa7b2041715"
             ]
         ]
     },
     {
-        "id": "4479012e810e49fa",
+        "id": "6638f877a5abb218",
         "type": "inject",
-        "z": "3a610e6787b75aeb",
+        "z": "e0bd9e50950cbdbf",
         "name": "",
         "props": [
             {
@@ -1594,14 +1442,14 @@
         "y": 200,
         "wires": [
             [
-                "a38c62b72745c652"
+                "e8bd4058f302fd97"
             ]
         ]
     },
     {
-        "id": "a1dddbf4fbbb4d49",
+        "id": "c9e4daa7b2041715",
         "type": "debug",
-        "z": "3a610e6787b75aeb",
+        "z": "e0bd9e50950cbdbf",
         "name": "debug 25",
         "active": true,
         "tosidebar": true,

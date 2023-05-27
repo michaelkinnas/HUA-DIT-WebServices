@@ -42,7 +42,7 @@
     {
         "id": "75713334e8d9d783",
         "type": "ui_tab",
-        "name": "Monthly Analysis",
+        "name": "Γενική Μηνιαία Εικόνα",
         "icon": "dashboard",
         "order": 2,
         "disabled": false,
@@ -55,7 +55,7 @@
         "tab": "75713334e8d9d783",
         "order": 1,
         "disp": true,
-        "width": "25",
+        "width": 20,
         "collapse": false,
         "className": ""
     },
@@ -164,13 +164,14 @@
         }
     },
     {
-        "id": "14fb68c521133d90",
-        "type": "ui_tab",
-        "name": "Daily Data",
-        "icon": "dashboard",
-        "order": 1,
-        "disabled": false,
-        "hidden": false
+        "id": "281da459e7f9dd42",
+        "type": "ui_spacer",
+        "z": "e0bd9e50950cbdbf",
+        "name": "spacer",
+        "group": "578d025e00dafb5b",
+        "order": 2,
+        "width": 11,
+        "height": 1
     },
     {
         "id": "98d6e69f573d7d61",
@@ -195,7 +196,7 @@
                 "valueValue": "Token 18b95bf584abece33b62fba77e946f5d19760873"
             }
         ],
-        "x": 210,
+        "x": 230,
         "y": 60,
         "wires": [
             [
@@ -245,7 +246,7 @@
         "z": "3d9c4b8676673364",
         "name": "API Call",
         "links": [],
-        "x": 55,
+        "x": 75,
         "y": 60,
         "wires": [
             [
@@ -260,7 +261,7 @@
         "name": "API Return",
         "mode": "return",
         "links": [],
-        "x": 355,
+        "x": 385,
         "y": 60,
         "wires": []
     },
@@ -269,7 +270,7 @@
         "type": "debug",
         "z": "3d9c4b8676673364",
         "name": "debug 30",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -852,7 +853,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 130,
-        "y": 100,
+        "y": 60,
         "wires": [
             [
                 "a4eae0be3193e5d7"
@@ -870,7 +871,7 @@
         "linkType": "static",
         "timeout": "300",
         "x": 320,
-        "y": 100,
+        "y": 60,
         "wires": [
             [
                 "f60ae7ab6aee55c0"
@@ -889,30 +890,12 @@
         "finalize": "",
         "libs": [],
         "x": 330,
-        "y": 160,
+        "y": 120,
         "wires": [
             [
-                "0b49140f92b06cb5",
-                "dcf396b213299957"
+                "0b49140f92b06cb5"
             ]
         ]
-    },
-    {
-        "id": "4c4269ef5c51be9f",
-        "type": "debug",
-        "z": "469d36c343ae88fa",
-        "name": "debug 31",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 560,
-        "y": 220,
-        "wires": []
     },
     {
         "id": "0b49140f92b06cb5",
@@ -926,10 +909,9 @@
         "finalize": "",
         "libs": [],
         "x": 330,
-        "y": 220,
+        "y": 180,
         "wires": [
             [
-                "4c4269ef5c51be9f",
                 "7bb72f0154eba586"
             ]
         ]
@@ -940,8 +922,8 @@
         "z": "469d36c343ae88fa",
         "name": "clusters array size  = 90 roads x 7 days x 24 hours ~15000",
         "info": "",
-        "x": 710,
-        "y": 80,
+        "x": 690,
+        "y": 60,
         "wires": []
     },
     {
@@ -956,11 +938,10 @@
         "finalize": "",
         "libs": [],
         "x": 340,
-        "y": 280,
+        "y": 240,
         "wires": [
             [
-                "4afb4726da95e57b",
-                "7d6d963ea4d67777"
+                "4afb4726da95e57b"
             ]
         ]
     },
@@ -974,76 +955,7 @@
             "f8482dd0d3eb5861"
         ],
         "x": 515,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "4261a400aae3eac8",
-        "type": "function",
-        "z": "469d36c343ae88fa",
-        "name": "Build dataset",
-        "func": "const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']\n\nlet roads = []\n\nfor (let item of msg.payload) { \n    const birthday = new Date(item.appprocesstime.substring(0, 10))\n    const day_name = days[birthday.getDay()]\n\n    let index_road = roads.findIndex(x => x.road_name === item.road_name);   \n    \n    if (index_road === -1) {\n        //create new road\n        roads.push({\n            'road_name' : item.road_name,\n            'months': [{\n                'month': item.appprocesstime.substring(0, 7),\n                'days': [{\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                }]                \n            }]\n        })\n    } else {\n        //update existing road\n        let index_month = roads[index_road].months.findIndex(x => x.month === item.appprocesstime.substring(0, 7)); //find month in months\n        //if month does not exist\n        if (index_month === -1) {\n            roads[index_road].months.push({                \n                'month': item.appprocesstime.substring(0, 7),\n                'days': [{\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                }]\n            })            \n        } else {         \n            let index_day = roads[index_road].months[index_month].days.findIndex(x => x.day === day_name)\n            if (index_day === -1) {\n                roads[index_road].months[index_month].days.push({\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                })\n            } else {\n                roads[index_road].months[index_month].days[index_day].speeds.push([item.average_speed])\n            }\n        }\n    }        \n}\n\n\n\nmsg = {}\nmsg.roads = roads\n// msg.data = monthly_clusters\n// [{\n//     'road_name': 'whatever',\n//     'months': [{\n//         'month': '2023-05',\n//         'days': [{\n//             'day': 'Monday',\n//             'speeds': [[2], [3]]\n//         }]\n//     }] \n// }]\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 870,
-        "y": 360,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "fea56c0d34b8693e",
-        "type": "function",
-        "z": "469d36c343ae88fa",
-        "d": true,
-        "name": "Build Dataset",
-        "func": "const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\n\nlet roads = []\n\nfor (let item of msg.payload) {\n    const birthday = new Date(item.appprocesstime.substring(0, 10))\n    const day_name = days[birthday.getDay()]\n\n    let index_road = roads.findIndex(x => x.road_name === item.road_name);\n\n    if (index_road === -1) {\n        //create new road\n        roads.push({\n            'road_name': item.road_name,\n            'months': [{\n                'month': item.appprocesstime.substring(0, 7),\n                'days': [{\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                }]\n            }]\n        })\n    } else {\n}\n\n\n\nmsg.dataset = hours\n\nreturn msg;\n\n\n\n// for (let hour of hours_list) {\n//     let roads = []\n//     for (let road of roads_list) {       \n//         let speeds = []             \n//         for (let item of msg.payload) {\n//             if (item.appprocesstime.includes(hour) && road === item.road_name) {\n//                 speeds.push([item.average_speed])\n//             }\n//         }\n//         roads.push({\n//             'road_name':road,\n//             'speeds': speeds\n//         })\n//     }\n//     hours.push({\n//         'hour':hour,\n//         'roads':roads\n//     })\n// }\n\n\n// [{\n//     hour: '22:00:00',\n//     roads: [{\n//         road_name: 'κηφησία',\n//         speeds: [[2],[3]...]\n//     }]\n// }]",
-        "outputs": 1,
-        "noerr": 2,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 230,
-        "y": 520,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "7d6d963ea4d67777",
-        "type": "debug",
-        "z": "469d36c343ae88fa",
-        "name": "debug 32",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 580,
-        "y": 340,
-        "wires": []
-    },
-    {
-        "id": "dcf396b213299957",
-        "type": "debug",
-        "z": "469d36c343ae88fa",
-        "name": "debug 33",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 560,
-        "y": 160,
+        "y": 240,
         "wires": []
     },
     {
@@ -1099,7 +1011,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 180,
-        "y": 120,
+        "y": 80,
         "wires": [
             [
                 "6543c3f2ca12350d"
@@ -1138,7 +1050,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 190,
-        "y": 160,
+        "y": 120,
         "wires": [
             [
                 "6543c3f2ca12350d"
@@ -1193,10 +1105,10 @@
         "name": "",
         "label": "",
         "tooltip": "",
-        "place": "Select option",
+        "place": "ΟΔΟΣ",
         "group": "578d025e00dafb5b",
         "order": 1,
-        "width": 10,
+        "width": 9,
         "height": 1,
         "passthru": true,
         "multiple": false,
@@ -1205,12 +1117,11 @@
         "topic": "topic",
         "topicType": "msg",
         "className": "",
-        "x": 1200,
+        "x": 760,
         "y": 60,
         "wires": [
             [
-                "4957156a6f94ddd9",
-                "407f467c52f559e3"
+                "40effdb6c6d6dcbc"
             ]
         ]
     },
@@ -1224,7 +1135,7 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 750,
+        "x": 350,
         "y": 60,
         "wires": [
             [
@@ -1233,7 +1144,228 @@
         ]
     },
     {
-        "id": "6638f877a5abb218",
+        "id": "c7be280a69d56b0a",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "Built Option List",
+        "func": "msg.options = msg.payload\n\nlet options = []\nfor (let road of msg.payload) {\n    options.push(road.road)\n}\noptions.sort()\nmsg.options = options\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 60,
+        "wires": [
+            [
+                "6f02af30701a186c"
+            ]
+        ]
+    },
+    {
+        "id": "e8bd4058f302fd97",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "SQL Auto Query",
+        "func": "msg.topic = 'SELECT DISTINCT road FROM monthly_clusters'\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\nlet msg = {}\nmsg.topic = 'SELECT DISTINCT road FROM monthly_clusters'\n// console.log('test')\nnode.send(msg);\nreturn msg\n",
+        "finalize": "",
+        "libs": [],
+        "x": 140,
+        "y": 60,
+        "wires": [
+            [
+                "90992ce88253f6ef"
+            ]
+        ]
+    },
+    {
+        "id": "4957156a6f94ddd9",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "Read data from DB",
+        "func": "// const road = msg.payload\nlet limit = 6\nconst road = flow.get(\"road\")\nconst months = flow.get(\"months\")\nlimit = msg.payload-1\nmonths.sort()\n\nlet selected_dates = []\nfor (let i= limit; i > limit - 6; i--) {\n    selected_dates.push(`'${months[i]}'`)\n}\n\n// console.log(road, months)\n\nmsg.topic = `SELECT * FROM monthly_clusters WHERE road = \"${road}\" AND month in (${selected_dates})`\n// console.log(msg.topic)\nconsole.log(msg.topic)\n// msg.topic = `SELECT * FROM monthly_clusters WHERE road = \"ΑΓ. ΚΩΝΣΤΑΝΤΙΝΟΥ\"`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 150,
+        "y": 360,
+        "wires": [
+            [
+                "be23879b3ae3ab6c"
+            ]
+        ]
+    },
+    {
+        "id": "e36f970f36b4d8df",
+        "type": "ui_chart",
+        "z": "e0bd9e50950cbdbf",
+        "name": "",
+        "group": "578d025e00dafb5b",
+        "order": 3,
+        "width": 20,
+        "height": 6,
+        "label": "High",
+        "chartType": "bar",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "120",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 990,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "be23879b3ae3ab6c",
+        "type": "link call",
+        "z": "e0bd9e50950cbdbf",
+        "name": "",
+        "links": [
+            "4c0b0e95abe41adb"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 350,
+        "y": 360,
+        "wires": [
+            [
+                "6faafac9e3198f8f"
+            ]
+        ]
+    },
+    {
+        "id": "b113fde78b0f9e8d",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "Build Chart Data",
+        "func": "// let groups = msg.groups\n\nlet day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']\nlet months_idx = []\n\nfor (let month of msg.groups) {\n    months_idx.push(month[0].month)\n}\n\nlet data = []\n\nfor (let day of day_names) {\n    let values = Array(msg.groups.size).fill(0)\n    data.push(values)\n}\n\nfor (let month of msg.groups) {\n    let month_idx = months_idx.indexOf(month[0].month)\n    for (let day of month) {\n        let day_idx = day_names.indexOf(day.day)\n        data[day_idx][month_idx] = day.centroid1.toFixed(2);\n    }\n}\n// context.get(\"slider_limit\")\n\n\nmsg.payload = [{\n    'series': day_names,\n    'data': data,\n    'labels': months_idx\n}]\n\n// msg.groups = groups\n\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 340,
+        "wires": [
+            [
+                "e36f970f36b4d8df"
+            ]
+        ]
+    },
+    {
+        "id": "727196b6ea05ef81",
+        "type": "ui_chart",
+        "z": "e0bd9e50950cbdbf",
+        "name": "",
+        "group": "578d025e00dafb5b",
+        "order": 5,
+        "width": 20,
+        "height": 6,
+        "label": "Low",
+        "chartType": "bar",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "120",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 990,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "52993c78a5e79bd2",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "Build Chart Data",
+        "func": "// let groups = msg.groups\n\nlet day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']\nlet months_idx = []\n\nfor (let month of msg.groups) {\n    months_idx.push(month[0].month)\n}\n\nlet data = []\n\nfor (let day of day_names) {\n    let values = Array(msg.groups.size).fill(0)\n    data.push(values)\n}\n\nfor (let month of msg.groups) {\n    let month_idx = months_idx.indexOf(month[0].month)\n    for (let day of month) {\n        let day_idx = day_names.indexOf(day.day)\n        data[day_idx][month_idx] = day.centroid2.toFixed(2);\n    }\n}\n\n// let window = flow.get(\"window\");\n\nmsg.payload = [{\n    'series': day_names,\n    'data':data,\n    'labels': months_idx\n}]\n\n// msg.groups = groups\n\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 380,
+        "wires": [
+            [
+                "727196b6ea05ef81"
+            ]
+        ]
+    },
+    {
+        "id": "6faafac9e3198f8f",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "Order Data",
+        "func": "// let payload = msg.payload\n\nmsg.payload.sort((a, b) => {\n    if (a.month < b.month) {\n        return -1;\n    }\n    if (a.month > b.month) {\n        return 1;\n    }\n    return 0;\n});\n\nlet groups = []\n\nlet month = msg.payload[0].month\nlet months = []\nfor (let item of msg.payload) {\n    if (item.month === month) {\n        months.push(item)\n    } else {\n        groups.push(months)\n        month = item.month\n        months = []\n    }\n}\ngroups.push(months)\n\n\nfor (let group of groups) {\n    group.sort((a, b) => {\n        const days = {\n            'Monday': 1,\n            'Tuesday': 2,\n            'Wednesday': 3,\n            'Thursday': 4,\n            'Friday': 5,\n            'Saturday': 6,\n            'Sunday': 7\n        }\n        return days[a.day] - days[b.day];\n    });\n}\n\nmsg = {}\nmsg.groups = groups\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 360,
+        "wires": [
+            [
+                "b113fde78b0f9e8d",
+                "52993c78a5e79bd2"
+            ]
+        ]
+    },
+    {
+        "id": "49770aad5ddbff47",
         "type": "inject",
         "z": "e0bd9e50950cbdbf",
         "name": "",
@@ -1253,8 +1385,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 300,
-        "y": 60,
+        "x": 120,
+        "y": 120,
         "wires": [
             [
                 "e8bd4058f302fd97"
@@ -1262,240 +1394,105 @@
         ]
     },
     {
-        "id": "c7be280a69d56b0a",
+        "id": "21f96850f3a19f0a",
+        "type": "ui_slider",
+        "z": "e0bd9e50950cbdbf",
+        "name": "",
+        "label": "Months window",
+        "tooltip": "",
+        "group": "578d025e00dafb5b",
+        "order": 4,
+        "width": 20,
+        "height": 1,
+        "passthru": true,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": "0",
+        "max": "0",
+        "step": 1,
+        "className": "",
+        "x": 780,
+        "y": 200,
+        "wires": [
+            [
+                "4957156a6f94ddd9"
+            ]
+        ]
+    },
+    {
+        "id": "cf32b73628f33fde",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "Built Option List",
-        "func": "msg.options = msg.payload\n\nlet options = []\nfor (let road of msg.payload) {\n    options.push(road.road)\n}\noptions.sort()\nmsg.options = options\nreturn msg;",
+        "name": "Set min value",
+        "func": "let months = []\nfor (let month of msg.payload) {\n    months.push(month.month)\n}\nflow.set(\"months\", months)\n\nmsg.ui_control = { \n    min: 6, \n    max: msg.payload.length\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 980,
-        "y": 60,
+        "x": 560,
+        "y": 200,
         "wires": [
             [
-                "6f02af30701a186c"
+                "21f96850f3a19f0a",
+                "c8cc289bda16f67f"
             ]
         ]
     },
     {
-        "id": "e8bd4058f302fd97",
+        "id": "40effdb6c6d6dcbc",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "SQL Auto Query",
-        "func": "msg.topic = 'SELECT DISTINCT road FROM monthly_clusters'\nreturn msg",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "// Code added here will be run once\n// whenever the node is started.\nlet msg = {}\nmsg.topic = 'SELECT DISTINCT road FROM monthly_clusters'\nreturn msg\n",
-        "finalize": "",
-        "libs": [],
-        "x": 520,
-        "y": 60,
-        "wires": [
-            [
-                "90992ce88253f6ef"
-            ]
-        ]
-    },
-    {
-        "id": "4957156a6f94ddd9",
-        "type": "function",
-        "z": "e0bd9e50950cbdbf",
-        "name": "Read data fro DB",
-        "func": "const road = msg.payload\n\nmsg.topic = `SELECT * FROM monthly_clusters WHERE road = \"${road}\"`\n// console.log(msg.topic)\n\n// msg.topic = `SELECT * FROM monthly_clusters WHERE road = \"ΑΓ. ΚΩΝΣΤΑΝΤΙΝΟΥ\"`\nreturn msg;",
+        "name": "Get  dates",
+        "func": "const road = msg.payload\n\nflow.set(\"road\", road)\n\nmsg.topic = `SELECT DISTINCT month FROM monthly_clusters WHERE road = \"${road}\"`\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 530,
-        "y": 140,
+        "x": 120,
+        "y": 200,
+        "wires": [
+            [
+                "ba063cc96d4266ed"
+            ]
+        ]
+    },
+    {
+        "id": "ba063cc96d4266ed",
+        "type": "link call",
+        "z": "e0bd9e50950cbdbf",
+        "name": "DB Interface",
+        "links": [
+            "4c0b0e95abe41adb"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 350,
+        "y": 200,
+        "wires": [
+            [
+                "cf32b73628f33fde"
+            ]
+        ]
+    },
+    {
+        "id": "c8cc289bda16f67f",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "Initial chart setting",
+        "func": "// let limit = 6\nconst road = flow.get(\"road\")\nconst months = flow.get(\"months\")\n// limit = msg.payload - 1\nmonths.sort()\n\nlet selected_dates = []\nfor (let i = months.length; i > months.length - 7; i--) {\n    selected_dates.push(`'${months[i]}'`)\n}\n\n// console.log(road, months)\n\nmsg.topic = `SELECT * FROM monthly_clusters WHERE road = \"${road}\" AND month in (${selected_dates})`\n// console.log(msg.topic)\nconsole.log(msg.topic)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 150,
+        "y": 280,
         "wires": [
             [
                 "be23879b3ae3ab6c"
-            ]
-        ]
-    },
-    {
-        "id": "e36f970f36b4d8df",
-        "type": "ui_chart",
-        "z": "e0bd9e50950cbdbf",
-        "name": "",
-        "group": "578d025e00dafb5b",
-        "order": 2,
-        "width": 25,
-        "height": 9,
-        "label": "High Centroid",
-        "chartType": "bar",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": 1,
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 1220,
-        "y": 140,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "be23879b3ae3ab6c",
-        "type": "link call",
-        "z": "e0bd9e50950cbdbf",
-        "name": "",
-        "links": [
-            "4c0b0e95abe41adb"
-        ],
-        "linkType": "static",
-        "timeout": "30",
-        "x": 750,
-        "y": 140,
-        "wires": [
-            [
-                "b113fde78b0f9e8d"
-            ]
-        ]
-    },
-    {
-        "id": "b113fde78b0f9e8d",
-        "type": "function",
-        "z": "e0bd9e50950cbdbf",
-        "name": "Build Chart Data",
-        "func": "let payload = msg.payload\n\nfunction compare(a, b) {\n    if (a.month < b.month) {\n        return -1;\n    }\n    if (a.month > b.month) {\n        return 1;\n    }\n    return 0;\n}\n\npayload.sort(compare);\n\nlet groups = []\n\nlet month = payload[0].month\nlet months = []\nfor (let item of payload) {\n    if (item.month === month) {\n        months.push(item)\n    } else {\n        groups.push(months)\n        month = item.month\n        months = []\n    }    \n}\ngroups.push(months)\n\nconst days = {\n    'Monday': 1,\n    'Tuesday': 2,\n    'Wednesday': 3,\n    'Thursday': 4,\n    'Friday': 5,\n    'Saturday': 6,\n    'Sunday': 7\n}\n\nfor (let group of groups) {\n    group.sort((a, b) => {\n        return days[a.day] - days[b.day];\n    });\n}\n\n\nlet day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']\nlet months_idx = []\n\nfor (let month of groups) {\n    months_idx.push(month[0].month)\n}\n\n\nlet data = []\n\nfor (let day of day_names) {\n    let values = Array(groups.size).fill(0)\n    data.push(values)\n}\n\nfor (let month of groups) {\n    let month_idx = months_idx.indexOf(month[0].month)\n    for (let day of month) {\n        let day_idx = day_names.indexOf(day.day)\n        data[day_idx][month_idx] = day.centroid1.toFixed(2);\n    }\n}\n\n\n\nmsg.payload = [{\n    'series': day_names,\n    'data':data,\n    'labels': months_idx\n}]\n\nmsg.groups = groups\n\n// return msg\n\n\n\n\n\n// for (let item of msg.payload) {\n\n// }\n\n\n\n// msg.payload = [{\n//   \n//     \"series\": [\"Δευτέρα\", \"Τρίτη\", \"Τετάρτη\", \"Πέμπτη\"],\n//     \"data\": [       [5, 6, 9],                                         [3, 8, 5], [6, 7, 2], [6, 7, 2]],\n//     \"labels\": [\"Ιανουάριος\", \"Φεβρουάριος\", \"Μάρτιος\"]\n// }]\n\n\nreturn msg\n\n\n// [{\n//     \"series\": [\"Ιανουάριος\",                                                 \"Φεβρουάριος\",               \"Z\"],\n//     \"data\": [    [90,        88,     78,         10],                       [3, 8, 5, 10],            [6, 7, 2, 10]],\n//     \"labels\": [\"Δευτέρα\", \"Τρίτη\", \"Τετάρτη\", \"Πέμπτη\"]\n// }]\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 980,
-        "y": 140,
-        "wires": [
-            [
-                "e36f970f36b4d8df"
-            ]
-        ]
-    },
-    {
-        "id": "407f467c52f559e3",
-        "type": "function",
-        "z": "e0bd9e50950cbdbf",
-        "name": "Read data fro DB",
-        "func": "const road = msg.payload\n\nmsg.topic = `SELECT * FROM monthly_clusters WHERE road = \"${road}\"`\n// console.log(msg.topic)\n\n// msg.topic = `SELECT * FROM monthly_clusters WHERE road = \"ΑΓ. ΚΩΝΣΤΑΝΤΙΝΟΥ\"`\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 530,
-        "y": 300,
-        "wires": [
-            [
-                "262e33504553e055"
-            ]
-        ]
-    },
-    {
-        "id": "727196b6ea05ef81",
-        "type": "ui_chart",
-        "z": "e0bd9e50950cbdbf",
-        "name": "",
-        "group": "578d025e00dafb5b",
-        "order": 2,
-        "width": 25,
-        "height": 9,
-        "label": "Low Centroid",
-        "chartType": "bar",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": 1,
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 1210,
-        "y": 300,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "262e33504553e055",
-        "type": "link call",
-        "z": "e0bd9e50950cbdbf",
-        "name": "",
-        "links": [
-            "4c0b0e95abe41adb"
-        ],
-        "linkType": "static",
-        "timeout": "30",
-        "x": 750,
-        "y": 300,
-        "wires": [
-            [
-                "52993c78a5e79bd2"
-            ]
-        ]
-    },
-    {
-        "id": "52993c78a5e79bd2",
-        "type": "function",
-        "z": "e0bd9e50950cbdbf",
-        "name": "Build Chart Data",
-        "func": "let payload = msg.payload\n\nfunction compare(a, b) {\n    if (a.month < b.month) {\n        return -1;\n    }\n    if (a.month > b.month) {\n        return 1;\n    }\n    return 0;\n}\n\npayload.sort(compare);\n\nlet groups = []\n\nlet month = payload[0].month\nlet months = []\nfor (let item of payload) {\n    if (item.month === month) {\n        months.push(item)\n    } else {\n        groups.push(months)\n        month = item.month\n        months = []\n    }    \n}\ngroups.push(months)\n\nconst days = {\n    'Monday': 1,\n    'Tuesday': 2,\n    'Wednesday': 3,\n    'Thursday': 4,\n    'Friday': 5,\n    'Saturday': 6,\n    'Sunday': 7\n}\n\nfor (let group of groups) {\n    group.sort((a, b) => {\n        return days[a.day] - days[b.day];\n    });\n}\n\n\nlet day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']\nlet months_idx = []\n\nfor (let month of groups) {\n    months_idx.push(month[0].month)\n}\n\n\nlet data = []\n\nfor (let day of day_names) {\n    let values = Array(groups.size).fill(0)\n    data.push(values)\n}\n\nfor (let month of groups) {\n    let month_idx = months_idx.indexOf(month[0].month)\n    for (let day of month) {\n        let day_idx = day_names.indexOf(day.day)\n        data[day_idx][month_idx] = day.centroid2.toFixed(2);\n    }\n}\n\n\n\nmsg.payload = [{\n    'series': day_names,\n    'data':data,\n    'labels': months_idx\n}]\n\nmsg.groups = groups\n\n// return msg\n\n\n\n\n\n// for (let item of msg.payload) {\n\n// }\n\n\n\n// msg.payload = [{\n//   \n//     \"series\": [\"Δευτέρα\", \"Τρίτη\", \"Τετάρτη\", \"Πέμπτη\"],\n//     \"data\": [       [5, 6, 9],                                         [3, 8, 5], [6, 7, 2], [6, 7, 2]],\n//     \"labels\": [\"Ιανουάριος\", \"Φεβρουάριος\", \"Μάρτιος\"]\n// }]\n\n\nreturn msg\n\n\n// [{\n//     \"series\": [\"Ιανουάριος\",                                                 \"Φεβρουάριος\",               \"Z\"],\n//     \"data\": [    [90,        88,     78,         10],                       [3, 8, 5, 10],            [6, 7, 2, 10]],\n//     \"labels\": [\"Δευτέρα\", \"Τρίτη\", \"Τετάρτη\", \"Πέμπτη\"]\n// }]\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 980,
-        "y": 300,
-        "wires": [
-            [
-                "727196b6ea05ef81"
             ]
         ]
     }

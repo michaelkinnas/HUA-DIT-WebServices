@@ -1,5 +1,13 @@
 [
     {
+        "id": "372f8629abbd83d1",
+        "type": "tab",
+        "label": "Save to DB",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "f04f43533f741c82",
         "type": "tab",
         "label": "DB",
@@ -48,24 +56,10 @@
         "env": []
     },
     {
-        "id": "75713334e8d9d783",
-        "type": "ui_tab",
-        "name": "Ιστορικά Δεδομένα",
-        "icon": "dashboard",
-        "order": 2,
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "578d025e00dafb5b",
-        "type": "ui_group",
-        "name": "Μηνιαία μετατόπηση",
-        "tab": "75713334e8d9d783",
-        "order": 1,
-        "disp": true,
-        "width": "20",
-        "collapse": false,
-        "className": ""
+        "id": "19ae6230b6d2cba0",
+        "type": "sqlitedb",
+        "db": "/home/mike/HUA/WebServices/Lab/madrid.db",
+        "mode": "RWC"
     },
     {
         "id": "5588be0b796aa416",
@@ -172,6 +166,26 @@
         }
     },
     {
+        "id": "75713334e8d9d783",
+        "type": "ui_tab",
+        "name": "Ιστορικά Δεδομένα",
+        "icon": "dashboard",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "578d025e00dafb5b",
+        "type": "ui_group",
+        "name": "Μηνιαία μετατόπηση",
+        "tab": "75713334e8d9d783",
+        "order": 1,
+        "disp": true,
+        "width": "20",
+        "collapse": false,
+        "className": ""
+    },
+    {
         "id": "281da459e7f9dd42",
         "type": "ui_spacer",
         "z": "e0bd9e50950cbdbf",
@@ -222,6 +236,160 @@
         "height": 1
     },
     {
+        "id": "e6b3f9669cad2f4e",
+        "type": "sqlite",
+        "z": "372f8629abbd83d1",
+        "mydb": "19ae6230b6d2cba0",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "DB",
+        "x": 570,
+        "y": 140,
+        "wires": [
+            [
+                "095f7f0145328d3e"
+            ]
+        ]
+    },
+    {
+        "id": "57845a320eefea48",
+        "type": "function",
+        "z": "372f8629abbd83d1",
+        "name": "Create Table",
+        "func": "msg.topic = 'create table madrid (it text, id text, idelem text, velocidad text, timestamp text)';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 80,
+        "wires": [
+            [
+                "e6b3f9669cad2f4e"
+            ]
+        ]
+    },
+    {
+        "id": "1d74369e826c3ed7",
+        "type": "function",
+        "z": "372f8629abbd83d1",
+        "name": "Read * from DB",
+        "func": "msg.topic = 'select * from madrid'\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 140,
+        "wires": [
+            [
+                "e6b3f9669cad2f4e"
+            ]
+        ]
+    },
+    {
+        "id": "095f7f0145328d3e",
+        "type": "debug",
+        "z": "372f8629abbd83d1",
+        "name": "debug 3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "66d7ada6ed47e15c",
+        "type": "inject",
+        "z": "372f8629abbd83d1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "57845a320eefea48"
+            ]
+        ]
+    },
+    {
+        "id": "7e2fc9825a1544db",
+        "type": "inject",
+        "z": "372f8629abbd83d1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 140,
+        "wires": [
+            [
+                "1d74369e826c3ed7"
+            ]
+        ]
+    },
+    {
+        "id": "c215e2b78564b378",
+        "type": "link in",
+        "z": "372f8629abbd83d1",
+        "name": "link in 1",
+        "links": [
+            "af5befa082010c26"
+        ],
+        "x": 405,
+        "y": 200,
+        "wires": [
+            [
+                "e6b3f9669cad2f4e"
+            ]
+        ]
+    },
+    {
+        "id": "d241db0b121a5d6e",
+        "type": "comment",
+        "z": "372f8629abbd83d1",
+        "name": "Insert",
+        "info": "Insert",
+        "x": 410,
+        "y": 240,
+        "wires": []
+    },
+    {
         "id": "6543c3f2ca12350d",
         "type": "sqlite",
         "z": "f04f43533f741c82",
@@ -230,7 +398,7 @@
         "sql": "",
         "name": "DB Batch insert",
         "x": 460,
-        "y": 80,
+        "y": 100,
         "wires": [
             []
         ]
@@ -274,7 +442,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 180,
-        "y": 80,
+        "y": 100,
         "wires": [
             [
                 "6543c3f2ca12350d"
@@ -288,7 +456,7 @@
         "name": "",
         "info": "CREATE TABLE traffic(device_id TEXT, app_process_time TEXT, counted_cars INTEGER, average_speed REAL, PRIMARY KEY(device_id, app_process_time) ON CONFLICT IGNORE, FOREIGN KEY(device_id) REFERENCES sensors(device_id) ON DELETE CASCADE)",
         "x": 620,
-        "y": 80,
+        "y": 100,
         "wires": []
     },
     {
@@ -313,7 +481,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 190,
-        "y": 120,
+        "y": 160,
         "wires": [
             [
                 "6543c3f2ca12350d"
@@ -329,7 +497,7 @@
         "sql": "",
         "name": "DB",
         "x": 450,
-        "y": 200,
+        "y": 280,
         "wires": [
             [
                 "2b1bf0baafe6bfbc"
@@ -343,7 +511,7 @@
         "name": "DB Interface",
         "links": [],
         "x": 285,
-        "y": 200,
+        "y": 280,
         "wires": [
             [
                 "45095633224fe68b"
@@ -358,7 +526,7 @@
         "mode": "return",
         "links": [],
         "x": 625,
-        "y": 200,
+        "y": 280,
         "wires": []
     },
     {
@@ -471,16 +639,6 @@
         "wires": []
     },
     {
-        "id": "60c6085a7e36fd58",
-        "type": "comment",
-        "z": "3d9c4b8676673364",
-        "name": "Testing",
-        "info": "",
-        "x": 110,
-        "y": 180,
-        "wires": []
-    },
-    {
         "id": "52520011d05866bd",
         "type": "link call",
         "z": "019efafd3890369d",
@@ -490,8 +648,8 @@
         ],
         "linkType": "static",
         "timeout": "300",
-        "x": 380,
-        "y": 360,
+        "x": 280,
+        "y": 280,
         "wires": [
             [
                 "b3e0b9db3a177a7e"
@@ -509,31 +667,13 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
-        "y": 480,
+        "x": 290,
+        "y": 400,
         "wires": [
             [
-                "f22b46e7d111a546",
                 "c61a13d82f2bad85"
             ]
         ]
-    },
-    {
-        "id": "f22b46e7d111a546",
-        "type": "debug",
-        "z": "019efafd3890369d",
-        "name": "debug 29",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 620,
-        "y": 480,
-        "wires": []
     },
     {
         "id": "c61a13d82f2bad85",
@@ -546,8 +686,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
-        "y": 540,
+        "x": 300,
+        "y": 460,
         "wires": [
             [
                 "527efbcb58ecf430"
@@ -563,8 +703,8 @@
         "links": [
             "f8482dd0d3eb5861"
         ],
-        "x": 575,
-        "y": 540,
+        "x": 475,
+        "y": 460,
         "wires": []
     },
     {
@@ -578,8 +718,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
-        "y": 420,
+        "x": 290,
+        "y": 340,
         "wires": [
             [
                 "cee2f7b1bbc03e41"
@@ -1010,7 +1150,7 @@
         "z": "019efafd3890369d",
         "name": "DB lines (per year) = 90 roads x 7 days x 12 months ~ 7500",
         "info": "",
-        "x": 850,
+        "x": 830,
         "y": 40,
         "wires": []
     },
@@ -1159,7 +1299,7 @@
         "finalize": "",
         "libs": [],
         "x": 350,
-        "y": 160,
+        "y": 140,
         "wires": [
             [
                 "94838feaa4797e0c"
@@ -1177,11 +1317,11 @@
         "linkType": "static",
         "timeout": "30",
         "x": 560,
-        "y": 160,
+        "y": 140,
         "wires": [
             [
-                "76d630bae28bda6d",
-                "20d5e062fa0e7d4a"
+                "20d5e062fa0e7d4a",
+                "76d630bae28bda6d"
             ]
         ]
     },
@@ -1207,14 +1347,14 @@
         "mode": "return",
         "links": [],
         "x": 1005,
-        "y": 240,
+        "y": 220,
         "wires": []
     },
     {
         "id": "1b4131c2a8c9d70f",
         "type": "function",
         "z": "53617fb819fb8d69",
-        "name": "Check if data already exists",
+        "name": "Check if saved data are valid",
         "func": "//check if data exists and dates are yesterdays\n\nconst existing_data = flow.get(\"yesterday_data\")\n\nif (existing_data) {\n\n    let date = new Date();\n    date.setDate(date.getDate() - 1);\n\n\n    let yesterday = date.getDate().toString()\n    if (yesterday.length === 1) {\n        yesterday = '0' + yesterday\n    }\n    let month = date.getMonth() + 1\n    month = month.toString()\n\n    if (month.length === 1) {\n        month = '0' + month\n    }\n    let year = date.getFullYear()\n\n    let today = `${year}-${month}-${yesterday}`\n    \n    console.log(today + ' vs '+ existing_data[0].appprocesstime.substring(0, 10))\n\n    if (existing_data[0].appprocesstime.substring(0, 10) === today) {\n        msg.data_exists = 1\n    } else {\n        msg.data_exists = 0\n    }    \n} else {\n    msg.data_exists = 0\n}\n\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -1252,7 +1392,7 @@
         "repair": false,
         "outputs": 2,
         "x": 150,
-        "y": 200,
+        "y": 180,
         "wires": [
             [
                 "9710c3a746ea27f5"
@@ -1266,15 +1406,15 @@
         "id": "ba5848d05ee7d4a7",
         "type": "function",
         "z": "53617fb819fb8d69",
-        "name": "Read Flow VAR",
+        "name": "Read saved flow var data",
         "func": "//read data from flow variable\nlet data = flow.get(\"yesterday_data\")\n\nif (data) {\n    msg.payload = data\n} else {\n    msg.payload = 'No yesterdays data exist'\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
-        "y": 240,
+        "x": 450,
+        "y": 220,
         "wires": [
             [
                 "76d630bae28bda6d"
@@ -1285,15 +1425,15 @@
         "id": "76d630bae28bda6d",
         "type": "function",
         "z": "53617fb819fb8d69",
-        "name": "Build Dataset",
-        "func": "if (msg.payload.length === 0) {\n    msg.error = 'Empty data'\n    return msg\n}\n\nconst days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nlet roads = []\n\n//format dataset\nfor (let item of msg.payload) {\n    const birthday = new Date(item.appprocesstime.substring(0, 10))\n    const day_name = days[birthday.getDay()]\n\n    let index_road = roads.findIndex(x => x.road_name === item.road_name);\n\n    if (index_road === -1) {\n        //create new road\n        roads.push({\n            'road_name': item.road_name,\n            'days': [{\n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]\n            }]\n        })\n    } else {\n        let index_day = roads[index_road].days.findIndex(x => x.day === day_name)\n\n        if (index_day === -1) {\n            roads[index_road].days.push({\n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]\n            })\n        } else {\n            let index_hour = roads[index_road].days[index_day].hours.findIndex(x => x.hour === item.appprocesstime.substring(11, 19))\n\n            if (index_hour === -1) {\n                roads[index_road].days[index_day].hours.push({\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                })\n            } else {\n                roads[index_road].days[index_day].hours[index_hour].speeds.push([item.average_speed])\n            }\n        }\n    }\n}\n\n//remove the extra day that the api returns at 00:00 hours\nfor (let item of roads) {  \n    if (item.days[0].hours.length === 1) {\n        item.days.splice(0, 1);\n    } else {\n        item.days.splice(1, 1);\n    }    \n}\n\n//average the speeds of every sensor for the same road\nfor (let item of roads) {  \n    for (let hour of item.days[0].hours) {\n        let total = 0\n        for (let speed of hour.speeds) {\n            total += speed[0]\n        }\n        hour.average = total / hour.speeds.length\n    }\n}\n\n\n\nmsg.yesterday_data = roads\nreturn msg;",
+        "name": "Build dataset",
+        "func": "if (msg.payload.length === 0) {\n    msg.error = 'Empty data'\n    return msg\n}\n\nconst days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nlet roads = []\n\n//format dataset\nfor (let item of msg.payload) {\n    const birthday = new Date(item.appprocesstime.substring(0, 10))\n    const day_name = days[birthday.getDay()]\n\n    let index_road = roads.findIndex(x => x.road_name === item.road_name);\n\n    if (index_road === -1) {\n        //create new road\n        roads.push({\n            'road_name': item.road_name,\n            'days': [{\n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]\n            }]\n        })\n    } else {\n        let index_day = roads[index_road].days.findIndex(x => x.day === day_name)\n\n        if (index_day === -1) {\n            roads[index_road].days.push({\n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]\n            })\n        } else {\n            let index_hour = roads[index_road].days[index_day].hours.findIndex(x => x.hour === item.appprocesstime.substring(11, 19))\n\n            if (index_hour === -1) {\n                roads[index_road].days[index_day].hours.push({\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                })\n            } else {\n                roads[index_road].days[index_day].hours[index_hour].speeds.push([item.average_speed])\n            }\n        }\n    }\n}\n\n//remove the extra day that the api returns at 00:00 hours\nfor (let item of roads) {  \n    if (item.days[0].hours.length === 1) {\n        item.days.splice(0, 1);\n    } else {\n        item.days.splice(1, 1);\n    }    \n}\n\n\n//average the speeds of every sensor for the same road\nfor (let item of roads) {  \n    for (let hour of item.days[0].hours) {\n        let total = 0\n        for (let speed of hour.speeds) {\n            total += speed[0]\n        }\n        hour.average = total / hour.speeds.length\n    }\n}\n\nmsg.yesterday_data = roads\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 770,
-        "y": 240,
+        "y": 220,
         "wires": [
             [
                 "80c1db3f98970820"
@@ -1304,15 +1444,15 @@
         "id": "20d5e062fa0e7d4a",
         "type": "function",
         "z": "53617fb819fb8d69",
-        "name": "Set data flow var",
+        "name": "Save data to flow var",
         "func": "//if api data are valid save to flow variable\nif (msg.payload.length > 0) {\n    flow.set(\"yesterday_data\", msg.payload)\n}\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 770,
-        "y": 120,
+        "x": 800,
+        "y": 140,
         "wires": [
             []
         ]
@@ -1323,30 +1463,159 @@
         "z": "53617fb819fb8d69",
         "name": "Fallback",
         "links": [],
-        "x": 425,
-        "y": 340,
+        "x": 65,
+        "y": 360,
         "wires": [
             [
-                "8c0fae08fe6a4021"
+                "4501819c1806336a"
             ]
         ]
     },
     {
-        "id": "8c0fae08fe6a4021",
-        "type": "link call",
+        "id": "4501819c1806336a",
+        "type": "file in",
         "z": "53617fb819fb8d69",
         "name": "",
-        "links": [
-            "fc0ac11ee099dff3"
-        ],
-        "linkType": "static",
-        "timeout": "30",
-        "x": 560,
-        "y": 340,
+        "filename": "/home/mike/HUA/WebServices/HUA-DIT-WebServices/fallback.json",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 380,
+        "y": 360,
+        "wires": [
+            [
+                "9ea9cf9b9a240173"
+            ]
+        ]
+    },
+    {
+        "id": "9ea9cf9b9a240173",
+        "type": "json",
+        "z": "53617fb819fb8d69",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 750,
+        "y": 360,
         "wires": [
             [
                 "76d630bae28bda6d"
             ]
+        ]
+    },
+    {
+        "id": "e10c9de7e7130899",
+        "type": "comment",
+        "z": "53617fb819fb8d69",
+        "name": "read fallback data file",
+        "info": "",
+        "x": 240,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "6e8655f63cf64f28",
+        "type": "function",
+        "z": "53617fb819fb8d69",
+        "name": "function 1",
+        "func": "let sdfdsf = []\nmsg.test = sdfdsf\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 760,
+        "wires": [
+            [
+                "7d3eaea9b920dd01"
+            ]
+        ]
+    },
+    {
+        "id": "7d3eaea9b920dd01",
+        "type": "debug",
+        "z": "53617fb819fb8d69",
+        "name": "debug 32",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "d40956ba8d4c4c59",
+        "type": "inject",
+        "z": "53617fb819fb8d69",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 340,
+        "y": 760,
+        "wires": [
+            [
+                "6e8655f63cf64f28"
+            ]
+        ]
+    },
+    {
+        "id": "082f0b7dddb74d14",
+        "type": "function",
+        "z": "53617fb819fb8d69",
+        "d": true,
+        "name": "Format dataset",
+        "func": "if (msg.payload.length === 0) {\n    msg.error = 'Empty data'\n    return msg\n}\n\nconst days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nlet roads = []\n\n//format dataset\nfor (let item of msg.payload) {\n    const birthday = new Date(item.appprocesstime.substring(0, 10))\n    const day_name = days[birthday.getDay()]\n\n    let index_road = roads.findIndex(x => x.road_name === item.road_name);\n\n    if (index_road === -1) {\n        //create new road\n        roads.push({\n            'road_name': item.road_name,\n            'days': [{\n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]\n            }]\n        })\n    } else {\n        let index_day = roads[index_road].days.findIndex(x => x.day === day_name)\n\n        if (index_day === -1) {\n            roads[index_road].days.push({\n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]\n            })\n        } else {\n            let index_hour = roads[index_road].days[index_day].hours.findIndex(x => x.hour === item.appprocesstime.substring(11, 19))\n\n            if (index_hour === -1) {\n                roads[index_road].days[index_day].hours.push({\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                })\n            } else {\n                roads[index_road].days[index_day].hours[index_hour].speeds.push([item.average_speed])\n            }\n        }\n    }\n}\nmsg.yesterday_data = roads\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3981a75867b58fc9",
+        "type": "function",
+        "z": "53617fb819fb8d69",
+        "d": true,
+        "name": "Filter and average speeds",
+        "func": "//remove the extra day that the api returns at 00:00 hours\nfor (let item of msg.yesterday_data) {\n    if (item.days[0].hours.length === 1) {\n        item.days.splice(0, 1);\n    } else {\n        item.days.splice(1, 1);\n    }\n}\n\n\n//average the speeds of every sensor for the same road\nfor (let item of msg.yesterday_data) {\n    for (let hour of item.days[0].hours) {\n        let total = 0\n        for (let speed of hour.speeds) {\n            total += speed[0]\n        }\n        hour.average = total / hour.speeds.length\n    }\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 540,
+        "wires": [
+            []
         ]
     },
     {
@@ -1368,7 +1637,7 @@
         "topic": "topic",
         "topicType": "msg",
         "className": "",
-        "x": 760,
+        "x": 780,
         "y": 60,
         "wires": [
             [
@@ -1386,7 +1655,7 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 350,
+        "x": 370,
         "y": 60,
         "wires": [
             [
@@ -1405,7 +1674,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
+        "x": 580,
         "y": 60,
         "wires": [
             [
@@ -1425,7 +1694,7 @@
         "initialize": "// Code added here will be run once\n// whenever the node is started.\nlet msg = {}\nmsg.topic = 'SELECT DISTINCT road FROM monthly_clusters'\n// console.log('test')\nnode.send(msg);\nreturn msg\n",
         "finalize": "",
         "libs": [],
-        "x": 140,
+        "x": 160,
         "y": 60,
         "wires": [
             [
@@ -1600,14 +1869,14 @@
         "id": "6faafac9e3198f8f",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "Order Data",
+        "name": "Sort data",
         "func": "// let payload = msg.payload\n\nmsg.payload.sort((a, b) => {\n    if (a.month < b.month) {\n        return -1;\n    }\n    if (a.month > b.month) {\n        return 1;\n    }\n    return 0;\n});\n\nlet groups = []\n\nlet month = msg.payload[0].month\nlet months = []\nfor (let item of msg.payload) {\n    if (item.month === month) {\n        months.push(item)\n    } else {\n        groups.push(months)\n        month = item.month\n        months = []\n    }\n}\ngroups.push(months)\n\n\nfor (let group of groups) {\n    group.sort((a, b) => {\n        const days = {\n            'Monday': 1,\n            'Tuesday': 2,\n            'Wednesday': 3,\n            'Thursday': 4,\n            'Friday': 5,\n            'Saturday': 6,\n            'Sunday': 7\n        }\n        return days[a.day] - days[b.day];\n    });\n}\n\nmsg = {}\nmsg.groups = groups\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 570,
+        "x": 560,
         "y": 360,
         "wires": [
             [
@@ -1637,7 +1906,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 120,
+        "x": 140,
         "y": 120,
         "wires": [
             [
@@ -1755,7 +2024,7 @@
         "name": "",
         "label": "",
         "tooltip": "",
-        "place": "Select option",
+        "place": "ΟΔΟΣ",
         "group": "6207fff339b851ea",
         "order": 2,
         "width": 10,
@@ -1773,8 +2042,8 @@
         "topic": "topic",
         "topicType": "msg",
         "className": "",
-        "x": 760,
-        "y": 540,
+        "x": 180,
+        "y": 840,
         "wires": [
             [
                 "6b3121bf7cdab1f2",
@@ -1793,8 +2062,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 150,
-        "y": 680,
+        "x": 210,
+        "y": 1060,
         "wires": [
             [
                 "f0764441520d46f0"
@@ -1811,11 +2080,11 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 370,
-        "y": 680,
+        "x": 430,
+        "y": 1060,
         "wires": [
             [
-                "02a4dd527001fe1f"
+                "f44edb29c2825f75"
             ]
         ]
     },
@@ -1831,7 +2100,7 @@
         "label": "Ημερήσια Κίνηση - Σύγκριση τελευταίων 4 μηνών",
         "chartType": "line",
         "legend": "true",
-        "xformat": "HH:mm:ss",
+        "xformat": "auto",
         "interpolate": "linear",
         "nodata": "",
         "dot": false,
@@ -1857,29 +2126,10 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 510,
-        "y": 780,
+        "x": 550,
+        "y": 1240,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "02a4dd527001fe1f",
-        "type": "function",
-        "z": "e0bd9e50950cbdbf",
-        "name": "Order Data",
-        "func": "const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nconst date = new Date()\ndate.setDate(date.getDate() - 1);\nconst day = days[date.getDay()]\n\n\nlet selected_day = []\n\n//filter yesterday's day from DB data\nfor (let item of msg.payload) {\n    if (item.day === day) {\n        selected_day.push(item)\n    }\n}\n\n//isolate selected road from dataset\nif (msg.yesterday_data) {\n    for (let road of msg.yesterday_data) {\n        if (road.road_name === flow.get(\"selected_road\")) {\n            msg.yesterday_data = road.days[0].hours\n            break\n        }\n    }\n}\n\n\n\n//convert to GMT+2 for DB data and yesterday's data\nfor (let item of selected_day) {\n    let hour = Number(item.hour.substring(0, 2))\n    let remaining = item.hour.substring(2,8)\n    hour = (hour + 2 ) % 24\n    let hour_str = `${hour}`\n    if (hour_str.length === 1) {\n        hour_str = '0' + hour_str\n    }\n    item.hour = hour_str+`${remaining}`\n}\nif (msg.yesterday_data) {\n    for (let item of msg.yesterday_data) {\n        let hour = Number(item.hour.substring(0, 2))\n        let remaining = item.hour.substring(2, 8)\n        hour = (hour + 2) % 24\n        let hour_str = `${hour}`\n        if (hour_str.length === 1) {\n            hour_str = '0' + hour_str\n        }\n        item.hour = hour_str + `${remaining}`\n    }\n}\nselected_day.sort((a, b) => {\n    if (a.hour < b.hour) {\n        return -1;\n    }\n    if (a.hour > b.hour) {\n        return 1;\n    }\n    return 0;\n});\n\n\nmsg.payload = selected_day\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 570,
-        "y": 680,
-        "wires": [
-            [
-                "3d38f7da6ab0d8a2"
-            ]
         ]
     },
     {
@@ -1887,14 +2137,14 @@
         "type": "function",
         "z": "e0bd9e50950cbdbf",
         "name": "Build Chart Data",
-        "func": "//calculate midpoint\nfor (let item of msg.payload) {\n    item.midpoint = item.centroid1 + ((item.centroid2 - item.centroid1) / 2)\n}\n\n//create 2d arrays\nlet data = []\nfor (let i=0; i < 4; i++) {\n    data.push(new Array(24).fill(0))\n}\n\n\nlet labels = []\nfor (let item of msg.payload) {\n    labels.push(item.hour)\n}\n\n//create yesterdays average speed data points\nlet yesterday = new Array(24).fill(0)\n\n//put average speeds to correct index\nif (msg.yesterday_data) {\n    for (let hour of msg.yesterday_data) {\n        yesterday[labels.indexOf(hour.hour)] = hour.average\n    }\n}\n\n\n//create chart data points\nfor (let i=0; i < 24; i++) {\n    data[0][i] = msg.payload[i].centroid1\n    data[1][i] = msg.payload[i].centroid2\n    data[2][i] = msg.payload[i].midpoint\n    data[3][i] = yesterday[i]\n}\n\n\n\nmsg.payload = [{\n    \"series\": [\"High\", \"Low\", \"Midpoint\", \"Yesterday's average\"],\n    \"data\": data,\n    \"labels\": labels\n}]\nreturn msg;",
+        "func": "//calculate midpoint\nfor (let item of msg.selected_day_data) {\n    item.midpoint = item.centroid1 + ((item.centroid2 - item.centroid1) / 2)\n}\n\n//create 2d arrays\nlet data = []\nfor (let i=0; i < 4; i++) {\n    data.push(new Array(24).fill(0))\n}\n\n\nlet labels = []\nfor (let item of msg.selected_day_data) {\n    labels.push(item.hour)\n}\n\n//create yesterdays average speed data points\nlet yesterday = new Array(24).fill(0)\n\n//put average speeds to correct index\nif (msg.yesterday_data) {\n    for (let hour of msg.yesterday_data) {\n        yesterday[labels.indexOf(hour.hour)] = hour.average\n    }\n}\n\n//create chart data points\nfor (let i=0; i < 24; i++) {\n    data[0][i] = msg.selected_day_data[i].centroid1\n    data[1][i] = msg.selected_day_data[i].centroid2\n    data[2][i] = msg.selected_day_data[i].midpoint\n    data[3][i] = yesterday[i]\n}\n\nmsg.payload = [{\n    \"series\": [\"High\", \"Low\", \"Midpoint\", \"Data for \" + msg.date_from],\n    \"data\": data,\n    \"labels\": labels\n}]\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 780,
-        "y": 680,
+        "x": 680,
+        "y": 1160,
         "wires": [
             [
                 "731d3ecc508dd7eb"
@@ -1911,8 +2161,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 960,
-        "y": 560,
+        "x": 440,
+        "y": 860,
         "wires": [
             [
                 "689deff0571ee86a"
@@ -1930,8 +2180,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 960,
-        "y": 480,
+        "x": 480,
+        "y": 780,
         "wires": [
             []
         ]
@@ -1956,8 +2206,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 150,
-        "y": 560,
+        "x": 170,
+        "y": 960,
         "wires": [
             [
                 "92edc011fffd5476"
@@ -1978,8 +2228,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
-        "y": 560,
+        "x": 440,
+        "y": 960,
         "wires": [
             [
                 "9288b346e83a23b9"
@@ -1996,11 +2246,68 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 540,
-        "y": 560,
+        "x": 660,
+        "y": 960,
         "wires": [
             [
                 "92edc011fffd5476"
+            ]
+        ]
+    },
+    {
+        "id": "0b5c56d0be8269c5",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "Filter for selected day",
+        "func": "const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nconst date = new Date()\ndate.setDate(date.getDate() - 1);\nconst day = days[date.getDay()]\n\n\nlet selected_day = []\n//filter yesterday's day from DB data\nfor (let item of msg.payload) {\n    if (item.day === day) {\n        selected_day.push(item)\n    }\n}\nmsg.selected_day_data = selected_day\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 200,
+        "y": 1160,
+        "wires": [
+            [
+                "15edcb5a0b4d67bc"
+            ]
+        ]
+    },
+    {
+        "id": "f44edb29c2825f75",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "Isolate selected road",
+        "func": "//isolate selected road from dataset\nconst selected_road = flow.get(\"selected_road\")\n\nlet road_data = []\nif (msg.yesterday_data) {\n    for (let road of msg.yesterday_data) {\n        if (road.road_name === selected_road) {\n            road_data = road.days[0].hours\n            break   \n        }\n    }     \n}\n\nif (road_data.length === 0) {    \n    for (let hour of msg.yesterday_data[0].days[0].hours) {\n        road_data.push({\n            'hour': hour.hour,\n            'average': 0\n        })\n    }   \n}\nmsg.yesterday_data = road_data\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 1060,
+        "wires": [
+            [
+                "0b5c56d0be8269c5"
+            ]
+        ]
+    },
+    {
+        "id": "15edcb5a0b4d67bc",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "Convert to GMT+2",
+        "func": "//convert to GMT+2 for DB data and yesterday's data\n\nfor (let item of msg.selected_day_data) {    \n    let hour = Number(item.hour.substring(0, 2))\n    let remaining = item.hour.substring(2, 8)\n    hour = (hour + 2) % 24\n    let hour_str = `${hour}`\n    if (hour_str.length === 1) {\n        hour_str = '0' + hour_str\n    }\n    item.hour = hour_str + `${remaining}`\n}\n\n\nif (msg.yesterday_data) { \n    for (let item of msg.yesterday_data) {\n        let hour = Number(item.hour.substring(0, 2))\n        let remaining = item.hour.substring(2, 8)\n        hour = (hour + 2) % 24\n        let hour_str = `${hour}`\n        if (hour_str.length === 1) {\n            hour_str = '0' + hour_str\n        }\n        item.hour = hour_str + `${remaining}`\n    }\n}\n\nmsg.selected_day_data.sort((a, b) => {\n    if (a.hour < b.hour) {\n        return -1;\n    }\n    if (a.hour > b.hour) {\n        return 1;\n    }\n    return 0;\n});\n\n// msg.payload = msg.selected_day_data\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1160,
+        "wires": [
+            [
+                "3d38f7da6ab0d8a2"
             ]
         ]
     }

@@ -163,7 +163,7 @@
     {
         "id": "578d025e00dafb5b",
         "type": "ui_group",
-        "name": "Μηνιαία μετατόπηση",
+        "name": "Μηνιαία μετατόπιση",
         "tab": "75713334e8d9d783",
         "order": 1,
         "disp": true,
@@ -196,13 +196,13 @@
         "name": "Default",
         "tab": "6be636b1c47e4056",
         "order": 1,
-        "disp": true,
-        "width": 26,
+        "disp": false,
+        "width": "26",
         "collapse": false,
         "className": ""
     },
     {
-        "id": "9e7cdc2647fa9b44",
+        "id": "ee71958aedbdf465",
         "type": "ui_spacer",
         "z": "e0bd9e50950cbdbf",
         "name": "spacer",
@@ -212,7 +212,7 @@
         "height": 1
     },
     {
-        "id": "5759b5c7e015abbc",
+        "id": "61ef9368cd10da85",
         "type": "ui_spacer",
         "z": "e0bd9e50950cbdbf",
         "name": "spacer",
@@ -318,7 +318,7 @@
         "sqlquery": "msg.topic",
         "sql": "",
         "name": "DB",
-        "x": 430,
+        "x": 350,
         "y": 280,
         "wires": [
             [
@@ -332,7 +332,7 @@
         "z": "f04f43533f741c82",
         "name": "DB Interface",
         "links": [],
-        "x": 265,
+        "x": 185,
         "y": 280,
         "wires": [
             [
@@ -347,7 +347,7 @@
         "name": "link out 9",
         "mode": "return",
         "links": [],
-        "x": 605,
+        "x": 525,
         "y": 280,
         "wires": []
     },
@@ -1423,7 +1423,7 @@
         "topic": "topic",
         "topicType": "msg",
         "className": "",
-        "x": 780,
+        "x": 800,
         "y": 60,
         "wires": [
             [
@@ -1473,14 +1473,14 @@
         "id": "e8bd4058f302fd97",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "SQL Auto Query",
+        "name": "SQL auto query",
         "func": "msg.topic = 'SELECT DISTINCT road FROM monthly_clusters'\nreturn msg",
         "outputs": 1,
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is started.\nlet msg = {}\nmsg.topic = 'SELECT DISTINCT road FROM monthly_clusters'\n// console.log('test')\nnode.send(msg);\nreturn msg\n",
         "finalize": "",
         "libs": [],
-        "x": 160,
+        "x": 140,
         "y": 60,
         "wires": [
             [
@@ -1545,8 +1545,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 990,
-        "y": 320,
+        "x": 750,
+        "y": 340,
         "wires": [
             []
         ]
@@ -1573,15 +1573,15 @@
         "id": "b113fde78b0f9e8d",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "Build Chart Data",
+        "name": "Build chart data",
         "func": "// let groups = msg.groups\n\nlet day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']\nlet months_idx = []\n\nfor (let month of msg.groups) {\n    months_idx.push(month[0].month)\n}\n\nlet data = []\n\nfor (let day of day_names) {\n    let values = Array(msg.groups.size).fill(0)\n    data.push(values)\n}\n\nfor (let month of msg.groups) {\n    let month_idx = months_idx.indexOf(month[0].month)\n    for (let day of month) {\n        let day_idx = day_names.indexOf(day.day)\n        data[day_idx][month_idx] = day.centroid1.toFixed(2);\n    }\n}\n// context.get(\"slider_limit\")\n\n\nmsg.payload = [{\n    'series': day_names,\n    'data': data,\n    'labels': months_idx\n}]\n\n// msg.groups = groups\n\nreturn msg",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 800,
-        "y": 320,
+        "x": 780,
+        "y": 280,
         "wires": [
             [
                 "e36f970f36b4d8df"
@@ -1626,8 +1626,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 990,
-        "y": 400,
+        "x": 750,
+        "y": 480,
         "wires": [
             []
         ]
@@ -1636,15 +1636,15 @@
         "id": "52993c78a5e79bd2",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "Build Chart Data",
+        "name": "Build chart data",
         "func": "// let groups = msg.groups\n\nlet day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']\nlet months_idx = []\n\nfor (let month of msg.groups) {\n    months_idx.push(month[0].month)\n}\n\nlet data = []\n\nfor (let day of day_names) {\n    let values = Array(msg.groups.size).fill(0)\n    data.push(values)\n}\n\nfor (let month of msg.groups) {\n    let month_idx = months_idx.indexOf(month[0].month)\n    for (let day of month) {\n        let day_idx = day_names.indexOf(day.day)\n        data[day_idx][month_idx] = day.centroid2.toFixed(2);\n    }\n}\n\n// let window = flow.get(\"window\");\n\nmsg.payload = [{\n    'series': day_names,\n    'data':data,\n    'labels': months_idx\n}]\n\n// msg.groups = groups\n\nreturn msg",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 800,
-        "y": 400,
+        "x": 780,
+        "y": 420,
         "wires": [
             [
                 "727196b6ea05ef81"
@@ -1751,14 +1751,14 @@
         "id": "40effdb6c6d6dcbc",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "Build SQL Query",
+        "name": "Build SQL query",
         "func": "const road = msg.payload\n\nflow.set(\"road\", road)\n\nmsg.topic = `SELECT DISTINCT month FROM monthly_clusters WHERE road = \"${road}\"`\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 150,
+        "x": 140,
         "y": 200,
         "wires": [
             [
@@ -1828,7 +1828,7 @@
         "topic": "topic",
         "topicType": "msg",
         "className": "",
-        "x": 180,
+        "x": 120,
         "y": 820,
         "wires": [
             [
@@ -1841,14 +1841,14 @@
         "id": "92edc011fffd5476",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "Build SQL Query",
+        "name": "Build SQL query",
         "func": "// const road = msg.payload\nconst road = flow.get(\"selected_road\")\nmsg.topic = `SELECT * FROM hourly_clusters WHERE road = \"${road}\"`\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 210,
+        "x": 140,
         "y": 1060,
         "wires": [
             [
@@ -1866,7 +1866,7 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 430,
+        "x": 390,
         "y": 1060,
         "wires": [
             [
@@ -1912,8 +1912,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 790,
-        "y": 1240,
+        "x": 670,
+        "y": 1260,
         "wires": [
             []
         ]
@@ -1922,14 +1922,14 @@
         "id": "3d38f7da6ab0d8a2",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "Build Chart Data",
+        "name": "Build chart data",
         "func": "//calculate midpoint\nfor (let item of msg.selected_day_data) {\n    item.midpoint = item.centroid1 + ((item.centroid2 - item.centroid1) / 2)\n}\n\n//create 2d arrays\nlet data = []\nfor (let i=0; i < 4; i++) {\n    data.push(new Array(24).fill(0))\n}\n\n\nlet labels = []\nfor (let item of msg.selected_day_data) {\n    labels.push(item.hour)\n}\n\n//create yesterdays average speed data points\nlet yesterday = new Array(24).fill(0)\n\n//put average speeds to correct index\nif (msg.yesterday_data) {\n    for (let hour of msg.yesterday_data) {\n        yesterday[labels.indexOf(hour.hour)] = hour.average\n    }\n}\n\n//create chart data points\nfor (let i=0; i < 24; i++) {\n    data[0][i] = msg.selected_day_data[i].centroid1\n    data[1][i] = msg.selected_day_data[i].centroid2\n    data[2][i] = msg.selected_day_data[i].midpoint\n    data[3][i] = yesterday[i]\n}\n\nmsg.payload = [{\n    \"series\": [\"High\", \"Low\", \"Midpoint\", \"Data for \" + msg.date_from],\n    \"data\": data,\n    \"labels\": labels\n}]\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 680,
+        "x": 780,
         "y": 1160,
         "wires": [
             [
@@ -1947,8 +1947,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 440,
-        "y": 860,
+        "x": 460,
+        "y": 880,
         "wires": [
             [
                 "689deff0571ee86a"
@@ -1966,8 +1966,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 480,
-        "y": 780,
+        "x": 420,
+        "y": 820,
         "wires": [
             []
         ]
@@ -1992,7 +1992,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 170,
+        "x": 110,
         "y": 960,
         "wires": [
             [
@@ -2014,7 +2014,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 440,
+        "x": 460,
         "y": 960,
         "wires": [
             [
@@ -2032,7 +2032,7 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 660,
+        "x": 800,
         "y": 960,
         "wires": [
             [
@@ -2044,7 +2044,7 @@
         "id": "0b5c56d0be8269c5",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "Filter for selected day",
+        "name": "Filter for selected day from DB data",
         "func": "const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nconst date = new Date()\ndate.setDate(date.getDate() - 1);\nconst day = days[date.getDay()]\n\n\nlet selected_day = []\n//filter yesterday's day from DB data\nfor (let item of msg.payload) {\n    if (item.day === day) {\n        selected_day.push(item)\n    }\n}\nmsg.selected_day_data = selected_day\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -2064,14 +2064,14 @@
         "id": "f44edb29c2825f75",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "Isolate selected road",
+        "name": "Filter for selected road from API data",
         "func": "//isolate selected road from dataset\nconst selected_road = flow.get(\"selected_road\")\n\nlet road_data = []\nif (msg.yesterday_data) {\n    for (let road of msg.yesterday_data) {\n        if (road.road_name === selected_road) {\n            road_data = road.days[0].hours\n            break   \n        }\n    }     \n}\n\nif (road_data.length === 0) {    \n    for (let hour of msg.yesterday_data[0].days[0].hours) {\n        road_data.push({\n            'hour': hour.hour,\n            'average': 0\n        })\n    }   \n}\nmsg.yesterday_data = road_data\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 700,
+        "x": 710,
         "y": 1060,
         "wires": [
             [
@@ -2091,8 +2091,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
-        "y": 1240,
+        "x": 290,
+        "y": 1260,
         "wires": [
             [
                 "3f13be38c091eafb"
@@ -2103,14 +2103,14 @@
         "id": "3f13be38c091eafb",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "Sort",
+        "name": "Sort data",
         "func": "msg.selected_day_data.sort((a, b) => {\n    if (a.hour < b.hour) {\n        return -1;\n    }\n    if (a.hour > b.hour) {\n        return 1;\n    }\n    return 0;\n});\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
+        "x": 520,
         "y": 1160,
         "wires": [
             [

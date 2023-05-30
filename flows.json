@@ -1,13 +1,5 @@
 [
     {
-        "id": "372f8629abbd83d1",
-        "type": "tab",
-        "label": "Save to DB",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
         "id": "f04f43533f741c82",
         "type": "tab",
         "label": "DB",
@@ -54,18 +46,6 @@
         "disabled": false,
         "info": "",
         "env": []
-    },
-    {
-        "id": "19ae6230b6d2cba0",
-        "type": "sqlitedb",
-        "db": "/home/mike/HUA/WebServices/Lab/madrid.db",
-        "mode": "RWC"
-    },
-    {
-        "id": "5588be0b796aa416",
-        "type": "sqlitedb",
-        "db": "/home/mike/HUA/WebServices/HUA-DIT-WebServices/db2.sqlite",
-        "mode": "RWC"
     },
     {
         "id": "d74ed80f31a2ffe3",
@@ -166,6 +146,12 @@
         }
     },
     {
+        "id": "5588be0b796aa416",
+        "type": "sqlitedb",
+        "db": "/home/mike/HUA/WebServices/HUA-DIT-WebServices/db2.sqlite",
+        "mode": "RWC"
+    },
+    {
         "id": "75713334e8d9d783",
         "type": "ui_tab",
         "name": "Ιστορικά Δεδομένα",
@@ -236,160 +222,6 @@
         "height": 1
     },
     {
-        "id": "e6b3f9669cad2f4e",
-        "type": "sqlite",
-        "z": "372f8629abbd83d1",
-        "mydb": "19ae6230b6d2cba0",
-        "sqlquery": "msg.topic",
-        "sql": "",
-        "name": "DB",
-        "x": 570,
-        "y": 140,
-        "wires": [
-            [
-                "095f7f0145328d3e"
-            ]
-        ]
-    },
-    {
-        "id": "57845a320eefea48",
-        "type": "function",
-        "z": "372f8629abbd83d1",
-        "name": "Create Table",
-        "func": "msg.topic = 'create table madrid (it text, id text, idelem text, velocidad text, timestamp text)';\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 350,
-        "y": 80,
-        "wires": [
-            [
-                "e6b3f9669cad2f4e"
-            ]
-        ]
-    },
-    {
-        "id": "1d74369e826c3ed7",
-        "type": "function",
-        "z": "372f8629abbd83d1",
-        "name": "Read * from DB",
-        "func": "msg.topic = 'select * from madrid'\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 140,
-        "wires": [
-            [
-                "e6b3f9669cad2f4e"
-            ]
-        ]
-    },
-    {
-        "id": "095f7f0145328d3e",
-        "type": "debug",
-        "z": "372f8629abbd83d1",
-        "name": "debug 3",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 720,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "66d7ada6ed47e15c",
-        "type": "inject",
-        "z": "372f8629abbd83d1",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 80,
-        "wires": [
-            [
-                "57845a320eefea48"
-            ]
-        ]
-    },
-    {
-        "id": "7e2fc9825a1544db",
-        "type": "inject",
-        "z": "372f8629abbd83d1",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 140,
-        "wires": [
-            [
-                "1d74369e826c3ed7"
-            ]
-        ]
-    },
-    {
-        "id": "c215e2b78564b378",
-        "type": "link in",
-        "z": "372f8629abbd83d1",
-        "name": "link in 1",
-        "links": [
-            "af5befa082010c26"
-        ],
-        "x": 405,
-        "y": 200,
-        "wires": [
-            [
-                "e6b3f9669cad2f4e"
-            ]
-        ]
-    },
-    {
-        "id": "d241db0b121a5d6e",
-        "type": "comment",
-        "z": "372f8629abbd83d1",
-        "name": "Insert",
-        "info": "Insert",
-        "x": 410,
-        "y": 240,
-        "wires": []
-    },
-    {
         "id": "6543c3f2ca12350d",
         "type": "sqlite",
         "z": "f04f43533f741c82",
@@ -450,16 +282,6 @@
         ]
     },
     {
-        "id": "3efe1fcdf5a096a6",
-        "type": "comment",
-        "z": "f04f43533f741c82",
-        "name": "",
-        "info": "CREATE TABLE traffic(device_id TEXT, app_process_time TEXT, counted_cars INTEGER, average_speed REAL, PRIMARY KEY(device_id, app_process_time) ON CONFLICT IGNORE, FOREIGN KEY(device_id) REFERENCES sensors(device_id) ON DELETE CASCADE)",
-        "x": 620,
-        "y": 100,
-        "wires": []
-    },
-    {
         "id": "7e2726054319fa12",
         "type": "inject",
         "z": "f04f43533f741c82",
@@ -496,7 +318,7 @@
         "sqlquery": "msg.topic",
         "sql": "",
         "name": "DB",
-        "x": 450,
+        "x": 430,
         "y": 280,
         "wires": [
             [
@@ -510,7 +332,7 @@
         "z": "f04f43533f741c82",
         "name": "DB Interface",
         "links": [],
-        "x": 285,
+        "x": 265,
         "y": 280,
         "wires": [
             [
@@ -525,7 +347,7 @@
         "name": "link out 9",
         "mode": "return",
         "links": [],
-        "x": 625,
+        "x": 605,
         "y": 280,
         "wires": []
     },
@@ -572,12 +394,12 @@
             },
             {
                 "p": "date_from",
-                "v": "2023-04-28",
+                "v": "2023-05-07",
                 "vt": "str"
             },
             {
                 "p": "date_to",
-                "v": "2023-04-29",
+                "v": "2023-05-08",
                 "vt": "str"
             }
         ],
@@ -1298,8 +1120,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
-        "y": 140,
+        "x": 390,
+        "y": 160,
         "wires": [
             [
                 "94838feaa4797e0c"
@@ -1316,8 +1138,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 560,
-        "y": 140,
+        "x": 600,
+        "y": 160,
         "wires": [
             [
                 "20d5e062fa0e7d4a",
@@ -1346,8 +1168,8 @@
         "name": "link out 10",
         "mode": "return",
         "links": [],
-        "x": 1005,
-        "y": 220,
+        "x": 925,
+        "y": 240,
         "wires": []
     },
     {
@@ -1392,7 +1214,7 @@
         "repair": false,
         "outputs": 2,
         "x": 150,
-        "y": 180,
+        "y": 200,
         "wires": [
             [
                 "9710c3a746ea27f5"
@@ -1413,8 +1235,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
-        "y": 220,
+        "x": 410,
+        "y": 240,
         "wires": [
             [
                 "76d630bae28bda6d"
@@ -1432,8 +1254,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 770,
-        "y": 220,
+        "x": 730,
+        "y": 240,
         "wires": [
             [
                 "80c1db3f98970820"
@@ -1451,8 +1273,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 800,
-        "y": 140,
+        "x": 840,
+        "y": 160,
         "wires": [
             []
         ]
@@ -1463,8 +1285,8 @@
         "z": "53617fb819fb8d69",
         "name": "Fallback",
         "links": [],
-        "x": 65,
-        "y": 360,
+        "x": 45,
+        "y": 340,
         "wires": [
             [
                 "4501819c1806336a"
@@ -1484,7 +1306,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 380,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "9ea9cf9b9a240173"
@@ -1500,7 +1322,7 @@
         "action": "",
         "pretty": false,
         "x": 750,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "76d630bae28bda6d"
@@ -1514,73 +1336,8 @@
         "name": "read fallback data file",
         "info": "",
         "x": 240,
-        "y": 320,
+        "y": 380,
         "wires": []
-    },
-    {
-        "id": "6e8655f63cf64f28",
-        "type": "function",
-        "z": "53617fb819fb8d69",
-        "name": "function 1",
-        "func": "let sdfdsf = []\nmsg.test = sdfdsf\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 520,
-        "y": 760,
-        "wires": [
-            [
-                "7d3eaea9b920dd01"
-            ]
-        ]
-    },
-    {
-        "id": "7d3eaea9b920dd01",
-        "type": "debug",
-        "z": "53617fb819fb8d69",
-        "name": "debug 32",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 760,
-        "y": 760,
-        "wires": []
-    },
-    {
-        "id": "d40956ba8d4c4c59",
-        "type": "inject",
-        "z": "53617fb819fb8d69",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 340,
-        "y": 760,
-        "wires": [
-            [
-                "6e8655f63cf64f28"
-            ]
-        ]
     },
     {
         "id": "082f0b7dddb74d14",
@@ -1594,8 +1351,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 600,
-        "y": 540,
+        "x": 400,
+        "y": 480,
         "wires": [
             []
         ]
@@ -1612,10 +1369,39 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 850,
-        "y": 540,
+        "x": 650,
+        "y": 480,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "5feb70fd6cf353fa",
+        "type": "inject",
+        "z": "53617fb819fb8d69",
+        "name": "Daily updates",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "86400",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 600,
+        "y": 60,
+        "wires": [
+            [
+                "9710c3a746ea27f5"
+            ]
         ]
     },
     {
@@ -2043,7 +1829,7 @@
         "topicType": "msg",
         "className": "",
         "x": 180,
-        "y": 840,
+        "y": 820,
         "wires": [
             [
                 "6b3121bf7cdab1f2",
@@ -2126,7 +1912,7 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 550,
+        "x": 790,
         "y": 1240,
         "wires": [
             []
@@ -2269,7 +2055,8 @@
         "y": 1160,
         "wires": [
             [
-                "15edcb5a0b4d67bc"
+                "15edcb5a0b4d67bc",
+                "3f13be38c091eafb"
             ]
         ]
     },
@@ -2296,8 +2083,28 @@
         "id": "15edcb5a0b4d67bc",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
+        "d": true,
         "name": "Convert to GMT+2",
-        "func": "//convert to GMT+2 for DB data and yesterday's data\n\nfor (let item of msg.selected_day_data) {    \n    let hour = Number(item.hour.substring(0, 2))\n    let remaining = item.hour.substring(2, 8)\n    hour = (hour + 2) % 24\n    let hour_str = `${hour}`\n    if (hour_str.length === 1) {\n        hour_str = '0' + hour_str\n    }\n    item.hour = hour_str + `${remaining}`\n}\n\n\nif (msg.yesterday_data) { \n    for (let item of msg.yesterday_data) {\n        let hour = Number(item.hour.substring(0, 2))\n        let remaining = item.hour.substring(2, 8)\n        hour = (hour + 2) % 24\n        let hour_str = `${hour}`\n        if (hour_str.length === 1) {\n            hour_str = '0' + hour_str\n        }\n        item.hour = hour_str + `${remaining}`\n    }\n}\n\nmsg.selected_day_data.sort((a, b) => {\n    if (a.hour < b.hour) {\n        return -1;\n    }\n    if (a.hour > b.hour) {\n        return 1;\n    }\n    return 0;\n});\n\n// msg.payload = msg.selected_day_data\nreturn msg;",
+        "func": "//convert to GMT+2 for DB data and yesterday's data\n\nfor (let item of msg.selected_day_data) {    \n    let hour = Number(item.hour.substring(0, 2))\n    let remaining = item.hour.substring(2, 8)\n    hour = (hour + 2) % 24\n    let hour_str = `${hour}`\n    if (hour_str.length === 1) {\n        hour_str = '0' + hour_str\n    }\n    item.hour = hour_str + `${remaining}`\n}\n\n\nif (msg.yesterday_data) { \n    for (let item of msg.yesterday_data) {\n        let hour = Number(item.hour.substring(0, 2))\n        let remaining = item.hour.substring(2, 8)\n        hour = (hour + 2) % 24\n        let hour_str = `${hour}`\n        if (hour_str.length === 1) {\n            hour_str = '0' + hour_str\n        }\n        item.hour = hour_str + `${remaining}`\n    }\n}\n\nmsg.selected_day_data.sort((a, b) => {\n    if (a.hour < b.hour) {\n        return -1;\n    }\n    if (a.hour > b.hour) {\n        return 1;\n    }\n    return 0;\n});\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 1240,
+        "wires": [
+            [
+                "3f13be38c091eafb"
+            ]
+        ]
+    },
+    {
+        "id": "3f13be38c091eafb",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "Sort",
+        "func": "msg.selected_day_data.sort((a, b) => {\n    if (a.hour < b.hour) {\n        return -1;\n    }\n    if (a.hour > b.hour) {\n        return 1;\n    }\n    return 0;\n});\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",

@@ -186,7 +186,7 @@
         "type": "ui_tab",
         "name": "Ημερήσια Ανάλυση",
         "icon": "dashboard",
-        "order": 2,
+        "order": 1,
         "disabled": false,
         "hidden": false
     },
@@ -394,12 +394,12 @@
             },
             {
                 "p": "date_from",
-                "v": "2023-05-07",
+                "v": "2023-5-1",
                 "vt": "str"
             },
             {
                 "p": "date_to",
-                "v": "2023-05-08",
+                "v": "2023-5-15",
                 "vt": "str"
             }
         ],
@@ -448,17 +448,52 @@
         "type": "debug",
         "z": "3d9c4b8676673364",
         "name": "debug 30",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
         "x": 340,
         "y": 140,
         "wires": []
+    },
+    {
+        "id": "15e3990eb3aaf792",
+        "type": "inject",
+        "z": "3d9c4b8676673364",
+        "name": "Test API",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "date_from",
+                "v": "2023-5-30",
+                "vt": "str"
+            },
+            {
+                "p": "date_to",
+                "v": "2023-5-31",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 260,
+        "wires": [
+            [
+                "98d6e69f573d7d61"
+            ]
+        ]
     },
     {
         "id": "52520011d05866bd",
@@ -1114,7 +1149,7 @@
         "type": "function",
         "z": "53617fb819fb8d69",
         "name": "Built date params",
-        "func": "//build yesterday's date string http query parameters\n\nlet date = new Date();\ndate.setDate(date.getDate() - 1);\n\nlet yesterday = date.getDate().toString()\nif (yesterday.length === 1) {\n    yesterday = '0' + yesterday\n}\n\nlet month = date.getMonth() + 1\nmonth = month.toString()\n\n\nif (month.length === 1) {\n    month = '0' + month\n}\nlet year = date.getFullYear()\n\nmsg.date_from = `${year}-${month}-${yesterday}`\n\ndate = new Date()\ndate.setDate(date.getDate());\n\nlet today = date.getDate().toString()\nif (today.length === 1) {\n    today = '0' + yesterday\n}\nmonth = date.getMonth() + 1\nmonth = month.toString()\n\nif (month.length === 1) {\n    month = '0' + month\n}\nyear = date.getFullYear()\n\nmsg.date_to = `${year}-${month}-${today}`\n\nreturn msg;",
+        "func": "let todayObj = new Date();\nlet yesterdayOnj = new Date(todayObj);\nyesterdayOnj.setDate(todayObj.getDate() - 1);\n\n\nlet yesterday_day = yesterdayOnj.getDate()\nlet today_day = todayObj.getDate()\n\nlet yesterday_month = yesterdayOnj.getMonth() + 1\nlet today_month = todayObj.getMonth() + 1\n\nlet yesterday_year = yesterdayOnj.getFullYear()\nlet today_year = todayObj.getFullYear()\n\n\nmsg.date_from = `${yesterday_year}-${yesterday_month}-${yesterday_day}`\nmsg.date_to = `${today_year}-${today_month}-${today_day}`\n\nreturn msg",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1177,7 +1212,7 @@
         "type": "function",
         "z": "53617fb819fb8d69",
         "name": "Check if saved data are valid",
-        "func": "//check if data exists and dates are yesterdays\n\nconst existing_data = flow.get(\"yesterday_data\")\n\nif (existing_data) {\n\n    let date = new Date();\n    date.setDate(date.getDate() - 1);\n\n\n    let yesterday = date.getDate().toString()\n    if (yesterday.length === 1) {\n        yesterday = '0' + yesterday\n    }\n    let month = date.getMonth() + 1\n    month = month.toString()\n\n    if (month.length === 1) {\n        month = '0' + month\n    }\n    let year = date.getFullYear()\n\n    let today = `${year}-${month}-${yesterday}`\n    \n    console.log(today + ' vs '+ existing_data[0].appprocesstime.substring(0, 10))\n\n    if (existing_data[0].appprocesstime.substring(0, 10) === today) {\n        msg.data_exists = 1\n    } else {\n        msg.data_exists = 0\n    }    \n} else {\n    msg.data_exists = 0\n}\n\n\nreturn msg;",
+        "func": "//check if data exists and dates are yesterdays\nlet existing_data = undefined\nexisting_data = flow.get(\"yesterday_data\")\n// msg.existing_data = existing_data\n// return msg\n// if (existing_data) {\nif (existing_data !== 'Bad query parameters') { //WHAT IS GOING ON?!??!!?\n    console.log('inside')\n    console.log('dsds' + existing_data)\n\n    let date = new Date();\n    date.setDate(date.getDate() - 1);\n\n\n    let yesterday = date.getDate().toString()\n    if (yesterday.length === 1) {\n        yesterday = '0' + yesterday\n    }\n    let month = date.getMonth() + 1\n    month = month.toString()\n\n    if (month.length === 1) {\n        month = '0' + month\n    }\n    let year = date.getFullYear()\n\n    let today = `${year}-${month}-${yesterday}`\n    \n    // console.log(today + ' vs '+ existing_data[0].appprocesstime.substring(0, 10))\n\n    if (existing_data[0].appprocesstime.substring(0, 10) === today) {\n        msg.data_exists = 1\n    } else {\n        msg.data_exists = 0\n    }    \n} else {\n    msg.data_exists = 0\n}\n\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1187,7 +1222,8 @@
         "y": 60,
         "wires": [
             [
-                "a0a393cd7672d554"
+                "a0a393cd7672d554",
+                "c6fe7a120f1db93a"
             ]
         ]
     },
@@ -1267,7 +1303,7 @@
         "type": "function",
         "z": "53617fb819fb8d69",
         "name": "Save data to flow var",
-        "func": "//if api data are valid save to flow variable\nif (msg.payload.length > 0) {\n    flow.set(\"yesterday_data\", msg.payload)\n}\n",
+        "func": "//if api data are valid save to flow variable\nif (msg.payload.length !== 0) {\n    flow.set(\"yesterday_data\", msg.payload)\n}\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1325,7 +1361,7 @@
         "y": 340,
         "wires": [
             [
-                "76d630bae28bda6d"
+                "f02f3e5307a8254a"
             ]
         ]
     },
@@ -1401,6 +1437,71 @@
         "wires": [
             [
                 "9710c3a746ea27f5"
+            ]
+        ]
+    },
+    {
+        "id": "ff83d5fa30b0bfef",
+        "type": "inject",
+        "z": "53617fb819fb8d69",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 840,
+        "y": 60,
+        "wires": [
+            [
+                "9710c3a746ea27f5"
+            ]
+        ]
+    },
+    {
+        "id": "c6fe7a120f1db93a",
+        "type": "debug",
+        "z": "53617fb819fb8d69",
+        "name": "debug 33",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 380,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "f02f3e5307a8254a",
+        "type": "function",
+        "z": "53617fb819fb8d69",
+        "name": "fallback dates",
+        "func": "//in case yesterdays date has no data\nmsg.date_from = '2023-04-28'\nmsg.date_to = '2023-04-29'\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 340,
+        "wires": [
+            [
+                "76d630bae28bda6d"
             ]
         ]
     },
@@ -1829,7 +1930,7 @@
         "topicType": "msg",
         "className": "",
         "x": 120,
-        "y": 820,
+        "y": 900,
         "wires": [
             [
                 "6b3121bf7cdab1f2",
@@ -1947,8 +2048,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 460,
-        "y": 880,
+        "x": 140,
+        "y": 980,
         "wires": [
             [
                 "689deff0571ee86a"
@@ -1967,7 +2068,7 @@
         "finalize": "",
         "libs": [],
         "x": 420,
-        "y": 820,
+        "y": 900,
         "wires": [
             []
         ]
@@ -1992,31 +2093,12 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 110,
-        "y": 960,
+        "x": 470,
+        "y": 980,
         "wires": [
             [
                 "92edc011fffd5476"
             ],
-            [
-                "906f95950135ffb0"
-            ]
-        ]
-    },
-    {
-        "id": "906f95950135ffb0",
-        "type": "function",
-        "z": "e0bd9e50950cbdbf",
-        "name": "fallback dates",
-        "func": "//in case yesterdays date has no data\nmsg.date_from = '2023-04-28'\nmsg.date_to = '2023-04-29'\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 460,
-        "y": 960,
-        "wires": [
             [
                 "9288b346e83a23b9"
             ]
@@ -2033,7 +2115,7 @@
         "linkType": "static",
         "timeout": "30",
         "x": 800,
-        "y": 960,
+        "y": 980,
         "wires": [
             [
                 "92edc011fffd5476"

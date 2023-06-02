@@ -48,6 +48,14 @@
         "env": []
     },
     {
+        "id": "70cdc46223053fea",
+        "type": "tab",
+        "label": "Rabbit MQ",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "6ed6fe690bd97f00",
         "type": "subflow",
         "name": "JSON array sort",
@@ -253,6 +261,26 @@
         "order": 3,
         "width": 8,
         "height": 1
+    },
+    {
+        "id": "82cfb6e6ec87f54c",
+        "type": "amqp-broker",
+        "name": "Consumer",
+        "host": "localhost",
+        "port": "5672",
+        "vhost": "",
+        "tls": false,
+        "credsFromSettings": false
+    },
+    {
+        "id": "6843372537ab3896",
+        "type": "amqp-broker",
+        "name": "hourly traffic report",
+        "host": "localhost",
+        "port": "5672",
+        "vhost": "",
+        "tls": false,
+        "credsFromSettings": false
     },
     {
         "id": "3ce77276c998505a",
@@ -532,12 +560,12 @@
             },
             {
                 "p": "date_from",
-                "v": "2023-5-7",
+                "v": "2023-6-1",
                 "vt": "str"
             },
             {
                 "p": "date_to",
-                "v": "2023-5-8",
+                "v": "2023-6-2",
                 "vt": "str"
             }
         ],
@@ -1350,7 +1378,7 @@
         "type": "function",
         "z": "53617fb819fb8d69",
         "name": "validate saved data",
-        "func": "//check if data exists and dates are yesterdays\n// let existing_data = undefined\nconst existing_data = flow.get(\"yesterday_data\")\n// msg.existing_data = existing_data\n// return msg\n// if (existing_data) {\n// if (existing_data && existing_data.length > 0) {\n// if (existing_data && existing_data !== 'Bad query parameters') { //WHAT IS GOING ON?!??!!?\nif (existing_data) {  \n    let todayObj = new Date();\n    let yesterdayOnj = new Date(todayObj);\n    yesterdayOnj.setDate(todayObj.getDate() - 1);\n\n\n    let yesterday_day = yesterdayOnj.getDate()\n    // let today_day = todayObj.getDate()\n    if (yesterday_day.length === 1) {\n        yesterday_day = '0' + yesterday_day\n    }\n\n    let yesterday_month = yesterdayOnj.getMonth() + 1\n    if (yesterday_month.length === 1) {\n        yesterday_month = '0' + yesterday_month\n    }\n\n    let yesterday_year = yesterdayOnj.getFullYear()\n\n    let today = `${yesterday_year}-${yesterday_month}-${yesterday_day}`    \n    console.log(today)\n\n    if (existing_data[0].appprocesstime.substring(0, 10) === today) {\n        msg.data_exists = true\n    } else {\n        msg.data_exists = false\n    }    \n} else {\n    msg.data_exists = false\n}\n\n\nreturn msg;",
+        "func": "//check if data exists and dates are yesterdays\n// let existing_data = undefined\nconst existing_data = global.get(\"yesterday_data\")\n// msg.existing_data = existing_data\n// return msg\n// if (existing_data) {\n// if (existing_data && existing_data.length > 0) {\n// if (existing_data && existing_data !== 'Bad query parameters') { //WHAT IS GOING ON?!??!!?\nif (existing_data) {  \n    let todayObj = new Date();\n    let yesterdayOnj = new Date(todayObj);\n    yesterdayOnj.setDate(todayObj.getDate() - 1);\n\n\n    let yesterday_day = yesterdayOnj.getDate()\n    // let today_day = todayObj.getDate()\n    if (yesterday_day.length === 1) {\n        yesterday_day = '0' + yesterday_day\n    }\n\n    let yesterday_month = yesterdayOnj.getMonth() + 1\n    if (yesterday_month.length === 1) {\n        yesterday_month = '0' + yesterday_month\n    }\n\n    let yesterday_year = yesterdayOnj.getFullYear()\n\n    let today = `${yesterday_year}-${yesterday_month}-${yesterday_day}`    \n    console.log(today)\n\n    if (existing_data[0].appprocesstime.substring(0, 10) === today) {\n        msg.data_exists = true\n    } else {\n        msg.data_exists = false\n    }    \n} else {\n    msg.data_exists = false\n}\n\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1437,7 +1465,7 @@
         "type": "function",
         "z": "53617fb819fb8d69",
         "name": "save data to flow var",
-        "func": "//if api data are valid save to flow variable\n// msg.payload.length !== 0\nif (msg.statusCode === 200 && msg.payload.length !== 0) {\n    flow.set(\"yesterday_data\", msg.payload)\n}\n",
+        "func": "//if api data are valid save to flow variable\n// msg.payload.length !== 0\nif (msg.statusCode === 200 && msg.payload.length !== 0) {\n    global.set(\"yesterday_data\", msg.payload)\n}\n",
         "outputs": 0,
         "noerr": 0,
         "initialize": "",
@@ -1597,7 +1625,7 @@
         "y": 80,
         "wires": [
             [
-                "9710c3a746ea27f5"
+                "1b4131c2a8c9d70f"
             ]
         ]
     },
@@ -1781,7 +1809,7 @@
         "wires": [
             [
                 "6f02af30701a186c",
-                "5218a7d91a66dc45"
+                "ce598f2f6932a601"
             ]
         ]
     },
@@ -2145,7 +2173,7 @@
         "topicType": "msg",
         "className": "",
         "x": 120,
-        "y": 900,
+        "y": 1060,
         "wires": [
             [
                 "6b3121bf7cdab1f2",
@@ -2165,7 +2193,7 @@
         "finalize": "",
         "libs": [],
         "x": 140,
-        "y": 1060,
+        "y": 1220,
         "wires": [
             [
                 "f0764441520d46f0"
@@ -2183,7 +2211,7 @@
         "linkType": "static",
         "timeout": "30",
         "x": 410,
-        "y": 1060,
+        "y": 1220,
         "wires": [
             [
                 "f44edb29c2825f75"
@@ -2229,7 +2257,7 @@
         "useDifferentColor": false,
         "className": "",
         "x": 720,
-        "y": 1220,
+        "y": 1380,
         "wires": [
             []
         ]
@@ -2239,14 +2267,14 @@
         "type": "function",
         "z": "e0bd9e50950cbdbf",
         "name": "build chart data",
-        "func": "//calculate midpoint\nfor (let item of msg.selected_day_data) {\n    item.midpoint = item.centroid1 + ((item.centroid2 - item.centroid1) / 2)\n}\n\n//create 2d arrays\nlet data = []\nfor (let i=0; i < 4; i++) {\n    data.push(new Array(24).fill(0))\n}\n\n\nlet labels = []\nfor (let item of msg.selected_day_data) {\n    labels.push(item.hour)\n}\n\n//create yesterdays average speed data points\nlet yesterday = new Array(24).fill(0)\n\n//put average speeds to correct index\nif (msg.yesterday_data) {\n    for (let hour of msg.yesterday_data) {\n        yesterday[labels.indexOf(hour.hour)] = hour.average\n    }\n}\n\n//create chart data points\nfor (let i=0; i < 24; i++) {\n    data[0][i] = msg.selected_day_data[i].centroid1\n    data[1][i] = msg.selected_day_data[i].centroid2\n    data[2][i] = msg.selected_day_data[i].midpoint\n    data[3][i] = yesterday[i]\n}\n\nmsg.payload = [{\n    \"series\": [\"High\", \"Low\", \"Midpoint\", \"Data for \" + msg.date_from],\n    \"data\": data,\n    \"labels\": labels\n}]\nreturn msg;",
+        "func": "//calculate midpoint\nfor (let item of msg.selected_day_data) {\n    item.midpoint = item.centroid1 + ((item.centroid2 - item.centroid1) / 2)\n}\n\n//create 2d arrays\nlet data = []\nfor (let i=0; i < 4; i++) {\n    data.push(new Array(24).fill(0))\n}\n\nlet labels = []\nfor (let item of msg.selected_day_data) {\n    labels.push(item.hour)\n}\n\n//create yesterdays average speed data points\nlet yesterday = new Array(24).fill(0)\n\n//put average speeds to correct index\nif (msg.yesterday_data) {\n    for (let hour of msg.yesterday_data) {\n        yesterday[labels.indexOf(hour.hour)] = hour.average\n    }\n}\n\n//create chart data points\nfor (let i=0; i < 24; i++) {\n    data[0][i] = msg.selected_day_data[i].centroid1\n    data[1][i] = msg.selected_day_data[i].centroid2\n    data[2][i] = msg.selected_day_data[i].midpoint\n    data[3][i] = yesterday[i]\n}\n\nmsg.payload = [{\n    \"series\": [\"High\", \"Low\", \"Midpoint\", \"Data for \" + msg.date_from],\n    \"data\": data,\n    \"labels\": labels\n}]\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 780,
-        "y": 1140,
+        "y": 1300,
         "wires": [
             [
                 "731d3ecc508dd7eb"
@@ -2264,7 +2292,7 @@
         "linkType": "static",
         "timeout": "30",
         "x": 140,
-        "y": 980,
+        "y": 1140,
         "wires": [
             [
                 "689deff0571ee86a"
@@ -2283,7 +2311,7 @@
         "finalize": "",
         "libs": [],
         "x": 380,
-        "y": 900,
+        "y": 1060,
         "wires": []
     },
     {
@@ -2307,7 +2335,7 @@
         "repair": false,
         "outputs": 2,
         "x": 480,
-        "y": 980,
+        "y": 1140,
         "wires": [
             [
                 "92edc011fffd5476"
@@ -2328,7 +2356,7 @@
         "linkType": "static",
         "timeout": "30",
         "x": 800,
-        "y": 980,
+        "y": 1140,
         "wires": [
             [
                 "92edc011fffd5476"
@@ -2347,7 +2375,7 @@
         "finalize": "",
         "libs": [],
         "x": 200,
-        "y": 1140,
+        "y": 1300,
         "wires": [
             [
                 "15edcb5a0b4d67bc",
@@ -2367,7 +2395,7 @@
         "finalize": "",
         "libs": [],
         "x": 720,
-        "y": 1060,
+        "y": 1220,
         "wires": [
             [
                 "0b5c56d0be8269c5"
@@ -2387,7 +2415,7 @@
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 1220,
+        "y": 1380,
         "wires": [
             [
                 "3f13be38c091eafb"
@@ -2399,18 +2427,351 @@
         "type": "function",
         "z": "e0bd9e50950cbdbf",
         "name": "sort data",
-        "func": "msg.selected_day_data.sort((a, b) => {\n    if (a.hour < b.hour) {\n        return -1;\n    }\n    if (a.hour > b.hour) {\n        return 1;\n    }\n    return 0;\n});\nreturn msg;",
+        "func": "msg.selected_day_data.sort((a, b) => {\n    if (a.hour < b.hour) {\n        return -1;\n    }\n    if (a.hour > b.hour) {\n        return 1;\n    }\n    return 0;\n});\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 520,
-        "y": 1140,
+        "y": 1300,
         "wires": [
             [
                 "3d38f7da6ab0d8a2"
             ]
         ]
+    },
+    {
+        "id": "2d91fb186e0d914e",
+        "type": "link call",
+        "z": "e0bd9e50950cbdbf",
+        "name": "",
+        "links": [
+            "4c0b0e95abe41adb"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 330,
+        "y": 980,
+        "wires": [
+            [
+                "0c78b869a0108ee6"
+            ]
+        ]
+    },
+    {
+        "id": "0c78b869a0108ee6",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "built option List",
+        "func": "msg.options = msg.payload\n\nlet options = []\nfor (let road of msg.payload) {\n    options.push(road.road)\n}\noptions.sort()\nmsg.options = options\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 980,
+        "wires": [
+            [
+                "5218a7d91a66dc45"
+            ]
+        ]
+    },
+    {
+        "id": "ce598f2f6932a601",
+        "type": "function",
+        "z": "e0bd9e50950cbdbf",
+        "name": "SQL query",
+        "func": "msg.topic = 'SELECT DISTINCT road FROM hourly_clusters'\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\n// let msg = {}\n// msg.topic = 'SELECT DISTINCT road FROM monthly_clusters'\n// // console.log('test')\n// node.send(msg);\n// return msg\n",
+        "finalize": "",
+        "libs": [],
+        "x": 130,
+        "y": 980,
+        "wires": [
+            [
+                "2d91fb186e0d914e"
+            ]
+        ]
+    },
+    {
+        "id": "5cdb945e425107ad",
+        "type": "amqp-out",
+        "z": "70cdc46223053fea",
+        "name": "",
+        "broker": "6843372537ab3896",
+        "exchangeName": "gr.traffic",
+        "exchangeType": "topic",
+        "exchangeRoutingKey": "hourly_traffic_report",
+        "exchangeRoutingKeyType": "str",
+        "exchangeDurable": true,
+        "amqpProperties": "{ \"headers\": {} }",
+        "rpcTimeoutMilliseconds": 3000,
+        "outputs": 0,
+        "x": 400,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "d2f25462ba46c893",
+        "type": "inject",
+        "z": "70cdc46223053fea",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "0f95abfdd82a53f0"
+            ]
+        ]
+    },
+    {
+        "id": "2223e61103c92cae",
+        "type": "amqp-in",
+        "z": "70cdc46223053fea",
+        "name": "",
+        "broker": "82cfb6e6ec87f54c",
+        "prefetch": 0,
+        "noAck": true,
+        "exchangeName": "gr.traffic",
+        "exchangeType": "topic",
+        "exchangeRoutingKey": "hourly_traffic_report",
+        "exchangeDurable": true,
+        "queueName": "gr.traffic",
+        "queueExclusive": true,
+        "queueDurable": false,
+        "queueAutoDelete": true,
+        "headers": "{}",
+        "x": 180,
+        "y": 460,
+        "wires": [
+            [
+                "e9a8a57890ca3586"
+            ]
+        ]
+    },
+    {
+        "id": "0f95abfdd82a53f0",
+        "type": "link call",
+        "z": "70cdc46223053fea",
+        "name": "",
+        "links": [
+            "7a484607652037be"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 320,
+        "y": 80,
+        "wires": [
+            [
+                "8ec6f897dbadee32"
+            ]
+        ]
+    },
+    {
+        "id": "8ec6f897dbadee32",
+        "type": "switch",
+        "z": "70cdc46223053fea",
+        "name": "if API returns last day's data",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 580,
+        "y": 80,
+        "wires": [
+            [
+                "735edf17ff961011"
+            ],
+            [
+                "b2559485665888fe"
+            ]
+        ]
+    },
+    {
+        "id": "b2559485665888fe",
+        "type": "link call",
+        "z": "70cdc46223053fea",
+        "name": "",
+        "links": [
+            "99fa6a9f2f698880"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 840,
+        "y": 80,
+        "wires": [
+            [
+                "735edf17ff961011"
+            ]
+        ]
+    },
+    {
+        "id": "735edf17ff961011",
+        "type": "function",
+        "z": "70cdc46223053fea",
+        "name": "filter for current hour",
+        "func": "const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nconst todayObj = new Date();\nlet yesterdayOnj = new Date(todayObj);\nyesterdayOnj.setDate(todayObj.getDate() - 1);\nconst day = days[yesterdayOnj.getDay()]\nconst hour = yesterdayOnj.getHours()\nconst hour_str = hour + ':00:00'\n\nlet roads = []\nfor (let item of msg.yesterday_data) {\n    for (let hour of item.days[0].hours) {\n        if (hour.hour === hour_str) {\n            roads.push({\n                \"road\": item.road_name,\n                \"speed\": hour.average,                \n            })\n        }               \n    }\n}\n\nmsg.yesterday_data = roads\nmsg.params = {\n    \"day\": day,\n    \"hour\": hour_str\n    }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 160,
+        "y": 160,
+        "wires": [
+            [
+                "a0485458b1d65b58",
+                "e3e9c08d5728ee61"
+            ]
+        ]
+    },
+    {
+        "id": "48498d46b1b6918e",
+        "type": "function",
+        "z": "70cdc46223053fea",
+        "name": "check for high traffic",
+        "func": "\nlet slow_roads = []\nfor (let road of msg.payload) {\n    for (let road2 of msg.yesterday_data) {\n        if (road.road === road2.road) {\n            if (road2.speed !== 0 && road2.speed <= road.centroid2) {\n                console.log(road2.speed + \" \" + road.centroid2 + \" \" + road.road)\n                slow_roads.push(road.road)\n            }\n        }\n    }\n}\nconst params = msg.params\nmsg = {}\nmsg.payload = slow_roads\nmsg.day = params.day\nmsg.hour = params.hour\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 160,
+        "wires": [
+            [
+                "fd06c100636470b4"
+            ]
+        ]
+    },
+    {
+        "id": "fd06c100636470b4",
+        "type": "function",
+        "z": "70cdc46223053fea",
+        "name": "format message",
+        "func": "let msg_string = \"Με βάση τα χθεσινά δεδομένα παρατηρήθηκε υψηλή κίνηση στις οδούς \"\nfor (let road of msg.payload) {\n    msg_string += road\n    msg_string += \", \"\n}\nmsg_string += \"για την ώρα \" + msg.hour\n\nmsg.payload = msg_string\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 140,
+        "y": 240,
+        "wires": [
+            [
+                "5cdb945e425107ad"
+            ]
+        ]
+    },
+    {
+        "id": "a0485458b1d65b58",
+        "type": "function",
+        "z": "70cdc46223053fea",
+        "name": "built SQL query",
+        "func": "msg.topic = `SELECT * FROM hourly_clusters WHERE day = \"${msg.params.day}\" AND hour = \"${msg.params.hour}\"`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 160,
+        "wires": [
+            [
+                "3103df930abd12b3"
+            ]
+        ]
+    },
+    {
+        "id": "3103df930abd12b3",
+        "type": "link call",
+        "z": "70cdc46223053fea",
+        "name": "",
+        "links": [
+            "4c0b0e95abe41adb"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 610,
+        "y": 160,
+        "wires": [
+            [
+                "48498d46b1b6918e"
+            ]
+        ]
+    },
+    {
+        "id": "0dabfdb1fc2e9948",
+        "type": "comment",
+        "z": "70cdc46223053fea",
+        "name": "make inject work for every hour",
+        "info": "",
+        "x": 190,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "e9a8a57890ca3586",
+        "type": "debug",
+        "z": "70cdc46223053fea",
+        "name": "debug 37",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "e3e9c08d5728ee61",
+        "type": "debug",
+        "z": "70cdc46223053fea",
+        "name": "debug 38",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 380,
+        "wires": []
     }
 ]

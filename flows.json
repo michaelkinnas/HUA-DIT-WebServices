@@ -48,6 +48,39 @@
         "env": []
     },
     {
+        "id": "6ed6fe690bd97f00",
+        "type": "subflow",
+        "name": "JSON array sort",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 40,
+                "y": 40,
+                "wires": [
+                    {
+                        "id": "3ce77276c998505a"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 760,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "4285fc65f666f0f8",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
         "id": "d74ed80f31a2ffe3",
         "type": "ui_base",
         "theme": {
@@ -222,6 +255,111 @@
         "height": 1
     },
     {
+        "id": "3ce77276c998505a",
+        "type": "function",
+        "z": "6ed6fe690bd97f00",
+        "name": "prechecks",
+        "func": "function getNestedValue(object, path) {\n    if (!path) return undefined;\n\n    let prop, props = path.split('.');\n\n    for (var i = 0, iLen = props.length - 1; i < iLen; i++) {\n        prop = props[i];\n        let candidate = object[prop];\n        if (candidate !== undefined) {\n            object = candidate;\n        } else {\n            break;\n        }\n    }\n    return object[props[i]];\n}\n\n\nif (!msg.payload.value.props) {\n    throw new Error('\"props\" property does not exist');\n}\nif (!Array.isArray(msg.payload.value.props)) {\n    throw new Error('\"props\" property is not an array');\n}\n\nif (msg.payload.value.props.length > 2 || msg.payload.value.props.length < 1) {\n    throw new Error('\"props\" array must be of size 1 or 2');\n}\n\nfor (let item of msg.payload.value.props) {\n    if (typeof(item) !== 'string') {\n        throw new Error('\"props\" value at index ' + msg.payload.value.props.indexOf(item) + ', is not of type string');\n    }\n}\n\nif (!msg.payload.value.data) {\n    throw new Error('Missing \"data\" property');\n}\n\n\nfor (let param of msg.payload.value.props) {\n    for (let item of msg.payload.value.data){\n        if (getNestedValue(item, param) === undefined){ \n            throw new Error('Provided \"props\" property missing from object');\n        }\n    }\n}\n\nif (msg.payload.value.order) {\n    for (let item of msg.payload.value.order) {\n       if (!(item === 'asc' || item === 'dsc')) {\n           throw new Error('\"order\" parameters error');\n       }\n    }\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 190,
+        "y": 40,
+        "wires": [
+            [
+                "5d81f3693079d564"
+            ]
+        ]
+    },
+    {
+        "id": "067376b1218309c9",
+        "type": "switch",
+        "z": "6ed6fe690bd97f00",
+        "name": "",
+        "property": "payload.props.length",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 390,
+        "y": 80,
+        "wires": [
+            [
+                "1da7fee8b1ae18f7"
+            ],
+            [
+                "4285fc65f666f0f8"
+            ]
+        ]
+    },
+    {
+        "id": "5d81f3693079d564",
+        "type": "function",
+        "z": "6ed6fe690bd97f00",
+        "name": "primary sort",
+        "func": "function getNestedValue(object, path) {\n    if (!path) return undefined;\n\n    let prop, props = path.split('.');\n    \n    for (var i = 0, iLen = props.length - 1; i < iLen; i++) {\n        prop = props[i];\n        let candidate = object[prop];\n        if (candidate !== undefined) {\n            object = candidate;\n        } else {\n            break;\n        }\n    }\n    return object[props[i]];\n}\n\nconst props = msg.payload.value.props\nconst order = msg.payload.value.order\nlet data = msg.payload.value.data\n\nif (!order || order && order[0] === 'asc') {\n    data.sort((a, b) => {\n        return ('' + getNestedValue(a, props[0])).localeCompare(getNestedValue(b, props[0]))\n    })\n} else if (order[0] === 'dsc') {\n    data.sort((a, b) => {\n        return ('' + getNestedValue(b, props[0])).localeCompare(getNestedValue(a, props[0]))\n    })\n}\n\nmsg.payload = {\n    'props': props,\n    'order': order,\n    'data': data\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 190,
+        "y": 120,
+        "wires": [
+            [
+                "067376b1218309c9"
+            ]
+        ]
+    },
+    {
+        "id": "1da7fee8b1ae18f7",
+        "type": "function",
+        "z": "6ed6fe690bd97f00",
+        "name": "secondary sort",
+        "func": "function getNestedValue(object, path) {\n    if (!path) return undefined;\n\n    let prop, props = path.split('.');\n\n    for (var i = 0, iLen = props.length - 1; i < iLen; i++) {\n        prop = props[i];\n\n        let candidate = object[prop];\n        if (candidate !== undefined) {\n            object = candidate;\n        } else {\n            break;\n        }\n    }\n    return object[props[i]];\n}\n\nconst props = msg.payload.props\nconst order = msg.payload.order\nconst data = msg.payload.data\n\n//group according to primary property\nlet groups = []\nlet group = []\nlet primary_prop = props[0]\nfor (let item of data) {\n    if (item[props[0]] === primary_prop) {  \n        group.push(item)\n    } else {\n        groups.push(group)\n        group = []\n        group.push(item)\n        primary_prop = item[props[0]]\n    }\n}\ngroups.push(group)\n\n//sort each group\nfor (let group of groups) {\n    //ascending\n    if (!order || order && order[1] === 'asc') {\n        group.sort((a, b) => {\n            return ('' + getNestedValue(a, props[1])).localeCompare(getNestedValue(b, props[1]))\n        })\n    //descending\n    } else if (order[1] === 'dsc') {\n        group.sort((a, b) => {\n            return ('' + getNestedValue(b, props[1])).localeCompare(getNestedValue(a, props[1]))\n        })\n    }\n\n}\n\n//recombine data\nlet sorted_data = []\nfor (let group of groups) {\n    for (let item of group) {\n        sorted_data.push(item)\n    }\n}\n\nmsg.payload = {\n    // 'props': props,\n    // 'order': order,\n    'data': sorted_data\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 40,
+        "wires": [
+            [
+                "4285fc65f666f0f8"
+            ]
+        ]
+    },
+    {
+        "id": "4285fc65f666f0f8",
+        "type": "function",
+        "z": "6ed6fe690bd97f00",
+        "name": "format payload",
+        "func": "const data = msg.payload.data\nmsg.payload = { data } //openwhisk\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
         "id": "6543c3f2ca12350d",
         "type": "sqlite",
         "z": "f04f43533f741c82",
@@ -394,12 +532,12 @@
             },
             {
                 "p": "date_from",
-                "v": "2023-5-1",
+                "v": "2023-5-7",
                 "vt": "str"
             },
             {
                 "p": "date_to",
-                "v": "2023-5-15",
+                "v": "2023-5-8",
                 "vt": "str"
             }
         ],
@@ -471,12 +609,12 @@
             },
             {
                 "p": "date_from",
-                "v": "2023-5-30",
+                "v": "2023-05-30",
                 "vt": "str"
             },
             {
                 "p": "date_to",
-                "v": "2023-5-31",
+                "v": "2023-05-31",
                 "vt": "str"
             }
         ],
@@ -1149,7 +1287,7 @@
         "type": "function",
         "z": "53617fb819fb8d69",
         "name": "built date params",
-        "func": "let todayObj = new Date();\nlet yesterdayOnj = new Date(todayObj);\nyesterdayOnj.setDate(todayObj.getDate() - 1);\n\n\nlet yesterday_day = yesterdayOnj.getDate()\nlet today_day = todayObj.getDate()\n\nlet yesterday_month = yesterdayOnj.getMonth() + 1\nlet today_month = todayObj.getMonth() + 1\n\nlet yesterday_year = yesterdayOnj.getFullYear()\nlet today_year = todayObj.getFullYear()\n\n\nmsg.date_from = `${yesterday_year}-${yesterday_month}-${yesterday_day}`\nmsg.date_to = `${today_year}-${today_month}-${today_day}`\n\nreturn msg",
+        "func": "let todayObj = new Date();\nlet yesterdayOnj = new Date(todayObj);\nyesterdayOnj.setDate(todayObj.getDate() - 1);\n\n\nlet yesterday_day = yesterdayOnj.getDate()\nlet today_day = todayObj.getDate()\n\nlet yesterday_month = yesterdayOnj.getMonth() + 1\nlet today_month = todayObj.getMonth() + 1\n\nlet yesterday_year = yesterdayOnj.getFullYear()\nlet today_year = todayObj.getFullYear()\n\n\nmsg.date_from = `${yesterday_year}-${yesterday_month}-${yesterday_day}`\n\nmsg.date_to = `${today_year}-${today_month}-${today_day}`\n// console.log(msg.date_from + msg.date_to)\n\n\nreturn msg",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1212,7 +1350,7 @@
         "type": "function",
         "z": "53617fb819fb8d69",
         "name": "validate saved data",
-        "func": "//check if data exists and dates are yesterdays\nlet existing_data = undefined\nexisting_data = flow.get(\"yesterday_data\")\n// msg.existing_data = existing_data\n// return msg\n// if (existing_data) {\nif (existing_data && existing_data !== 'Bad query parameters') { //WHAT IS GOING ON?!??!!?\n    console.log('inside')\n    console.log('dsds' + existing_data)\n\n    let date = new Date();\n    date.setDate(date.getDate() - 1);\n\n\n    let yesterday = date.getDate().toString()\n    if (yesterday.length === 1) {\n        yesterday = '0' + yesterday\n    }\n    let month = date.getMonth() + 1\n    month = month.toString()\n\n    if (month.length === 1) {\n        month = '0' + month\n    }\n    let year = date.getFullYear()\n\n    let today = `${year}-${month}-${yesterday}`\n    \n    // console.log(today + ' vs '+ existing_data[0].appprocesstime.substring(0, 10))\n\n    if (existing_data[0].appprocesstime.substring(0, 10) === today) {\n        msg.data_exists = 1\n    } else {\n        msg.data_exists = 0\n    }    \n} else {\n    msg.data_exists = 0\n}\n\n\nreturn msg;",
+        "func": "//check if data exists and dates are yesterdays\n// let existing_data = undefined\nconst existing_data = flow.get(\"yesterday_data\")\n// msg.existing_data = existing_data\n// return msg\n// if (existing_data) {\n// if (existing_data && existing_data.length > 0) {\n// if (existing_data && existing_data !== 'Bad query parameters') { //WHAT IS GOING ON?!??!!?\nif (existing_data) {  \n    let todayObj = new Date();\n    let yesterdayOnj = new Date(todayObj);\n    yesterdayOnj.setDate(todayObj.getDate() - 1);\n\n\n    let yesterday_day = yesterdayOnj.getDate()\n    // let today_day = todayObj.getDate()\n    if (yesterday_day.length === 1) {\n        yesterday_day = '0' + yesterday_day\n    }\n\n    let yesterday_month = yesterdayOnj.getMonth() + 1\n    if (yesterday_month.length === 1) {\n        yesterday_month = '0' + yesterday_month\n    }\n\n    let yesterday_year = yesterdayOnj.getFullYear()\n\n    let today = `${yesterday_year}-${yesterday_month}-${yesterday_day}`    \n    console.log(today)\n\n    if (existing_data[0].appprocesstime.substring(0, 10) === today) {\n        msg.data_exists = true\n    } else {\n        msg.data_exists = false\n    }    \n} else {\n    msg.data_exists = false\n}\n\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1236,14 +1374,10 @@
         "propertyType": "msg",
         "rules": [
             {
-                "t": "eq",
-                "v": "0",
-                "vt": "str"
+                "t": "false"
             },
             {
-                "t": "eq",
-                "v": "1",
-                "vt": "str"
+                "t": "else"
             }
         ],
         "checkall": "true",
@@ -1303,7 +1437,7 @@
         "type": "function",
         "z": "53617fb819fb8d69",
         "name": "save data to flow var",
-        "func": "//if api data are valid save to flow variable\nif (msg.payload.length !== 0) {\n    flow.set(\"yesterday_data\", msg.payload)\n}\n",
+        "func": "//if api data are valid save to flow variable\n// msg.payload.length !== 0\nif (msg.statusCode === 200 && msg.payload.length !== 0) {\n    flow.set(\"yesterday_data\", msg.payload)\n}\n",
         "outputs": 0,
         "noerr": 0,
         "initialize": "",
@@ -1502,6 +1636,89 @@
                 "76d630bae28bda6d"
             ]
         ]
+    },
+    {
+        "id": "3a8adaa5cf1f1cc5",
+        "type": "function",
+        "z": "53617fb819fb8d69",
+        "d": true,
+        "name": "validate saved data",
+        "func": "//check if data exists and dates are yesterdays\n// let existing_data = undefined\nconst existing_data = flow.get(\"yesterday_data\")\n// msg.existing_data = existing_data\n// return msg\n// if (existing_data) {\n// if (existing_data && existing_data.length > 0) {\n// if (existing_data && existing_data !== 'Bad query parameters') { //WHAT IS GOING ON?!??!!?\nif (existing_data) {\n    console.log('inside')\n    console.log('dsds' + existing_data)\n\n    let date = new Date();\n    date.setDate(date.getDate() - 1);\n\n\n    let yesterday = date.getDate().toString()\n    if (yesterday.length === 1) {\n        yesterday = '0' + yesterday\n    }\n    let month = date.getMonth() + 1\n    month = month.toString()\n\n    if (month.length === 1) {\n        month = '0' + month\n    }\n    let year = date.getFullYear()\n\n    let today = `${year}-${month}-${yesterday}`\n    \n    // console.log(today + ' vs '+ existing_data[0].appprocesstime.substring(0, 10))\n\n    if (existing_data[0].appprocesstime.substring(0, 10) === today) {\n        msg.data_exists = 1\n    } else {\n        msg.data_exists = 0\n    }    \n} else {\n    msg.data_exists = 0\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2621d34476f2c82e",
+        "type": "function",
+        "z": "53617fb819fb8d69",
+        "name": "function 1",
+        "func": "let todayObj = new Date();\nlet yesterdayOnj = new Date(todayObj);\nyesterdayOnj.setDate(todayObj.getDate() - 1);\n\n\nlet yesterday_day = yesterdayOnj.getDate()\n// let today_day = todayObj.getDate()\n\nif (yesterday_day < 10) {\n    yesterday_day = '0' + yesterday_day\n}\n\nlet yesterday_month = yesterdayOnj.getMonth() + 1\nconsole.log(yesterday_month)\nif (yesterday_month < 10) {\n    yesterday_month = '0' + yesterday_month\n}\n\nlet yesterday_year = yesterdayOnj.getFullYear()\n\nlet today = `${yesterday_year}-${yesterday_month}-${yesterday_day}`\n// console.log(today)\nmsg.payload = today\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 660,
+        "wires": [
+            [
+                "c160e3bc6061ab08"
+            ]
+        ]
+    },
+    {
+        "id": "242e7a0869c4aa9a",
+        "type": "inject",
+        "z": "53617fb819fb8d69",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 720,
+        "wires": [
+            [
+                "2621d34476f2c82e"
+            ]
+        ]
+    },
+    {
+        "id": "c160e3bc6061ab08",
+        "type": "debug",
+        "z": "53617fb819fb8d69",
+        "name": "debug 34",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 660,
+        "wires": []
     },
     {
         "id": "6f02af30701a186c",
@@ -1869,7 +2086,7 @@
         "id": "ba063cc96d4266ed",
         "type": "link call",
         "z": "e0bd9e50950cbdbf",
-        "name": "DB Interface",
+        "name": "",
         "links": [
             "4c0b0e95abe41adb"
         ],
@@ -2011,7 +2228,7 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 780,
+        "x": 720,
         "y": 1220,
         "wires": [
             []

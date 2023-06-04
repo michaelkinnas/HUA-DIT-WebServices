@@ -2441,7 +2441,7 @@
         "type": "function",
         "z": "70cdc46223053fea",
         "name": "check for high traffic",
-        "func": "\nlet slow_roads = []\nfor (let road of msg.payload) {\n    for (let road2 of msg.yesterday_data) {\n        if (road.road === road2.road) {\n            if (road2.speed !== 0 && road2.speed <= road.centroid2) {\n                console.log(road2.speed + \" \" + road.centroid2 + \" \" + road.road)\n                slow_roads.push(road.road)\n            }\n        }\n    }\n}\nconst params = msg.params\nmsg = {}\nmsg.payload = slow_roads\nmsg.day = params.day\nmsg.hour = params.hour\nreturn msg;",
+        "func": "\nlet slow_roads = []\nfor (let road of msg.payload) {\n    for (let road2 of msg.yesterday_data) {\n        if (road.road === road2.road) {\n            if (road2.speed !== 0 && road2.speed <= road.centroid2) {\n                slow_roads.push(road.road)\n            }\n        }\n    }\n}\nconst params = msg.params\nmsg = {}\nmsg.payload = slow_roads\nmsg.day = params.day\nmsg.hour = params.hour\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",

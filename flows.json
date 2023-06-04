@@ -34,7 +34,7 @@
     {
         "id": "53617fb819fb8d69",
         "type": "tab",
-        "label": "Daily update",
+        "label": "Updates",
         "disabled": false,
         "info": "",
         "env": []
@@ -234,10 +234,10 @@
     {
         "id": "6207fff339b851ea",
         "type": "ui_group",
-        "name": "Σύγκριση με k-clusters περιόδου 01-01-2023 - 30-04-2023",
+        "name": "Default",
         "tab": "6be636b1c47e4056",
         "order": 1,
-        "disp": true,
+        "disp": false,
         "width": "26",
         "collapse": false,
         "className": ""
@@ -405,7 +405,7 @@
         "id": "f8482dd0d3eb5861",
         "type": "link in",
         "z": "f04f43533f741c82",
-        "name": "DB2 batch insert",
+        "name": "DB2 Batch insert",
         "links": [
             "4afb4726da95e57b",
             "527efbcb58ecf430"
@@ -422,7 +422,7 @@
         "id": "2bbf3a20ae89c520",
         "type": "inject",
         "z": "f04f43533f741c82",
-        "name": "create monthly clusters table",
+        "name": "Create monthly clusters table",
         "props": [
             {
                 "p": "payload"
@@ -451,7 +451,7 @@
         "id": "7e2726054319fa12",
         "type": "inject",
         "z": "f04f43533f741c82",
-        "name": "create hourly clusters table",
+        "name": "Create hourly clusters table",
         "props": [
             {
                 "p": "payload"
@@ -496,7 +496,7 @@
         "id": "4c0b0e95abe41adb",
         "type": "link in",
         "z": "f04f43533f741c82",
-        "name": "DB interface",
+        "name": "DB Interface",
         "links": [],
         "x": 185,
         "y": 280,
@@ -544,43 +544,7 @@
         "y": 60,
         "wires": [
             [
-                "52067ff2382e812f",
-                "cbfcd413682c56e2"
-            ]
-        ]
-    },
-    {
-        "id": "b533a47bb7919317",
-        "type": "inject",
-        "z": "3d9c4b8676673364",
-        "name": "Test API",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "date_from",
-                "v": "2023-6-1",
-                "vt": "str"
-            },
-            {
-                "p": "date_to",
-                "v": "2023-6-2",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 140,
-        "wires": [
-            [
-                "98d6e69f573d7d61"
+                "52067ff2382e812f"
             ]
         ]
     },
@@ -588,7 +552,7 @@
         "id": "fc0ac11ee099dff3",
         "type": "link in",
         "z": "3d9c4b8676673364",
-        "name": "API call",
+        "name": "API Call",
         "links": [],
         "x": 75,
         "y": 60,
@@ -608,58 +572,6 @@
         "x": 385,
         "y": 60,
         "wires": []
-    },
-    {
-        "id": "cbfcd413682c56e2",
-        "type": "debug",
-        "z": "3d9c4b8676673364",
-        "name": "debug 30",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 340,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "15e3990eb3aaf792",
-        "type": "inject",
-        "z": "3d9c4b8676673364",
-        "name": "Test API",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "date_from",
-                "v": "2023-05-30",
-                "vt": "str"
-            },
-            {
-                "p": "date_to",
-                "v": "2023-05-31",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 200,
-        "wires": [
-            [
-                "98d6e69f573d7d61"
-            ]
-        ]
     },
     {
         "id": "52520011d05866bd",
@@ -683,7 +595,7 @@
         "id": "cee2f7b1bbc03e41",
         "type": "function",
         "z": "019efafd3890369d",
-        "name": "k-clustering",
+        "name": "K-Clustering",
         "func": "var clusterMaker = global.get('clusters')\n//number of clusters, defaults to undefined\nclusterMaker.k(2);\n\n//default to 1000\nclusterMaker.iterations(300);\n\nlet clusters = []\n\nfor (let road of msg.dataset) {\n    for (let month of road.months) {\n        for (let day of month.days) {\n            clusterMaker.data(day.speeds)\n            day.clusters = clusterMaker.clusters()\n        }\n    }    \n}\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -702,7 +614,7 @@
         "id": "c61a13d82f2bad85",
         "type": "function",
         "z": "019efafd3890369d",
-        "name": "built SQL insert",
+        "name": "Built SQL insert",
         "func": "let insert_query = \"INSERT INTO monthly_clusters(month, day, road, centroid1, centroid2) VALUES \"\nfor (let road of msg.dataset) {\n    for (let month of road.months) {\n        for (let day of month.days) {\n            let max = day.clusters[0].centroid[0]\n            let min = day.clusters[1].centroid[0]\n            if (min > max) {\n                [max, min] = [min, max]\n            }\n            insert_query += `(\"${month.month}\", \"${day.day}\", \"${road.road_name}\", \"${max}\", \"${min}\"),`\n        }\n    }\n}\nmsg = {}\nmsg.topic = insert_query.slice(0, -1)\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -734,14 +646,14 @@
         "id": "b3e0b9db3a177a7e",
         "type": "function",
         "z": "019efafd3890369d",
-        "name": "format dataset",
+        "name": "Build dataset",
         "func": "const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']\n\nlet roads = []\n\nfor (let item of msg.payload) { \n    const birthday = new Date(item.appprocesstime.substring(0, 10))\n    const day_name = days[birthday.getDay()]\n\n    let index_road = roads.findIndex(x => x.road_name === item.road_name);   \n    \n    if (index_road === -1) {\n        //create new road\n        roads.push({\n            'road_name' : item.road_name,\n            'months': [{\n                'month': item.appprocesstime.substring(0, 7),\n                'days': [{\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                }]                \n            }]\n        })\n    } else {\n        //update existing road\n        let index_month = roads[index_road].months.findIndex(x => x.month === item.appprocesstime.substring(0, 7)); //find month in months\n        //if month does not exist\n        if (index_month === -1) {\n            roads[index_road].months.push({                \n                'month': item.appprocesstime.substring(0, 7),\n                'days': [{\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                }]\n            })            \n        } else {         \n            let index_day = roads[index_road].months[index_month].days.findIndex(x => x.day === day_name)\n            if (index_day === -1) {\n                roads[index_road].months[index_month].days.push({\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                })\n            } else {\n                roads[index_road].months[index_month].days[index_day].speeds.push([item.average_speed])\n            }\n        }\n    }        \n}\n\n\n\nmsg = {}\nmsg.dataset = roads\n// msg.data = monthly_clusters\n// [{\n//     'road_name': 'whatever',\n//     'months': [{\n//         'month': '2023-05',\n//         'days': [{\n//             'day': 'Monday',\n//             'speeds': [[2], [3]]\n//         }]\n//     }] \n// }]\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 300,
+        "x": 290,
         "y": 340,
         "wires": [
             [
@@ -1181,7 +1093,7 @@
         "id": "1e6ab091d72cf623",
         "type": "inject",
         "z": "469d36c343ae88fa",
-        "name": "from 2023-01-01 to 2023-04-30",
+        "name": "Last 4 months",
         "props": [
             {
                 "p": "payload"
@@ -1204,7 +1116,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 190,
+        "x": 130,
         "y": 60,
         "wires": [
             [
@@ -1222,8 +1134,8 @@
         ],
         "linkType": "static",
         "timeout": "300",
-        "x": 260,
-        "y": 120,
+        "x": 320,
+        "y": 60,
         "wires": [
             [
                 "f60ae7ab6aee55c0"
@@ -1234,15 +1146,15 @@
         "id": "f60ae7ab6aee55c0",
         "type": "function",
         "z": "469d36c343ae88fa",
-        "name": "format dataset",
+        "name": "Build Dataset",
         "func": "const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\n\nlet roads = []\n\nfor (let item of msg.payload) {\n    const birthday = new Date(item.appprocesstime.substring(0, 10))\n    const day_name = days[birthday.getDay()]\n\n    let index_road = roads.findIndex(x => x.road_name === item.road_name);\n\n    if (index_road === -1) {\n        //create new road\n        roads.push({\n            'road_name': item.road_name,\n            'days': [{             \n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]                \n            }]\n        })\n    } else {\n        let index_day = roads[index_road].days.findIndex(x => x.day === day_name)\n\n        if (index_day === -1) {\n            roads[index_road].days.push({\n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]\n            })\n        } else {\n            let index_hour = roads[index_road].days[index_day].hours.findIndex(x => x.hour === item.appprocesstime.substring(11, 19))\n\n            if (index_hour === -1) {\n                roads[index_road].days[index_day].hours.push({\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                })\n            } else {\n                roads[index_road].days[index_day].hours[index_hour].speeds.push([item.average_speed])\n            }           \n        }\n    }\n}\n\nmsg = {}\nmsg.dataset = roads\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 280,
-        "y": 180,
+        "x": 330,
+        "y": 120,
         "wires": [
             [
                 "0b49140f92b06cb5"
@@ -1253,15 +1165,15 @@
         "id": "0b49140f92b06cb5",
         "type": "function",
         "z": "469d36c343ae88fa",
-        "name": "k-clustering",
+        "name": "K-Clustering",
         "func": "var clusterMaker = global.get('clusters')\n//number of clusters, defaults to undefined\nclusterMaker.k(2);\n\n//default to 1000\nclusterMaker.iterations(500);\n\nlet clusters = []\n\nfor (let road of msg.dataset) {\n    for (let day of road.days) {\n        for (let hour of day.hours){\n            clusterMaker.data(hour.speeds)\n            // let cluster = clusterMaker.clusters()\n            hour.clusters = clusterMaker.clusters()       \n        }       \n    }    \n}\n\n// msg = {}\n// msg.clusters = clusters\n// msg.payload = 'Operation Complete'\nreturn msg;\n\n// [{\n//     hour: '22:00:00',\n//     roads: [{\n//         road_name: 'κηφησία',\n//         speeds: [[2],[3]...]\n//     }]\n// }]",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 270,
-        "y": 240,
+        "x": 330,
+        "y": 180,
         "wires": [
             [
                 "7bb72f0154eba586"
@@ -1282,15 +1194,15 @@
         "id": "7bb72f0154eba586",
         "type": "function",
         "z": "469d36c343ae88fa",
-        "name": "build SQL Insert",
+        "name": "Build SQL Insert",
         "func": "let insert_query = \"INSERT INTO hourly_clusters(road, day, hour, centroid1, centroid2) VALUES \"\nfor (let road of msg.dataset) {\n    for (let day of road.days) {\n        for (let hour of day.hours) {\n            let max = hour.clusters[0].centroid[0]\n            let min = hour.clusters[1].centroid[0]\n            if (min > max) {\n                [max, min] = [min, max]\n            }\n            insert_query += `(\"${road.road_name}\", \"${day.day}\", \"${hour.hour}\", \"${max}\", \"${min}\"),`\n        }        \n    }    \n}\nmsg = {}\nmsg.topic = insert_query.slice(0, -1)\n\nreturn msg",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 280,
-        "y": 300,
+        "x": 340,
+        "y": 240,
         "wires": [
             [
                 "4afb4726da95e57b"
@@ -1306,16 +1218,16 @@
         "links": [
             "f8482dd0d3eb5861"
         ],
-        "x": 435,
-        "y": 300,
+        "x": 515,
+        "y": 240,
         "wires": []
     },
     {
         "id": "9710c3a746ea27f5",
         "type": "function",
         "z": "53617fb819fb8d69",
-        "name": "built date params",
-        "func": "let todayObj = new Date();\nlet yesterdayOnj = new Date(todayObj);\nyesterdayOnj.setDate(todayObj.getDate() - 1);\n\n\nlet yesterday_day = yesterdayOnj.getDate()\nlet today_day = todayObj.getDate()\n\nlet yesterday_month = yesterdayOnj.getMonth() + 1\nlet today_month = todayObj.getMonth() + 1\n\nlet yesterday_year = yesterdayOnj.getFullYear()\nlet today_year = todayObj.getFullYear()\n\n\nmsg.date_from = `${yesterday_year}-${yesterday_month}-${yesterday_day}`\n\nmsg.date_to = `${today_year}-${today_month}-${today_day}`\n// console.log(msg.date_from + msg.date_to)\n\n\nreturn msg",
+        "name": "Built date params",
+        "func": "let todayObj = new Date();\nlet yesterdayOnj = new Date(todayObj);\nyesterdayOnj.setDate(todayObj.getDate() - 1);\n\n\nlet yesterday_day = yesterdayOnj.getDate()\nlet today_day = todayObj.getDate()\n\nlet yesterday_month = yesterdayOnj.getMonth() + 1\nlet today_month = todayObj.getMonth() + 1\n\nlet yesterday_year = yesterdayOnj.getFullYear()\nlet today_year = todayObj.getFullYear()\n\n\nmsg.date_from = `${yesterday_year}-${yesterday_month}-${yesterday_day}`\nmsg.date_to = `${today_year}-${today_month}-${today_day}`\n\nreturn msg",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1352,10 +1264,10 @@
         "id": "7a484607652037be",
         "type": "link in",
         "z": "53617fb819fb8d69",
-        "name": "last day's data",
+        "name": "Yesterday DATA",
         "links": [],
         "x": 45,
-        "y": 80,
+        "y": 60,
         "wires": [
             [
                 "1b4131c2a8c9d70f"
@@ -1377,15 +1289,15 @@
         "id": "1b4131c2a8c9d70f",
         "type": "function",
         "z": "53617fb819fb8d69",
-        "name": "validate saved data",
-        "func": "//check if data exists and dates are yesterdays\n// let existing_data = undefined\nconst existing_data = global.get(\"yesterday_data\")\n// msg.existing_data = existing_data\n// return msg\n// if (existing_data) {\n// if (existing_data && existing_data.length > 0) {\n// if (existing_data && existing_data !== 'Bad query parameters') { //WHAT IS GOING ON?!??!!?\nif (existing_data) {  \n    let todayObj = new Date();\n    let yesterdayOnj = new Date(todayObj);\n    yesterdayOnj.setDate(todayObj.getDate() - 1);\n\n\n    let yesterday_day = yesterdayOnj.getDate()\n    // let today_day = todayObj.getDate()\n    if (yesterday_day.length === 1) {\n        yesterday_day = '0' + yesterday_day\n    }\n\n    let yesterday_month = yesterdayOnj.getMonth() + 1\n    if (yesterday_month.length === 1) {\n        yesterday_month = '0' + yesterday_month\n    }\n\n    let yesterday_year = yesterdayOnj.getFullYear()\n\n    let today = `${yesterday_year}-${yesterday_month}-${yesterday_day}`    \n    console.log(today)\n\n    if (existing_data[0].appprocesstime.substring(0, 10) === today) {\n        msg.data_exists = true\n    } else {\n        msg.data_exists = false\n    }    \n} else {\n    msg.data_exists = false\n}\n\n\nreturn msg;",
+        "name": "Check if saved data are valid",
+        "func": "//check if data exists and dates are yesterdays\nlet existing_data = undefined\nexisting_data = flow.get(\"yesterday_data\")\n// msg.existing_data = existing_data\n// return msg\n// if (existing_data) {\nif (existing_data && existing_data !== 'Bad query parameters') { //WHAT IS GOING ON?!??!!?\n    console.log('inside')\n    console.log('dsds' + existing_data)\n\n    let date = new Date();\n    date.setDate(date.getDate() - 1);\n\n\n    let yesterday = date.getDate().toString()\n    if (yesterday.length === 1) {\n        yesterday = '0' + yesterday\n    }\n    let month = date.getMonth() + 1\n    month = month.toString()\n\n    if (month.length === 1) {\n        month = '0' + month\n    }\n    let year = date.getFullYear()\n\n    let today = `${year}-${month}-${yesterday}`\n    \n    // console.log(today + ' vs '+ existing_data[0].appprocesstime.substring(0, 10))\n\n    if (existing_data[0].appprocesstime.substring(0, 10) === today) {\n        msg.data_exists = 1\n    } else {\n        msg.data_exists = 0\n    }    \n} else {\n    msg.data_exists = 0\n}\n\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 190,
-        "y": 80,
+        "x": 260,
+        "y": 60,
         "wires": [
             [
                 "a0a393cd7672d554",
@@ -1397,21 +1309,25 @@
         "id": "a0a393cd7672d554",
         "type": "switch",
         "z": "53617fb819fb8d69",
-        "name": "read saved or call api",
+        "name": "",
         "property": "data_exists",
         "propertyType": "msg",
         "rules": [
             {
-                "t": "false"
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
             },
             {
-                "t": "else"
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
             }
         ],
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 140,
+        "x": 150,
         "y": 200,
         "wires": [
             [
@@ -1426,7 +1342,7 @@
         "id": "ba5848d05ee7d4a7",
         "type": "function",
         "z": "53617fb819fb8d69",
-        "name": "read saved flow var data",
+        "name": "Read saved flow var data",
         "func": "//read data from flow variable\nlet data = flow.get(\"yesterday_data\")\n\nif (data) {\n    msg.payload = data\n} else {\n    msg.payload = 'No yesterdays data exist'\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -1445,14 +1361,14 @@
         "id": "76d630bae28bda6d",
         "type": "function",
         "z": "53617fb819fb8d69",
-        "name": "format dataset",
+        "name": "Build dataset",
         "func": "if (msg.payload.length === 0) {\n    msg.error = 'Empty data'\n    return msg\n}\n\nconst days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nlet roads = []\n\n//format dataset\nfor (let item of msg.payload) {\n    const birthday = new Date(item.appprocesstime.substring(0, 10))\n    const day_name = days[birthday.getDay()]\n\n    let index_road = roads.findIndex(x => x.road_name === item.road_name);\n\n    if (index_road === -1) {\n        //create new road\n        roads.push({\n            'road_name': item.road_name,\n            'days': [{\n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]\n            }]\n        })\n    } else {\n        let index_day = roads[index_road].days.findIndex(x => x.day === day_name)\n\n        if (index_day === -1) {\n            roads[index_road].days.push({\n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]\n            })\n        } else {\n            let index_hour = roads[index_road].days[index_day].hours.findIndex(x => x.hour === item.appprocesstime.substring(11, 19))\n\n            if (index_hour === -1) {\n                roads[index_road].days[index_day].hours.push({\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                })\n            } else {\n                roads[index_road].days[index_day].hours[index_hour].speeds.push([item.average_speed])\n            }\n        }\n    }\n}\n\n//remove the extra day that the api returns at 00:00 hours\nfor (let item of roads) {  \n    if (item.days[0].hours.length === 1) {\n        item.days.splice(0, 1);\n    } else {\n        item.days.splice(1, 1);\n    }    \n}\n\n\n//average the speeds of every sensor for the same road\nfor (let item of roads) {  \n    for (let hour of item.days[0].hours) {\n        let total = 0\n        for (let speed of hour.speeds) {\n            total += speed[0]\n        }\n        hour.average = total / hour.speeds.length\n    }\n}\n\nmsg.yesterday_data = roads\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
+        "x": 730,
         "y": 240,
         "wires": [
             [
@@ -1464,22 +1380,24 @@
         "id": "20d5e062fa0e7d4a",
         "type": "function",
         "z": "53617fb819fb8d69",
-        "name": "save data to flow var",
-        "func": "//if api data are valid save to flow variable\n// msg.payload.length !== 0\nif (msg.statusCode === 200 && msg.payload.length !== 0) {\n    global.set(\"yesterday_data\", msg.payload)\n}\n",
-        "outputs": 0,
+        "name": "Save data to flow var",
+        "func": "//if api data are valid save to flow variable\nif (msg.payload.length !== 0) {\n    flow.set(\"yesterday_data\", msg.payload)\n}\n",
+        "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 840,
         "y": 160,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "99fa6a9f2f698880",
         "type": "link in",
         "z": "53617fb819fb8d69",
-        "name": "fallback",
+        "name": "Fallback",
         "links": [],
         "x": 45,
         "y": 340,
@@ -1501,7 +1419,7 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 340,
+        "x": 380,
         "y": 340,
         "wires": [
             [
@@ -1517,7 +1435,7 @@
         "property": "payload",
         "action": "",
         "pretty": false,
-        "x": 670,
+        "x": 750,
         "y": 340,
         "wires": [
             [
@@ -1575,7 +1493,7 @@
         "id": "5feb70fd6cf353fa",
         "type": "inject",
         "z": "53617fb819fb8d69",
-        "name": "daily updates",
+        "name": "Daily updates",
         "props": [
             {
                 "p": "payload"
@@ -1592,8 +1510,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 480,
-        "y": 80,
+        "x": 600,
+        "y": 60,
         "wires": [
             [
                 "9710c3a746ea27f5"
@@ -1604,7 +1522,7 @@
         "id": "ff83d5fa30b0bfef",
         "type": "inject",
         "z": "53617fb819fb8d69",
-        "name": "manual request",
+        "name": "",
         "props": [
             {
                 "p": "payload"
@@ -1621,11 +1539,11 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 760,
-        "y": 80,
+        "x": 840,
+        "y": 60,
         "wires": [
             [
-                "1b4131c2a8c9d70f"
+                "9710c3a746ea27f5"
             ]
         ]
     },
@@ -1642,22 +1560,22 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 220,
-        "y": 40,
+        "x": 380,
+        "y": 20,
         "wires": []
     },
     {
         "id": "f02f3e5307a8254a",
         "type": "function",
         "z": "53617fb819fb8d69",
-        "name": "set fallback dates",
+        "name": "fallback dates",
         "func": "//in case yesterdays date has no data\nmsg.date_from = '2023-04-28'\nmsg.date_to = '2023-04-29'\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 850,
+        "x": 960,
         "y": 340,
         "wires": [
             [
@@ -1666,96 +1584,13 @@
         ]
     },
     {
-        "id": "3a8adaa5cf1f1cc5",
-        "type": "function",
-        "z": "53617fb819fb8d69",
-        "d": true,
-        "name": "validate saved data",
-        "func": "//check if data exists and dates are yesterdays\n// let existing_data = undefined\nconst existing_data = flow.get(\"yesterday_data\")\n// msg.existing_data = existing_data\n// return msg\n// if (existing_data) {\n// if (existing_data && existing_data.length > 0) {\n// if (existing_data && existing_data !== 'Bad query parameters') { //WHAT IS GOING ON?!??!!?\nif (existing_data) {\n    console.log('inside')\n    console.log('dsds' + existing_data)\n\n    let date = new Date();\n    date.setDate(date.getDate() - 1);\n\n\n    let yesterday = date.getDate().toString()\n    if (yesterday.length === 1) {\n        yesterday = '0' + yesterday\n    }\n    let month = date.getMonth() + 1\n    month = month.toString()\n\n    if (month.length === 1) {\n        month = '0' + month\n    }\n    let year = date.getFullYear()\n\n    let today = `${year}-${month}-${yesterday}`\n    \n    // console.log(today + ' vs '+ existing_data[0].appprocesstime.substring(0, 10))\n\n    if (existing_data[0].appprocesstime.substring(0, 10) === today) {\n        msg.data_exists = 1\n    } else {\n        msg.data_exists = 0\n    }    \n} else {\n    msg.data_exists = 0\n}\n\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 170,
-        "y": 480,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "2621d34476f2c82e",
-        "type": "function",
-        "z": "53617fb819fb8d69",
-        "name": "function 1",
-        "func": "let todayObj = new Date();\nlet yesterdayOnj = new Date(todayObj);\nyesterdayOnj.setDate(todayObj.getDate() - 1);\n\n\nlet yesterday_day = yesterdayOnj.getDate()\n// let today_day = todayObj.getDate()\n\nif (yesterday_day < 10) {\n    yesterday_day = '0' + yesterday_day\n}\n\nlet yesterday_month = yesterdayOnj.getMonth() + 1\nconsole.log(yesterday_month)\nif (yesterday_month < 10) {\n    yesterday_month = '0' + yesterday_month\n}\n\nlet yesterday_year = yesterdayOnj.getFullYear()\n\nlet today = `${yesterday_year}-${yesterday_month}-${yesterday_day}`\n// console.log(today)\nmsg.payload = today\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 520,
-        "y": 660,
-        "wires": [
-            [
-                "c160e3bc6061ab08"
-            ]
-        ]
-    },
-    {
-        "id": "242e7a0869c4aa9a",
-        "type": "inject",
-        "z": "53617fb819fb8d69",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 280,
-        "y": 720,
-        "wires": [
-            [
-                "2621d34476f2c82e"
-            ]
-        ]
-    },
-    {
-        "id": "c160e3bc6061ab08",
-        "type": "debug",
-        "z": "53617fb819fb8d69",
-        "name": "debug 34",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 740,
-        "y": 660,
-        "wires": []
-    },
-    {
         "id": "6f02af30701a186c",
         "type": "ui_dropdown",
         "z": "e0bd9e50950cbdbf",
         "name": "",
         "label": "",
         "tooltip": "",
-        "place": "Επιλέξτε δρόμο",
+        "place": "ΟΔΟΣ",
         "group": "578d025e00dafb5b",
         "order": 1,
         "width": 9,
@@ -1797,7 +1632,7 @@
         "id": "c7be280a69d56b0a",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "built option List",
+        "name": "Built Option List",
         "func": "msg.options = msg.payload\n\nlet options = []\nfor (let road of msg.payload) {\n    options.push(road.road)\n}\noptions.sort()\nmsg.options = options\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -1809,7 +1644,7 @@
         "wires": [
             [
                 "6f02af30701a186c",
-                "ce598f2f6932a601"
+                "5218a7d91a66dc45"
             ]
         ]
     },
@@ -1836,7 +1671,7 @@
         "id": "4957156a6f94ddd9",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "read data from DB",
+        "name": "Read data from DB",
         "func": "// const road = msg.payload\nlet limit = 6\nconst road = flow.get(\"road\")\nconst months = flow.get(\"months\")\nlimit = msg.payload-1\nmonths.sort()\n\nlet selected_dates = []\nfor (let i= limit; i > limit - 6; i--) {\n    selected_dates.push(`'${months[i]}'`)\n}\n\nmsg.topic = `SELECT * FROM monthly_clusters WHERE road = \"${road}\" AND month in (${selected_dates})`\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -1860,7 +1695,7 @@
         "order": 3,
         "width": 20,
         "height": 6,
-        "label": "High centroids",
+        "label": "High",
         "chartType": "bar",
         "legend": "true",
         "xformat": "HH:mm:ss",
@@ -1889,7 +1724,7 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 780,
+        "x": 750,
         "y": 340,
         "wires": [
             []
@@ -1917,15 +1752,15 @@
         "id": "b113fde78b0f9e8d",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "build chart data for high centroid",
-        "func": "// let groups = msg.groups\n\nconst day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']\n// const day_names_el = ['Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σαββάτο', 'Κυριακή']\nlet months_idx = []\n\nfor (let month of msg.groups) {\n    months_idx.push(month[0].month)\n}\n\nlet data = []\n\nfor (let day of day_names) {\n    let values = Array(msg.groups.size).fill(0)\n    data.push(values)\n}\n\nfor (let month of msg.groups) {\n    let month_idx = months_idx.indexOf(month[0].month)\n    for (let day of month) {\n        let day_idx = day_names.indexOf(day.day)\n        data[day_idx][month_idx] = day.centroid1.toFixed(2);\n    }\n}\n// context.get(\"slider_limit\")\n\n\nmsg.payload = [{\n    'series': day_names,\n    'data': data,\n    'labels': months_idx\n}]\n\n// msg.groups = groups\n\nreturn msg",
+        "name": "Build chart data",
+        "func": "// let groups = msg.groups\n\nlet day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']\nlet months_idx = []\n\nfor (let month of msg.groups) {\n    months_idx.push(month[0].month)\n}\n\nlet data = []\n\nfor (let day of day_names) {\n    let values = Array(msg.groups.size).fill(0)\n    data.push(values)\n}\n\nfor (let month of msg.groups) {\n    let month_idx = months_idx.indexOf(month[0].month)\n    for (let day of month) {\n        let day_idx = day_names.indexOf(day.day)\n        data[day_idx][month_idx] = day.centroid1.toFixed(2);\n    }\n}\n// context.get(\"slider_limit\")\n\n\nmsg.payload = [{\n    'series': day_names,\n    'data': data,\n    'labels': months_idx\n}]\n\n// msg.groups = groups\n\nreturn msg",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
-        "y": 300,
+        "x": 780,
+        "y": 280,
         "wires": [
             [
                 "e36f970f36b4d8df"
@@ -1941,7 +1776,7 @@
         "order": 5,
         "width": 20,
         "height": 6,
-        "label": "Low centroids",
+        "label": "Low",
         "chartType": "bar",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -1970,8 +1805,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 780,
-        "y": 460,
+        "x": 750,
+        "y": 480,
         "wires": [
             []
         ]
@@ -1980,14 +1815,14 @@
         "id": "52993c78a5e79bd2",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "build chart data for low centroid",
+        "name": "Build chart data",
         "func": "// let groups = msg.groups\n\nlet day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']\nlet months_idx = []\n\nfor (let month of msg.groups) {\n    months_idx.push(month[0].month)\n}\n\nlet data = []\n\nfor (let day of day_names) {\n    let values = Array(msg.groups.size).fill(0)\n    data.push(values)\n}\n\nfor (let month of msg.groups) {\n    let month_idx = months_idx.indexOf(month[0].month)\n    for (let day of month) {\n        let day_idx = day_names.indexOf(day.day)\n        data[day_idx][month_idx] = day.centroid2.toFixed(2);\n    }\n}\n\n// let window = flow.get(\"window\");\n\nmsg.payload = [{\n    'series': day_names,\n    'data':data,\n    'labels': months_idx\n}]\n\n// msg.groups = groups\n\nreturn msg",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
+        "x": 780,
         "y": 420,
         "wires": [
             [
@@ -1999,7 +1834,7 @@
         "id": "6faafac9e3198f8f",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "sort data",
+        "name": "Sort data",
         "func": "// let payload = msg.payload\n\nmsg.payload.sort((a, b) => {\n    if (a.month < b.month) {\n        return -1;\n    }\n    if (a.month > b.month) {\n        return 1;\n    }\n    return 0;\n});\n\nlet groups = []\n\nlet month = msg.payload[0].month\nlet months = []\nfor (let item of msg.payload) {\n    if (item.month === month) {\n        months.push(item)\n    } else {\n        groups.push(months)\n        month = item.month\n        months = []\n    }\n}\ngroups.push(months)\n\n\nfor (let group of groups) {\n    group.sort((a, b) => {\n        const days = {\n            'Monday': 1,\n            'Tuesday': 2,\n            'Wednesday': 3,\n            'Thursday': 4,\n            'Friday': 5,\n            'Saturday': 6,\n            'Sunday': 7\n        }\n        return days[a.day] - days[b.day];\n    });\n}\n\nmsg = {}\nmsg.groups = groups\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -2075,7 +1910,7 @@
         "id": "cf32b73628f33fde",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "set max value",
+        "name": "Set max value",
         "func": "let months = []\nfor (let month of msg.payload) {\n    months.push(month.month)\n}\nflow.set(\"months\", months)\n\nlet max = msg.payload.length\nif (max < 7) {\n    //Disable slider\n}\n\nmsg.ui_control = { \n    'min': 6, \n    'max': max\n}\n\nmsg.payload = msg.payload.length\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -2095,7 +1930,7 @@
         "id": "40effdb6c6d6dcbc",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "build SQL query",
+        "name": "Build SQL query",
         "func": "const road = msg.payload\n\nflow.set(\"road\", road)\n\nmsg.topic = `SELECT DISTINCT month FROM monthly_clusters WHERE road = \"${road}\"`\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -2114,7 +1949,7 @@
         "id": "ba063cc96d4266ed",
         "type": "link call",
         "z": "e0bd9e50950cbdbf",
-        "name": "",
+        "name": "DB Interface",
         "links": [
             "4c0b0e95abe41adb"
         ],
@@ -2132,7 +1967,7 @@
         "id": "c8cc289bda16f67f",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "initial chart setting",
+        "name": "Initial chart setting",
         "func": "// let limit = 6\nconst road = flow.get(\"road\")\nconst months = flow.get(\"months\")\n// limit = msg.payload - 1\nmonths.sort()\n\nlet selected_dates = []\nfor (let i = months.length; i > months.length - 7; i--) {\n    selected_dates.push(`'${months[i]}'`)\n}\n\nmsg.topic = `SELECT * FROM monthly_clusters WHERE road = \"${road}\" AND month in (${selected_dates})`\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -2173,7 +2008,7 @@
         "topicType": "msg",
         "className": "",
         "x": 120,
-        "y": 1060,
+        "y": 900,
         "wires": [
             [
                 "6b3121bf7cdab1f2",
@@ -2185,7 +2020,7 @@
         "id": "92edc011fffd5476",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "build SQL query",
+        "name": "Build SQL query",
         "func": "// const road = msg.payload\nconst road = flow.get(\"selected_road\")\nmsg.topic = `SELECT * FROM hourly_clusters WHERE road = \"${road}\"`\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
@@ -2193,7 +2028,7 @@
         "finalize": "",
         "libs": [],
         "x": 140,
-        "y": 1220,
+        "y": 1060,
         "wires": [
             [
                 "f0764441520d46f0"
@@ -2210,8 +2045,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 410,
-        "y": 1220,
+        "x": 390,
+        "y": 1060,
         "wires": [
             [
                 "f44edb29c2825f75"
@@ -2227,7 +2062,7 @@
         "order": 4,
         "width": 26,
         "height": 6,
-        "label": "Mέση ταχύτητα οχημάτων ανά ώρα",
+        "label": "Ημερήσια Κίνηση - Σύγκριση τελευταίων 4 μηνών",
         "chartType": "line",
         "legend": "true",
         "xformat": "auto",
@@ -2256,8 +2091,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 720,
-        "y": 1380,
+        "x": 670,
+        "y": 1220,
         "wires": [
             []
         ]
@@ -2266,15 +2101,15 @@
         "id": "3d38f7da6ab0d8a2",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "build chart data",
-        "func": "//calculate midpoint\nfor (let item of msg.selected_day_data) {\n    item.midpoint = item.centroid1 + ((item.centroid2 - item.centroid1) / 2)\n}\n\n//create 2d arrays\nlet data = []\nfor (let i=0; i < 4; i++) {\n    data.push(new Array(24).fill(0))\n}\n\nlet labels = []\nfor (let item of msg.selected_day_data) {\n    labels.push(item.hour)\n}\n\n//create yesterdays average speed data points\nlet yesterday = new Array(24).fill(0)\n\n//put average speeds to correct index\nif (msg.yesterday_data) {\n    for (let hour of msg.yesterday_data) {\n        yesterday[labels.indexOf(hour.hour)] = hour.average\n    }\n}\n\n//create chart data points\nfor (let i=0; i < 24; i++) {\n    data[0][i] = msg.selected_day_data[i].centroid1\n    data[1][i] = msg.selected_day_data[i].centroid2\n    data[2][i] = msg.selected_day_data[i].midpoint\n    data[3][i] = yesterday[i]\n}\n\nmsg.payload = [{\n    \"series\": [\"High\", \"Low\", \"Midpoint\", \"Data for \" + msg.date_from],\n    \"data\": data,\n    \"labels\": labels\n}]\nreturn msg;",
+        "name": "Build chart data",
+        "func": "//calculate midpoint\nfor (let item of msg.selected_day_data) {\n    item.midpoint = item.centroid1 + ((item.centroid2 - item.centroid1) / 2)\n}\n\n//create 2d arrays\nlet data = []\nfor (let i=0; i < 4; i++) {\n    data.push(new Array(24).fill(0))\n}\n\n\nlet labels = []\nfor (let item of msg.selected_day_data) {\n    labels.push(item.hour)\n}\n\n//create yesterdays average speed data points\nlet yesterday = new Array(24).fill(0)\n\n//put average speeds to correct index\nif (msg.yesterday_data) {\n    for (let hour of msg.yesterday_data) {\n        yesterday[labels.indexOf(hour.hour)] = hour.average\n    }\n}\n\n//create chart data points\nfor (let i=0; i < 24; i++) {\n    data[0][i] = msg.selected_day_data[i].centroid1\n    data[1][i] = msg.selected_day_data[i].centroid2\n    data[2][i] = msg.selected_day_data[i].midpoint\n    data[3][i] = yesterday[i]\n}\n\nmsg.payload = [{\n    \"series\": [\"High\", \"Low\", \"Midpoint\", \"Data for \" + msg.date_from],\n    \"data\": data,\n    \"labels\": labels\n}]\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 780,
-        "y": 1300,
+        "y": 1140,
         "wires": [
             [
                 "731d3ecc508dd7eb"
@@ -2292,7 +2127,7 @@
         "linkType": "static",
         "timeout": "30",
         "x": 140,
-        "y": 1140,
+        "y": 980,
         "wires": [
             [
                 "689deff0571ee86a"
@@ -2303,22 +2138,24 @@
         "id": "f101341dc00b2c31",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "set selected road context var",
+        "name": "Set selected road context var",
         "func": "flow.set(\"selected_road\", msg.payload)\nreturn msg;",
-        "outputs": 0,
+        "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 380,
-        "y": 1060,
-        "wires": []
+        "x": 420,
+        "y": 900,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "689deff0571ee86a",
         "type": "switch",
         "z": "e0bd9e50950cbdbf",
-        "name": "if API returns last day's data",
+        "name": "",
         "property": "payload",
         "propertyType": "msg",
         "rules": [
@@ -2334,8 +2171,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 480,
-        "y": 1140,
+        "x": 470,
+        "y": 980,
         "wires": [
             [
                 "92edc011fffd5476"
@@ -2356,7 +2193,7 @@
         "linkType": "static",
         "timeout": "30",
         "x": 800,
-        "y": 1140,
+        "y": 980,
         "wires": [
             [
                 "92edc011fffd5476"
@@ -2367,7 +2204,7 @@
         "id": "0b5c56d0be8269c5",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "filter for selected day from DB data",
+        "name": "Filter for selected day from DB data",
         "func": "const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nconst date = new Date()\ndate.setDate(date.getDate() - 1);\nconst day = days[date.getDay()]\n\n\nlet selected_day = []\n//filter yesterday's day from DB data\nfor (let item of msg.payload) {\n    if (item.day === day) {\n        selected_day.push(item)\n    }\n}\nmsg.selected_day_data = selected_day\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -2375,7 +2212,7 @@
         "finalize": "",
         "libs": [],
         "x": 200,
-        "y": 1300,
+        "y": 1140,
         "wires": [
             [
                 "15edcb5a0b4d67bc",
@@ -2387,15 +2224,15 @@
         "id": "f44edb29c2825f75",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "filter for selected road from API data",
+        "name": "Filter for selected road from API data",
         "func": "//isolate selected road from dataset\nconst selected_road = flow.get(\"selected_road\")\n\nlet road_data = []\nif (msg.yesterday_data) {\n    for (let road of msg.yesterday_data) {\n        if (road.road_name === selected_road) {\n            road_data = road.days[0].hours\n            break   \n        }\n    }     \n}\n\nif (road_data.length === 0) {    \n    for (let hour of msg.yesterday_data[0].days[0].hours) {\n        road_data.push({\n            'hour': hour.hour,\n            'average': 0\n        })\n    }   \n}\nmsg.yesterday_data = road_data\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
-        "y": 1220,
+        "x": 710,
+        "y": 1060,
         "wires": [
             [
                 "0b5c56d0be8269c5"
@@ -2415,7 +2252,7 @@
         "finalize": "",
         "libs": [],
         "x": 290,
-        "y": 1380,
+        "y": 1220,
         "wires": [
             [
                 "3f13be38c091eafb"
@@ -2426,74 +2263,18 @@
         "id": "3f13be38c091eafb",
         "type": "function",
         "z": "e0bd9e50950cbdbf",
-        "name": "sort data",
-        "func": "msg.selected_day_data.sort((a, b) => {\n    if (a.hour < b.hour) {\n        return -1;\n    }\n    if (a.hour > b.hour) {\n        return 1;\n    }\n    return 0;\n});\n\nreturn msg;",
+        "name": "Sort data",
+        "func": "msg.selected_day_data.sort((a, b) => {\n    if (a.hour < b.hour) {\n        return -1;\n    }\n    if (a.hour > b.hour) {\n        return 1;\n    }\n    return 0;\n});\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 520,
-        "y": 1300,
+        "y": 1140,
         "wires": [
             [
                 "3d38f7da6ab0d8a2"
-            ]
-        ]
-    },
-    {
-        "id": "2d91fb186e0d914e",
-        "type": "link call",
-        "z": "e0bd9e50950cbdbf",
-        "name": "",
-        "links": [
-            "4c0b0e95abe41adb"
-        ],
-        "linkType": "static",
-        "timeout": "30",
-        "x": 330,
-        "y": 980,
-        "wires": [
-            [
-                "0c78b869a0108ee6"
-            ]
-        ]
-    },
-    {
-        "id": "0c78b869a0108ee6",
-        "type": "function",
-        "z": "e0bd9e50950cbdbf",
-        "name": "built option List",
-        "func": "msg.options = msg.payload\n\nlet options = []\nfor (let road of msg.payload) {\n    options.push(road.road)\n}\noptions.sort()\nmsg.options = options\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 540,
-        "y": 980,
-        "wires": [
-            [
-                "5218a7d91a66dc45"
-            ]
-        ]
-    },
-    {
-        "id": "ce598f2f6932a601",
-        "type": "function",
-        "z": "e0bd9e50950cbdbf",
-        "name": "SQL query",
-        "func": "msg.topic = 'SELECT DISTINCT road FROM hourly_clusters'\nreturn msg",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "// Code added here will be run once\n// whenever the node is started.\n// let msg = {}\n// msg.topic = 'SELECT DISTINCT road FROM monthly_clusters'\n// // console.log('test')\n// node.send(msg);\n// return msg\n",
-        "finalize": "",
-        "libs": [],
-        "x": 130,
-        "y": 980,
-        "wires": [
-            [
-                "2d91fb186e0d914e"
             ]
         ]
     },
@@ -2561,8 +2342,8 @@
         "queueDurable": false,
         "queueAutoDelete": true,
         "headers": "{}",
-        "x": 180,
-        "y": 460,
+        "x": 400,
+        "y": 440,
         "wires": [
             [
                 "e9a8a57890ca3586"
@@ -2579,7 +2360,7 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 320,
+        "x": 340,
         "y": 80,
         "wires": [
             [
@@ -2607,7 +2388,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 580,
+        "x": 620,
         "y": 80,
         "wires": [
             [
@@ -2628,7 +2409,7 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 840,
+        "x": 880,
         "y": 80,
         "wires": [
             [
@@ -2641,7 +2422,7 @@
         "type": "function",
         "z": "70cdc46223053fea",
         "name": "filter for current hour",
-        "func": "const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nconst todayObj = new Date();\nlet yesterdayOnj = new Date(todayObj);\nyesterdayOnj.setDate(todayObj.getDate() - 1);\nconst day = days[yesterdayOnj.getDay()]\nconst hour = yesterdayOnj.getHours()\nconst hour_str = hour + ':00:00'\n\nlet roads = []\nfor (let item of msg.yesterday_data) {\n    for (let hour of item.days[0].hours) {\n        if (hour.hour === hour_str) {\n            roads.push({\n                \"road\": item.road_name,\n                \"speed\": hour.average,                \n            })\n        }               \n    }\n}\n\nmsg.yesterday_data = roads\nmsg.params = {\n    \"day\": day,\n    \"hour\": hour_str\n    }\nreturn msg;",
+        "func": "const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nconst todayObj = new Date();\nlet yesterdayOnj = new Date(todayObj);\nyesterdayOnj.setDate(todayObj.getDate() - 1);\nconst day = days[yesterdayOnj.getDay()]\nconst hour = yesterdayOnj.getHours()\nlet hour_str = hour + ':00:00'\nif (hour < 10) {\n    hour_str = '0' + hour_str\n}\n   \n\nlet roads = []\nfor (let item of msg.yesterday_data) {\n    for (let hour of item.days[0].hours) {\n        if (hour.hour === hour_str) {\n            roads.push({\n                \"road\": item.road_name,\n                \"speed\": hour.average,                \n            })\n        }               \n    }\n}\n\nmsg.yesterday_data = roads\nmsg.params = {\n    \"day\": day,\n    \"hour\": hour_str\n    }\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -2651,8 +2432,7 @@
         "y": 160,
         "wires": [
             [
-                "a0485458b1d65b58",
-                "e3e9c08d5728ee61"
+                "a0485458b1d65b58"
             ]
         ]
     },
@@ -2753,25 +2533,18 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 440,
-        "y": 460,
+        "x": 660,
+        "y": 440,
         "wires": []
     },
     {
-        "id": "e3e9c08d5728ee61",
-        "type": "debug",
+        "id": "abd5952a78317514",
+        "type": "comment",
         "z": "70cdc46223053fea",
-        "name": "debug 38",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 780,
-        "y": 380,
+        "name": "for demonstration",
+        "info": "",
+        "x": 360,
+        "y": 400,
         "wires": []
     }
 ]

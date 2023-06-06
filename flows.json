@@ -595,7 +595,7 @@
         "id": "cee2f7b1bbc03e41",
         "type": "function",
         "z": "019efafd3890369d",
-        "name": "K-Clustering",
+        "name": "k-clustering",
         "func": "var clusterMaker = global.get('clusters')\n//number of clusters, defaults to undefined\nclusterMaker.k(2);\n\n//default to 1000\nclusterMaker.iterations(300);\n\nlet clusters = []\n\nfor (let road of msg.dataset) {\n    for (let month of road.months) {\n        for (let day of month.days) {\n            clusterMaker.data(day.speeds)\n            day.clusters = clusterMaker.clusters()\n        }\n    }    \n}\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -614,7 +614,7 @@
         "id": "c61a13d82f2bad85",
         "type": "function",
         "z": "019efafd3890369d",
-        "name": "Built SQL insert",
+        "name": "built SQL insert",
         "func": "let insert_query = \"INSERT INTO monthly_clusters(month, day, road, centroid1, centroid2) VALUES \"\nfor (let road of msg.dataset) {\n    for (let month of road.months) {\n        for (let day of month.days) {\n            let max = day.clusters[0].centroid[0]\n            let min = day.clusters[1].centroid[0]\n            if (min > max) {\n                [max, min] = [min, max]\n            }\n            insert_query += `(\"${month.month}\", \"${day.day}\", \"${road.road_name}\", \"${max}\", \"${min}\"),`\n        }\n    }\n}\nmsg = {}\nmsg.topic = insert_query.slice(0, -1)\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
@@ -646,18 +646,18 @@
         "id": "b3e0b9db3a177a7e",
         "type": "function",
         "z": "019efafd3890369d",
-        "name": "Build dataset",
+        "name": "format dataset",
         "func": "const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']\n\nlet roads = []\n\nfor (let item of msg.payload) { \n    const birthday = new Date(item.appprocesstime.substring(0, 10))\n    const day_name = days[birthday.getDay()]\n\n    let index_road = roads.findIndex(x => x.road_name === item.road_name);   \n    \n    if (index_road === -1) {\n        //create new road\n        roads.push({\n            'road_name' : item.road_name,\n            'months': [{\n                'month': item.appprocesstime.substring(0, 7),\n                'days': [{\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                }]                \n            }]\n        })\n    } else {\n        //update existing road\n        let index_month = roads[index_road].months.findIndex(x => x.month === item.appprocesstime.substring(0, 7)); //find month in months\n        //if month does not exist\n        if (index_month === -1) {\n            roads[index_road].months.push({                \n                'month': item.appprocesstime.substring(0, 7),\n                'days': [{\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                }]\n            })            \n        } else {         \n            let index_day = roads[index_road].months[index_month].days.findIndex(x => x.day === day_name)\n            if (index_day === -1) {\n                roads[index_road].months[index_month].days.push({\n                    'day': day_name,\n                    'speeds': [[item.average_speed]]\n                })\n            } else {\n                roads[index_road].months[index_month].days[index_day].speeds.push([item.average_speed])\n            }\n        }\n    }        \n}\n\n\n\nmsg = {}\nmsg.dataset = roads\n// msg.data = monthly_clusters\n// [{\n//     'road_name': 'whatever',\n//     'months': [{\n//         'month': '2023-05',\n//         'days': [{\n//             'day': 'Monday',\n//             'speeds': [[2], [3]]\n//         }]\n//     }] \n// }]\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 290,
+        "x": 300,
         "y": 340,
         "wires": [
             [
-                "cee2f7b1bbc03e41"
+                "d8fe5c557be0d4c4"
             ]
         ]
     },
@@ -1090,6 +1090,23 @@
         "wires": []
     },
     {
+        "id": "d8fe5c557be0d4c4",
+        "type": "debug",
+        "z": "019efafd3890369d",
+        "name": "debug 38",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 340,
+        "wires": []
+    },
+    {
         "id": "1e6ab091d72cf623",
         "type": "inject",
         "z": "469d36c343ae88fa",
@@ -1146,14 +1163,14 @@
         "id": "f60ae7ab6aee55c0",
         "type": "function",
         "z": "469d36c343ae88fa",
-        "name": "Build Dataset",
+        "name": "format dataset",
         "func": "const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\n\nlet roads = []\n\nfor (let item of msg.payload) {\n    const birthday = new Date(item.appprocesstime.substring(0, 10))\n    const day_name = days[birthday.getDay()]\n\n    let index_road = roads.findIndex(x => x.road_name === item.road_name);\n\n    if (index_road === -1) {\n        //create new road\n        roads.push({\n            'road_name': item.road_name,\n            'days': [{             \n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]                \n            }]\n        })\n    } else {\n        let index_day = roads[index_road].days.findIndex(x => x.day === day_name)\n\n        if (index_day === -1) {\n            roads[index_road].days.push({\n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]\n            })\n        } else {\n            let index_hour = roads[index_road].days[index_day].hours.findIndex(x => x.hour === item.appprocesstime.substring(11, 19))\n\n            if (index_hour === -1) {\n                roads[index_road].days[index_day].hours.push({\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                })\n            } else {\n                roads[index_road].days[index_day].hours[index_hour].speeds.push([item.average_speed])\n            }           \n        }\n    }\n}\n\nmsg = {}\nmsg.dataset = roads\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 330,
+        "x": 340,
         "y": 120,
         "wires": [
             [
@@ -1165,7 +1182,7 @@
         "id": "0b49140f92b06cb5",
         "type": "function",
         "z": "469d36c343ae88fa",
-        "name": "K-Clustering",
+        "name": "k-clustering",
         "func": "var clusterMaker = global.get('clusters')\n//number of clusters, defaults to undefined\nclusterMaker.k(2);\n\n//default to 1000\nclusterMaker.iterations(500);\n\nlet clusters = []\n\nfor (let road of msg.dataset) {\n    for (let day of road.days) {\n        for (let hour of day.hours){\n            clusterMaker.data(hour.speeds)\n            // let cluster = clusterMaker.clusters()\n            hour.clusters = clusterMaker.clusters()       \n        }       \n    }    \n}\n\n// msg = {}\n// msg.clusters = clusters\n// msg.payload = 'Operation Complete'\nreturn msg;\n\n// [{\n//     hour: '22:00:00',\n//     roads: [{\n//         road_name: 'κηφησία',\n//         speeds: [[2],[3]...]\n//     }]\n// }]",
         "outputs": 1,
         "noerr": 0,
@@ -1194,7 +1211,7 @@
         "id": "7bb72f0154eba586",
         "type": "function",
         "z": "469d36c343ae88fa",
-        "name": "Build SQL Insert",
+        "name": "build SQL Insert",
         "func": "let insert_query = \"INSERT INTO hourly_clusters(road, day, hour, centroid1, centroid2) VALUES \"\nfor (let road of msg.dataset) {\n    for (let day of road.days) {\n        for (let hour of day.hours) {\n            let max = hour.clusters[0].centroid[0]\n            let min = hour.clusters[1].centroid[0]\n            if (min > max) {\n                [max, min] = [min, max]\n            }\n            insert_query += `(\"${road.road_name}\", \"${day.day}\", \"${hour.hour}\", \"${max}\", \"${min}\"),`\n        }        \n    }    \n}\nmsg = {}\nmsg.topic = insert_query.slice(0, -1)\n\nreturn msg",
         "outputs": 1,
         "noerr": 0,
@@ -1300,8 +1317,7 @@
         "y": 60,
         "wires": [
             [
-                "a0a393cd7672d554",
-                "c6fe7a120f1db93a"
+                "a0a393cd7672d554"
             ]
         ]
     },
@@ -1382,16 +1398,14 @@
         "z": "53617fb819fb8d69",
         "name": "Save data to flow var",
         "func": "//if api data are valid save to flow variable\nif (msg.payload.length !== 0) {\n    flow.set(\"yesterday_data\", msg.payload)\n}\n",
-        "outputs": 1,
+        "outputs": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 840,
         "y": 160,
-        "wires": [
-            []
-        ]
+        "wires": []
     },
     {
         "id": "99fa6a9f2f698880",
@@ -1419,7 +1433,7 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 380,
+        "x": 340,
         "y": 340,
         "wires": [
             [
@@ -1435,7 +1449,7 @@
         "property": "payload",
         "action": "",
         "pretty": false,
-        "x": 750,
+        "x": 670,
         "y": 340,
         "wires": [
             [
@@ -1449,7 +1463,7 @@
         "z": "53617fb819fb8d69",
         "name": "read fallback data file",
         "info": "",
-        "x": 240,
+        "x": 200,
         "y": 380,
         "wires": []
     },
@@ -1548,34 +1562,17 @@
         ]
     },
     {
-        "id": "c6fe7a120f1db93a",
-        "type": "debug",
-        "z": "53617fb819fb8d69",
-        "name": "debug 33",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 380,
-        "y": 20,
-        "wires": []
-    },
-    {
         "id": "f02f3e5307a8254a",
         "type": "function",
         "z": "53617fb819fb8d69",
         "name": "fallback dates",
-        "func": "//in case yesterdays date has no data\nmsg.date_from = '2023-04-28'\nmsg.date_to = '2023-04-29'\nreturn msg;",
+        "func": "//in case yesterdays date has no data\nmsg.date_from = '2023-04-28'\nmsg.date_to = '2023-04-29'\nmsg.day = 'Friday'\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 960,
+        "x": 860,
         "y": 340,
         "wires": [
             [
@@ -2102,7 +2099,7 @@
         "type": "function",
         "z": "e0bd9e50950cbdbf",
         "name": "Build chart data",
-        "func": "//calculate midpoint\nfor (let item of msg.selected_day_data) {\n    item.midpoint = item.centroid1 + ((item.centroid2 - item.centroid1) / 2)\n}\n\n//create 2d arrays\nlet data = []\nfor (let i=0; i < 4; i++) {\n    data.push(new Array(24).fill(0))\n}\n\n\nlet labels = []\nfor (let item of msg.selected_day_data) {\n    labels.push(item.hour)\n}\n\n//create yesterdays average speed data points\nlet yesterday = new Array(24).fill(0)\n\n//put average speeds to correct index\nif (msg.yesterday_data) {\n    for (let hour of msg.yesterday_data) {\n        yesterday[labels.indexOf(hour.hour)] = hour.average\n    }\n}\n\n//create chart data points\nfor (let i=0; i < 24; i++) {\n    data[0][i] = msg.selected_day_data[i].centroid1\n    data[1][i] = msg.selected_day_data[i].centroid2\n    data[2][i] = msg.selected_day_data[i].midpoint\n    data[3][i] = yesterday[i]\n}\n\nmsg.payload = [{\n    \"series\": [\"High\", \"Low\", \"Midpoint\", \"Data for \" + msg.date_from],\n    \"data\": data,\n    \"labels\": labels\n}]\nreturn msg;",
+        "func": "//calculate midpoint\nfor (let item of msg.selected_day_data) {\n    item.midpoint = item.centroid1 + ((item.centroid2 - item.centroid1) / 2)\n}\n\n//create 2d arrays\nlet data = []\nfor (let i=0; i < 4; i++) {\n    data.push(new Array(24).fill(0))\n}\n\n\nlet labels = []\nfor (let item of msg.selected_day_data) {\n    labels.push(item.hour)\n}\n\n//create yesterdays average speed data points\nlet yesterday = new Array(24).fill(0)\n\n//put average speeds to correct index\nif (msg.yesterday_data) {\n    for (let hour of msg.yesterday_data) {\n        yesterday[labels.indexOf(hour.hour)] = hour.average\n    }\n}\n\n//create chart data points\nfor (let i=0; i < 24; i++) {\n    data[0][i] = msg.selected_day_data[i].centroid1\n    data[1][i] = msg.selected_day_data[i].centroid2\n    data[2][i] = msg.selected_day_data[i].midpoint\n    data[3][i] = yesterday[i]\n}\n\nmsg.payload = [{\n    \"series\": [\"High\", \"Low\", \"Midpoint\", \"Data for \" + msg.date_from + \" \"+ msg.selected_day_data[0].day],\n    \"data\": data,\n    \"labels\": labels\n}]\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -2140,16 +2137,14 @@
         "z": "e0bd9e50950cbdbf",
         "name": "Set selected road context var",
         "func": "flow.set(\"selected_road\", msg.payload)\nreturn msg;",
-        "outputs": 1,
+        "outputs": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 420,
         "y": 900,
-        "wires": [
-            []
-        ]
+        "wires": []
     },
     {
         "id": "689deff0571ee86a",
@@ -2160,12 +2155,12 @@
         "propertyType": "msg",
         "rules": [
             {
+                "t": "else"
+            },
+            {
                 "t": "gt",
                 "v": "0",
                 "vt": "str"
-            },
-            {
-                "t": "else"
             }
         ],
         "checkall": "true",
@@ -2175,10 +2170,10 @@
         "y": 980,
         "wires": [
             [
-                "92edc011fffd5476"
+                "9288b346e83a23b9"
             ],
             [
-                "9288b346e83a23b9"
+                "92edc011fffd5476"
             ]
         ]
     },
@@ -2205,7 +2200,7 @@
         "type": "function",
         "z": "e0bd9e50950cbdbf",
         "name": "Filter for selected day from DB data",
-        "func": "const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nconst date = new Date()\ndate.setDate(date.getDate() - 1);\nconst day = days[date.getDay()]\n\n\nlet selected_day = []\n//filter yesterday's day from DB data\nfor (let item of msg.payload) {\n    if (item.day === day) {\n        selected_day.push(item)\n    }\n}\nmsg.selected_day_data = selected_day\nreturn msg;",
+        "func": "const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nconst date = new Date(msg.date_from)\nconst day = days[date.getDay()]\n\nlet selected_day = []\n//filter yesterday's day from DB data\nfor (let item of msg.payload) {\n    if (item.day === day) {\n        selected_day.push(item)\n    }\n}\nmsg.selected_day_data = selected_day\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",

@@ -656,9 +656,7 @@
         "x": 300,
         "y": 340,
         "wires": [
-            [
-                "d8fe5c557be0d4c4"
-            ]
+            []
         ]
     },
     {
@@ -1090,23 +1088,6 @@
         "wires": []
     },
     {
-        "id": "d8fe5c557be0d4c4",
-        "type": "debug",
-        "z": "019efafd3890369d",
-        "name": "debug 38",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 620,
-        "y": 340,
-        "wires": []
-    },
-    {
         "id": "1e6ab091d72cf623",
         "type": "inject",
         "z": "469d36c343ae88fa",
@@ -1466,42 +1447,6 @@
         "x": 200,
         "y": 380,
         "wires": []
-    },
-    {
-        "id": "082f0b7dddb74d14",
-        "type": "function",
-        "z": "53617fb819fb8d69",
-        "d": true,
-        "name": "Format dataset",
-        "func": "if (msg.payload.length === 0) {\n    msg.error = 'Empty data'\n    return msg\n}\n\nconst days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']\nlet roads = []\n\n//format dataset\nfor (let item of msg.payload) {\n    const birthday = new Date(item.appprocesstime.substring(0, 10))\n    const day_name = days[birthday.getDay()]\n\n    let index_road = roads.findIndex(x => x.road_name === item.road_name);\n\n    if (index_road === -1) {\n        //create new road\n        roads.push({\n            'road_name': item.road_name,\n            'days': [{\n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]\n            }]\n        })\n    } else {\n        let index_day = roads[index_road].days.findIndex(x => x.day === day_name)\n\n        if (index_day === -1) {\n            roads[index_road].days.push({\n                'day': day_name,\n                'hours': [{\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                }]\n            })\n        } else {\n            let index_hour = roads[index_road].days[index_day].hours.findIndex(x => x.hour === item.appprocesstime.substring(11, 19))\n\n            if (index_hour === -1) {\n                roads[index_road].days[index_day].hours.push({\n                    'hour': item.appprocesstime.substring(11, 19),\n                    'speeds': [[item.average_speed]]\n                })\n            } else {\n                roads[index_road].days[index_day].hours[index_hour].speeds.push([item.average_speed])\n            }\n        }\n    }\n}\nmsg.yesterday_data = roads\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 400,
-        "y": 480,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "3981a75867b58fc9",
-        "type": "function",
-        "z": "53617fb819fb8d69",
-        "d": true,
-        "name": "Filter and average speeds",
-        "func": "//remove the extra day that the api returns at 00:00 hours\nfor (let item of msg.yesterday_data) {\n    if (item.days[0].hours.length === 1) {\n        item.days.splice(0, 1);\n    } else {\n        item.days.splice(1, 1);\n    }\n}\n\n\n//average the speeds of every sensor for the same road\nfor (let item of msg.yesterday_data) {\n    for (let hour of item.days[0].hours) {\n        let total = 0\n        for (let speed of hour.speeds) {\n            total += speed[0]\n        }\n        hour.average = total / hour.speeds.length\n    }\n}\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 650,
-        "y": 480,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "5feb70fd6cf353fa",
@@ -2295,7 +2240,7 @@
         "id": "d2f25462ba46c893",
         "type": "inject",
         "z": "70cdc46223053fea",
-        "name": "",
+        "name": "Every hour",
         "props": [
             {
                 "p": "payload"
@@ -2306,13 +2251,13 @@
             }
         ],
         "repeat": "",
-        "crontab": "",
+        "crontab": "0 0-22 * * *",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 120,
+        "x": 130,
         "y": 80,
         "wires": [
             [
@@ -2505,16 +2450,6 @@
                 "48498d46b1b6918e"
             ]
         ]
-    },
-    {
-        "id": "0dabfdb1fc2e9948",
-        "type": "comment",
-        "z": "70cdc46223053fea",
-        "name": "make inject work for every hour",
-        "info": "",
-        "x": 190,
-        "y": 40,
-        "wires": []
     },
     {
         "id": "e9a8a57890ca3586",
